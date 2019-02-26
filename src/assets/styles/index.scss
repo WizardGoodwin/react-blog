@@ -1,0 +1,149 @@
+@import 'src/assets/styles/variables';
+@import 'src/assets/styles/fonts';
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $baseFontFamily;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #403d3d;
+  color: #fff;
+  text-rendering: optimizeSpeed;
+}
+
+html {
+  font-size: $baseFont;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: $baseFontFamily;
+}
+/* Do not display default clear-cross-btn in MS-Edge */
+input::-ms-clear,
+input::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+input,
+textarea,
+select,
+button {
+  font-family: $baseFontFamily;
+}
+
+input[placeholder] {
+  text-overflow: ellipsis;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  opacity: 1;
+  color: #989898;
+}
+
+img {
+  max-width: 100%;
+}
+
+textarea:disabled {
+  background: none;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: none;
+  min-width: 0;
+  &[disabled] {
+    a,
+    button {
+      pointer-events: none;
+    }
+  }
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.shadow-preloader {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* reset browser borders */
+
+input,
+button,
+div {
+  outline: none;
+  box-shadow: none;
+}
+
+input:read-only {
+  cursor: default;
+}
+
+@media screen and (min-device-width: 1920px) {
+  html {
+    font-size: 62.5%;
+  }
+}
+
+// custom scroll bar
+
+:global {
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+  }
+  ::-webkit-scrollbar:horizontal {
+    height: 7px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #a9a9a9;
+    box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.3);
+  }
+
+  ::-webkit-scrollbar-track {
+    display: none;
+    background: transparent;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hidden {
+    display: none;
+  }
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}

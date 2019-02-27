@@ -100,12 +100,6 @@ input:read-only {
   cursor: default;
 }
 
-@media screen and (min-device-width: 1920px) {
-  html {
-    font-size: 62.5%;
-  }
-}
-
 // custom scroll bar
 
 :global {
@@ -134,12 +128,6 @@ input:read-only {
   }
 }
 
-@media screen and (max-width: 767px) {
-  .hidden {
-    display: none;
-  }
-}
-
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,
@@ -147,3 +135,5 @@ input:read-only {
     font-size: 16px;
   }
 }
+
+

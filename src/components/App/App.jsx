@@ -6,7 +6,7 @@ import CommentsContainer from '../../containers/CommentsContainer';
 import NotFound from '../NotFound/NotFound';
 import Layout from '../Layout/Layot';
 import SignIn from '../Auth/SignIn/SignIn';
-import SignOut from '../Auth/SignOut/SignOut';
+import SignUp from '../Auth/SignUp/SignUp';
 
 export default class App extends React.Component {
 
@@ -16,7 +16,7 @@ export default class App extends React.Component {
         <Switch>
           <Redirect from='/' exact to='/posts'/>
           <Route path='/sign-in' component={SignIn} />
-          <Route path='/sign-up' component={SignOut} />
+          <Route path='/sign-up' component={SignUp} />
           <Route path='/posts' component={PostsContainer} />
           <Route path='/users' component={UsersContainer} />
           <Route path='/comments' component={CommentsContainer} />

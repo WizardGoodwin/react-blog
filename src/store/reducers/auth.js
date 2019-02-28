@@ -5,32 +5,56 @@ const initialState = {
   userId: null,
   error: null,
   loading: false,
-  authRedirectPath: '/'
+  authRedirectPath: '/',
 };
 
-const authRequest = (state) => {
+const signUpRequest = (state) => {
   return {
     ...state,
     error: null,
-    loading: true
+    loading: true,
   };
 };
 
-const authSuccess = (state, action) => {
+const signUpSuccess = (state, action) => {
+  return {
+    ...state,
+    error: null,
+    loading: false,
+  };
+};
+
+const signUpFail = (state, action) => {
+  return {
+    ...state,
+    error: action.error,
+    loading: false,
+  };
+};
+
+const signInRequest = (state) => {
+  return {
+    ...state,
+    error: null,
+    loading: true,
+  };
+};
+
+const signInSuccess = (state, action) => {
   return {
     ...state,
     token: action.idToken,
     userId: action.userId,
     error: null,
-    loading: false
+    loading: false,
   };
 };
 
-const authFail = (state, action) => {
+const signInFail = (state, action) => {
   return {
     ...state,
     error: action.error,
-    loading: false
+    loading: false,
   };
 };
 
@@ -38,24 +62,35 @@ const authLogout = (state) => {
   return {
     ...state,
     token: null,
-    userId: null
+    userId: null,
   };
 };
 
 const setAuthRedirectPath = (state, action) => {
   return {
     ...state,
-    authRedirectPath: action.path
+    authRedirectPath: action.path,
   };
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.AUTH_REQUEST: return authRequest(state, action);
-    case actionTypes.AUTH_SUCCESS: return authSuccess(state, action);
-    case actionTypes.AUTH_FAIL: return authFail(state, action);
-    case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
-    case actionTypes.SET_AUTH_REDIRECT_PATH: return setAuthRedirectPath(state,action);
+    case actionTypes.SIGN_UP_REQUEST:
+      return signUpRequest(state, action);
+    case actionTypes.SIGN_UP_SUCCESS:
+      return signUpSuccess(state, action);
+    case actionTypes.SIGN_UP_FAIL:
+      return signUpFail(state, action);
+    case actionTypes.SIGN_IN_REQUEST:
+      return signInRequest(state, action);
+    case actionTypes.SIGN_IN_SUCCESS:
+      return signInSuccess(state, action);
+    case actionTypes.SIGN_IN_FAIL:
+      return signInFail(state, action);
+    case actionTypes.AUTH_LOGOUT:
+      return authLogout(state, action);
+    case actionTypes.SET_AUTH_REDIRECT_PATH:
+      return setAuthRedirectPath(state, action);
     default:
       return state;
   }

@@ -6,10 +6,7 @@ import * as Yup from 'yup';
 import Spinner from '../../../shared/Spinner/Spinner';
 import * as actions from '../../../store/actions/auth';
 
-
-
 class SignUp extends Component {
-
   SignUpSchema = Yup.object().shape({
     email: Yup.string()
       .email('Incorrect email format')
@@ -20,12 +17,12 @@ class SignUp extends Component {
   });
 
   onSubmit = (values, actions) => {
-    this.props.onAuth(values.email, values.password);
+    this.props.onSignUp(values.email, values.password);
     actions.setSubmitting(false);
-  }
+  };
 
-  renderForm = (props) => {
-    const { errors, touched, isSubmitting } = props;
+  renderForm = ({errors, touched}) => {
+    const {loading, error}  = this.props;
     return (
       <Form className="d-flex flex-column align-items-center">
         <div className="form-group w-75">
@@ -36,17 +33,13 @@ class SignUp extends Component {
             name="email"
             className={
               touched.email
-                ? errors.email
-                ? 'form-control is-invalid'
-                : 'form-control is-valid'
+                ? errors.email || error
+                  ? 'form-control is-invalid'
+                  : 'form-control is-valid'
                 : 'form-control '
             }
           />
-          <ErrorMessage
-            name="email"
-            component="div"
-            className="text-danger"
-          />
+          <ErrorMessage name="email" component="div" className="text-danger" />
         </div>
 
         <div className="form-group w-75">
@@ -57,9 +50,9 @@ class SignUp extends Component {
             name="password"
             className={
               touched.password
-                ? errors.password
-                ? 'form-control is-invalid'
-                : 'form-control is-valid'
+                ? errors.password || error
+                  ? 'form-control is-invalid'
+                  : 'form-control is-valid'
                 : 'form-control '
             }
           />
@@ -70,57 +63,61 @@ class SignUp extends Component {
           />
         </div>
 
-        <button
-          className="btn btn-success"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          Sign up
-        </button>
+        { error &&
+          <div className="text-danger mb-3">
+            {error.message}
+          </div>
+        }
+
+        { loading ?
+            <Spinner/>
+            :
+            <button
+              className="btn btn-success"
+              type="submit"
+              disabled={
+                !touched.email || !touched.password || Object.keys(errors).length !== 0
+              }
+            >
+              Sign up
+            </button>
+        }
       </Form>
-    )
+    );
   };
 
   render() {
-    if ( this.props.loading ) {
-      return <Spinner />
-    }
-
-    let errorMessage = null;
-
-    if (this.props.error) {
-      errorMessage = (
-        <p>{this.props.error.message}</p>
-      );
-    }
     return (
       <div className="container card w-75 mt-5 p-4 shadow">
         <h3 className="text-center">Sign up</h3>
         <Formik
-          initialValues={{ email: '', password: '' }}
+          initialValues={{email: '', password: ''}}
           onSubmit={(values, actions) => {this.onSubmit(values, actions)}}
           validationSchema={this.SignUpSchema}
           render={(formProps) => this.renderForm(formProps)}
         />
       </div>
-    )
+    );
   }
-};
+}
 
-const mapStateToProps = ({auth: {loading, error, token, authRedirectPath}}) => {
+const mapStateToProps = ({auth: { loading, error, token, authRedirectPath }}) => {
   return {
     loading,
     error,
     isAuthenticated: token !== null,
-    authRedirectPath
+    authRedirectPath,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    onAuth: (email, password) => dispatch(actions.auth(email, password)),
-    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+    onSignUp: (email, password) => dispatch(actions.signUp(email, password)),
+    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUp);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUp);

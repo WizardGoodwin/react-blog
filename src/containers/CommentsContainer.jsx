@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 
 class CommentsContainer extends Component {
   render() {
-    return (
-      <p>Comments</p>
-    )
+    return <p>Comments</p>;
   }
 }
 

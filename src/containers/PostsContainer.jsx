@@ -3,9 +3,7 @@ import Spinner from '../shared/Spinner/Spinner';
 
 class PostsContainer extends Component {
   render() {
-    return (
-      <Spinner/>
-    )
+    return <Spinner />;
   }
 }
 

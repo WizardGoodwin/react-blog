@@ -10,18 +10,17 @@ import SignUp from '../Auth/SignUp/SignUp';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 class App extends React.Component {
-
   render() {
     return (
       <Layout>
         <Switch>
-          <Redirect from='/' exact to='/posts'/>
-          <Route path='/sign-in' component={SignIn} />
-          <Route path='/sign-up' component={SignUp} />
-          <Route path='/posts' component={PostsContainer} />
-          <Route path='/users' component={UsersContainer} />
-          <Route path='/comments' component={CommentsContainer} />
-          <Route component={NotFound}/>
+          <Redirect from="/" exact to="/posts" />
+          <Route path="/sign-in" component={SignIn} />
+          <Route path="/sign-up" component={SignUp} />
+          <Route path="/posts" component={PostsContainer} />
+          <Route path="/users" component={UsersContainer} />
+          <Route path="/comments" component={CommentsContainer} />
+          <Route component={NotFound} />
         </Switch>
       </Layout>
     );
@@ -29,5 +28,3 @@ class App extends React.Component {
 }
 
 export default withErrorHandler(App);
-
-

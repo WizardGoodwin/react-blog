@@ -7,12 +7,12 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
       <div className="container">
-        <Brand/>
-        <Navigation/>
-        <SignButtons/>
+        <Brand />
+        <Navigation />
+        <SignButtons />
       </div>
     </nav>
-  )
+  );
 };
 
 export default Header;

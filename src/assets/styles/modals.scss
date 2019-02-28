@@ -30,11 +30,11 @@
   transition: opacity 500ms ease-in-out;
 }
 
-.ReactModal__Overlay--after-open{
+.ReactModal__Overlay--after-open {
   opacity: 1;
 }
 
-.ReactModal__Overlay--before-close{
+.ReactModal__Overlay--before-close {
   opacity: 0;
 }
 
@@ -44,12 +44,12 @@
   transition: all 500ms ease-in-out;
 }
 
-.ReactModal__Content--after-open{
+.ReactModal__Content--after-open {
   top: 15%;
   opacity: 1;
 }
 
-.ReactModal__Content--before-close{
+.ReactModal__Content--before-close {
   top: 0;
   opacity: 0;
 }

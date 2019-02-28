@@ -6,7 +6,7 @@ const Brand = () => {
     <Link to={'/'} className="navbar-brand text-white">
       React Blog
     </Link>
-  )
+  );
 };
 
 export default Brand;

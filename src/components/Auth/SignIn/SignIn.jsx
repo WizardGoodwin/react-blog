@@ -12,7 +12,6 @@ const SignInSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
-
   return (
     <div className="container card w-75 mt-5 p-4 shadow">
       <h3 className="text-center">Sign in</h3>
@@ -26,55 +25,59 @@ const SignIn = () => {
         {({ errors, touched, status, isSubmitting }) => (
           <Form className="d-flex flex-column align-items-center">
             <div className="form-group w-75">
-              <label htmlFor="email">
-                Email
-              </label>
+              <label htmlFor="email">Email</label>
               <Field
                 id="email"
                 type="email"
                 name="email"
                 className={
-                  touched.email ?
-                    errors.email ?
-                      "form-control is-invalid"
-                      :
-                      "form-control is-valid"
-                    :
-                    "form-control "
+                  touched.email
+                    ? errors.email
+                      ? 'form-control is-invalid'
+                      : 'form-control is-valid'
+                    : 'form-control '
                 }
               />
-              <ErrorMessage name="email" component="div" className="text-danger" />
+              <ErrorMessage
+                name="email"
+                component="div"
+                className="text-danger"
+              />
             </div>
 
             <div className="form-group w-75">
-              <label htmlFor="password">
-                Password
-              </label>
+              <label htmlFor="password">Password</label>
               <Field
                 id="password"
                 type="password"
                 name="password"
                 className={
-                  touched.password ?
-                    errors.password ?
-                      "form-control is-invalid"
-                      :
-                      "form-control is-valid"
-                    :
-                    "form-control "
+                  touched.password
+                    ? errors.password
+                      ? 'form-control is-invalid'
+                      : 'form-control is-valid'
+                    : 'form-control '
                 }
               />
-              <ErrorMessage name="password" component="div" className="text-danger" />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-danger"
+              />
             </div>
 
-            <button className="btn btn-success" type="submit" disabled={isSubmitting}>
+            <button
+              className="btn btn-success"
+              type="submit"
+              disabled={isSubmitting}
+            >
               Sign in
             </button>
           </Form>
         )}
       </Formik>
     </div>
-  )
+  );
 };
 
 export default SignIn;

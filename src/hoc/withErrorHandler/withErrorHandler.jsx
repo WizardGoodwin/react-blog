@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 
-const withErrorHandler = ( WrappedComponent ) => {
+const withErrorHandler = (WrappedComponent) => {
   return class extends Component {
     state = {
-      hasError: false
+      hasError: false,
     };
 
     componentDidCatch() {
@@ -17,7 +17,7 @@ const withErrorHandler = ( WrappedComponent ) => {
       }
       return <WrappedComponent {...this.props} />;
     }
-  }
+  };
 };
 
 export default withErrorHandler;

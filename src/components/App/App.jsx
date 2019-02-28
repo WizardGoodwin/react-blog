@@ -3,12 +3,13 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UsersContainer from '../../containers/UsersContainer';
 import PostsContainer from '../../containers/PostsContainer';
 import CommentsContainer from '../../containers/CommentsContainer';
-import NotFound from '../NotFound/NotFound';
+import NotFound from '../../shared/NotFound/NotFound';
 import Layout from '../Layout/Layot';
 import SignIn from '../Auth/SignIn/SignIn';
 import SignUp from '../Auth/SignUp/SignUp';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   render() {
     return (
@@ -26,5 +27,7 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default withErrorHandler(App);
 
 

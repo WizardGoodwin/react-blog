@@ -17,7 +17,7 @@ class SignUp extends Component {
   });
 
   onSubmit = (values, actions) => {
-    this.props.onSignUp(values.email, values.password);
+    this.props.onSignUp(values);
     actions.setSubmitting(false);
   };
 
@@ -31,6 +31,7 @@ class SignUp extends Component {
             id="email"
             type="email"
             name="email"
+            placeholder="Enter your email"
             className={
               touched.email
                 ? errors.email || error
@@ -48,6 +49,7 @@ class SignUp extends Component {
             id="password"
             type="password"
             name="password"
+            placeholder="Enter your password"
             className={
               touched.password
                 ? errors.password || error
@@ -76,7 +78,8 @@ class SignUp extends Component {
               className="btn btn-success"
               type="submit"
               disabled={
-                !touched.email || !touched.password || Object.keys(errors).length !== 0
+                !touched.email || !touched.password
+                ||  Object.keys(errors).length !== 0
               }
             >
               Sign up
@@ -112,7 +115,7 @@ const mapStateToProps = ({auth: { loading, error, token, authRedirectPath }}) =>
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSignUp: (email, password) => dispatch(actions.signUp(email, password)),
+    onSignUp: (authData) => dispatch(actions.signUp(authData)),
     onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
   };
 };

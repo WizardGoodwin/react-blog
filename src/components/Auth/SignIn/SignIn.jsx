@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -15,10 +16,10 @@ const SignInSchema = Yup.object().shape({
     .required('This field should be filled'),
 });
 
-const SignIn = ({loading, error, onSignIn }) => {
+const SignIn = ({ loading, error, isAuth, onSignIn }) => {
 
   const onSubmit = (values, actions) => {
-    onSignIn(values.email, values.password);
+    onSignIn(values);
     actions.setSubmitting(false);
   };
 
@@ -88,31 +89,35 @@ const SignIn = ({loading, error, onSignIn }) => {
     );
   };
 
+  if (isAuth) {
+    return <Redirect to='/'/>
+  }
 
-    return (
-      <div className="container card w-75 mt-5 p-4 shadow">
-        <h3 className="text-center">Sign in</h3>
-        <Formik
-          initialValues={{email: '', password: ''}}
-          onSubmit={(values, actions) => {onSubmit(values, actions)}}
-          validationSchema={SignInSchema}
-          render={(formProps) => renderForm(formProps)}
-        />
-      </div>
-    );
+  return (
+    <div className="container card w-75 mt-5 p-4 shadow">
+      <h3 className="text-center">Sign in</h3>
+      <Formik
+        initialValues={{email: '', password: ''}}
+        onSubmit={(values, actions) => {onSubmit(values, actions)}}
+        validationSchema={SignInSchema}
+        render={(formProps) => renderForm(formProps)}
+      />
+    </div>
+  );
 
 };
 
-const mapStateToProps = ({auth: { loading, error }}) => {
+const mapStateToProps = ({auth: { loading, error, token }}) => {
   return {
     loading,
-    error
+    error,
+    isAuth: token !== null
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSignIn: (email, password) => dispatch(signIn(email, password)),
+    onSignIn: (authData) => dispatch(signIn(authData)),
   };
 };
 

@@ -4,24 +4,25 @@ import { connect } from 'react-redux';
 import Brand from './Brand/Brand';
 import Navigation from './Navigation/Navigation';
 import SignButtons from './SignButtons/SignButtons';
-import LogOutButton from './LogOutButton/LogOutButton';
+import UserButton from './UserButton/UserButton';
 import * as actions from '../../store/actions/auth';
 
-const Header = ({isAuthenticated, onLogOut}) => {
+const Header = ({isAuth, userId, onLogOut}) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
       <div className="container">
         <Brand />
         <Navigation />
-        { isAuthenticated ? <LogOutButton onLogOut={onLogOut} /> : <SignButtons /> }
+        { isAuth ? <UserButton userId={userId} onLogOut={onLogOut} /> : <SignButtons /> }
       </div>
     </nav>
   );
 };
 
-const mapStateToProps = ({auth: { token }}) => {
+const mapStateToProps = ({auth: { token, userId }}) => {
   return {
-    isAuthenticated: token !== null,
+    isAuth: token !== null,
+    userId
   };
 };
 

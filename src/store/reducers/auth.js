@@ -5,7 +5,6 @@ const initialState = {
   userId: localStorage.getItem('userId'),
   error: null,
   loading: false,
-  authRedirectPath: '/',
 };
 
 const signUpRequest = (state) => {

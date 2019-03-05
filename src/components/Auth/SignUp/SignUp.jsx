@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -7,6 +8,9 @@ import Spinner from '../../../shared/Spinner/Spinner';
 import { signUp } from '../../../store/actions/auth';
 
 const SignUpSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(3, 'Username should consist of no less than 3 symbols')
+    .required('This field should be filled'),
   email: Yup.string()
     .email('Incorrect email format')
     .required('This field should be filled'),
@@ -15,7 +19,7 @@ const SignUpSchema = Yup.object().shape({
     .required('This field should be filled'),
 });
 
-const SignUp = ({loading, error, onSignUp}) => {
+const SignUp = ({loading, error, isAuth, onSignUp}) => {
 
   const onSubmit = (values, actions) => {
     onSignUp(values);
@@ -25,6 +29,24 @@ const SignUp = ({loading, error, onSignUp}) => {
   const renderForm = ({errors, touched}) => {
     return (
       <Form className="d-flex flex-column align-items-center">
+        <div className="form-group w-75">
+          <label htmlFor="username">Username</label>
+          <Field
+            id="username"
+            type="text"
+            name="username"
+            placeholder="Enter your username"
+            className={
+              touched.username
+                ? errors.username || error
+                ? 'form-control is-invalid'
+                : 'form-control is-valid'
+                : 'form-control '
+            }
+          />
+          <ErrorMessage name="username" component="div" className="text-danger" />
+        </div>
+
         <div className="form-group w-75">
           <label htmlFor="email">Email</label>
           <Field
@@ -78,7 +100,7 @@ const SignUp = ({loading, error, onSignUp}) => {
               className="btn btn-success"
               type="submit"
               disabled={
-                !touched.email || !touched.password
+                !touched.email || !touched.password || !touched.username
                 ||  Object.keys(errors).length !== 0
               }
             >
@@ -89,11 +111,15 @@ const SignUp = ({loading, error, onSignUp}) => {
     );
   };
 
+  if (isAuth) {
+    return <Redirect to='/'/>
+  }
+
   return (
     <div className="container card w-75 mt-5 p-4 shadow">
       <h3 className="text-center">Sign up</h3>
       <Formik
-        initialValues={{email: '', password: ''}}
+        initialValues={{username: '', email: '', password: ''}}
         onSubmit={(values, actions) => {onSubmit(values, actions)}}
         validationSchema={SignUpSchema}
         render={(formProps) => renderForm(formProps)}
@@ -103,10 +129,11 @@ const SignUp = ({loading, error, onSignUp}) => {
 
 };
 
-const mapStateToProps = ({auth: { loading, error }}) => {
+const mapStateToProps = ({auth: { loading, error, token }}) => {
   return {
     loading,
-    error
+    error,
+    isAuth: token !== null,
   };
 };
 

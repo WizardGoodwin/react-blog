@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
 import Spinner from '../../../shared/Spinner/Spinner';
-import * as actions from '../../../store/actions/auth';
+import { signUp } from '../../../store/actions/auth';
 
-class SignUp extends Component {
-  SignUpSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Incorrect email format')
-      .required('This field should be filled'),
-    password: Yup.string()
-      .min(8, 'Password should consist of no less than 8 symbols')
-      .required('This field should be filled'),
-  });
+const SignUpSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Incorrect email format')
+    .required('This field should be filled'),
+  password: Yup.string()
+    .min(8, 'Password should consist of no less than 8 symbols')
+    .required('This field should be filled'),
+});
 
-  onSubmit = (values, actions) => {
-    this.props.onSignUp(values.email, values.password);
+
+const SignUp = ({loading, error, onSignUp}) => {
+
+  const onSubmit = (values, actions) => {
+    onSignUp(values.email, values.password);
     actions.setSubmitting(false);
   };
 
-  renderForm = ({errors, touched}) => {
-    const {loading, error}  = this.props;
+  const renderForm = ({errors, touched}) => {
     return (
       <Form className="d-flex flex-column align-items-center">
         <div className="form-group w-75">
@@ -86,34 +87,30 @@ class SignUp extends Component {
     );
   };
 
-  render() {
-    return (
-      <div className="container card w-75 mt-5 p-4 shadow">
-        <h3 className="text-center">Sign up</h3>
-        <Formik
-          initialValues={{email: '', password: ''}}
-          onSubmit={(values, actions) => {this.onSubmit(values, actions)}}
-          validationSchema={this.SignUpSchema}
-          render={(formProps) => this.renderForm(formProps)}
-        />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="container card w-75 mt-5 p-4 shadow">
+      <h3 className="text-center">Sign up</h3>
+      <Formik
+        initialValues={{email: '', password: ''}}
+        onSubmit={(values, actions) => {onSubmit(values, actions)}}
+        validationSchema={SignUpSchema}
+        render={(formProps) => renderForm(formProps)}
+      />
+    </div>
+  );
 
-const mapStateToProps = ({auth: { loading, error, token, authRedirectPath }}) => {
+};
+
+const mapStateToProps = ({auth: { loading, error }}) => {
   return {
     loading,
-    error,
-    isAuthenticated: token !== null,
-    authRedirectPath,
+    error
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSignUp: (email, password) => dispatch(actions.signUp(email, password)),
-    onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+    onSignUp: (email, password) => dispatch(signUp(email, password)),
   };
 };
 

@@ -58,7 +58,7 @@ const signInFail = (state, action) => {
   };
 };
 
-const authLogout = (state) => {
+const logOut = (state) => {
   return {
     ...state,
     token: null,
@@ -87,8 +87,8 @@ const authReducer = (state = initialState, action) => {
       return signInSuccess(state, action);
     case actionTypes.SIGN_IN_FAIL:
       return signInFail(state, action);
-    case actionTypes.AUTH_LOGOUT:
-      return authLogout(state, action);
+    case actionTypes.LOG_OUT:
+      return logOut(state, action);
     case actionTypes.SET_AUTH_REDIRECT_PATH:
       return setAuthRedirectPath(state, action);
     default:

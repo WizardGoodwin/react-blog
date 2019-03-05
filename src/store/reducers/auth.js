@@ -1,8 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  token: null,
-  userId: null,
+  token: localStorage.getItem('token'),
+  userId: localStorage.getItem('userId'),
   error: null,
   loading: false,
   authRedirectPath: '/',
@@ -16,7 +16,7 @@ const signUpRequest = (state) => {
   };
 };
 
-const signUpSuccess = (state, action) => {
+const signUpSuccess = (state) => {
   return {
     ...state,
     error: null,

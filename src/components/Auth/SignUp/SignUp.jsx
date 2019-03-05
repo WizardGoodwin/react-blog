@@ -15,11 +15,10 @@ const SignUpSchema = Yup.object().shape({
     .required('This field should be filled'),
 });
 
-
 const SignUp = ({loading, error, onSignUp}) => {
 
   const onSubmit = (values, actions) => {
-    onSignUp(values.email, values.password);
+    onSignUp(values);
     actions.setSubmitting(false);
   };
 
@@ -32,6 +31,7 @@ const SignUp = ({loading, error, onSignUp}) => {
             id="email"
             type="email"
             name="email"
+            placeholder="Enter your email"
             className={
               touched.email
                 ? errors.email || error
@@ -49,6 +49,7 @@ const SignUp = ({loading, error, onSignUp}) => {
             id="password"
             type="password"
             name="password"
+            placeholder="Enter your password"
             className={
               touched.password
                 ? errors.password || error
@@ -77,7 +78,8 @@ const SignUp = ({loading, error, onSignUp}) => {
               className="btn btn-success"
               type="submit"
               disabled={
-                !touched.email || !touched.password || Object.keys(errors).length !== 0
+                !touched.email || !touched.password
+                ||  Object.keys(errors).length !== 0
               }
             >
               Sign up
@@ -110,7 +112,7 @@ const mapStateToProps = ({auth: { loading, error }}) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSignUp: (email, password) => dispatch(signUp(email, password)),
+    onSignUp: (authData) => dispatch(signUp(authData)),
   };
 };
 

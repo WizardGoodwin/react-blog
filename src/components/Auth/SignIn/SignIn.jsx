@@ -31,12 +31,13 @@ const SignIn = ({loading, error, onSignIn }) => {
             id="email"
             type="email"
             name="email"
+            placeholder="Enter your email"
             className={
               touched.email
                 ? errors.email || error
-                ? 'form-control is-invalid'
-                : 'form-control is-valid'
-                : 'form-control '
+                ? "form-control is-invalid"
+                : "form-control is-valid"
+                : "form-control"
             }
           />
           <ErrorMessage name="email" component="div" className="text-danger" />
@@ -48,6 +49,7 @@ const SignIn = ({loading, error, onSignIn }) => {
             id="password"
             type="password"
             name="password"
+            placeholder="Enter your password"
             className={
               touched.password
                 ? errors.password || error

@@ -65,13 +65,6 @@ const logOut = (state) => {
   };
 };
 
-const setAuthRedirectPath = (state, action) => {
-  return {
-    ...state,
-    authRedirectPath: action.path,
-  };
-};
-
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SIGN_UP_REQUEST:
@@ -88,8 +81,6 @@ const authReducer = (state = initialState, action) => {
       return signInFail(state, action);
     case actionTypes.LOG_OUT:
       return logOut(state, action);
-    case actionTypes.SET_AUTH_REDIRECT_PATH:
-      return setAuthRedirectPath(state, action);
     default:
       return state;
   }

@@ -55,7 +55,8 @@ export const logOut = () => {
 export const signUp = (authData) => {
   return (dispatch) => {
     dispatch(signUpRequest());
-    const url='https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDl7p6TD5rS_sYqeXIeRsToBEpXbjk36F4';
+    const url =
+      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDl7p6TD5rS_sYqeXIeRsToBEpXbjk36F4';
 
     axios
       .post(url, { ...authData, returnSecureToken: true })
@@ -65,21 +66,22 @@ export const signUp = (authData) => {
         const user = {
           id: response.data.localId,
           email: authData.email,
-          username: authData.username
+          username: authData.username,
         };
         axios
           .post('/users.json', user)
           .then(() => {
-            dispatch(signUpSuccess(response.data.idToken, response.data.localId));
+            dispatch(
+              signUpSuccess(response.data.idToken, response.data.localId),
+            );
           })
           .catch((err) => {
             dispatch(signUpFail(err.response.data.error));
-          })
+          });
       })
       .catch((err) => {
         dispatch(signUpFail(err.response.data.error));
       });
-
   };
 };
 

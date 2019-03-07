@@ -19,14 +19,13 @@ const SignUpSchema = Yup.object().shape({
     .required('This field should be filled'),
 });
 
-const SignUp = ({loading, error, isAuth, onSignUp}) => {
-
+const SignUp = ({ loading, error, isAuth, onSignUp }) => {
   const onSubmit = (values, actions) => {
     onSignUp(values);
     actions.setSubmitting(false);
   };
 
-  const renderForm = ({errors, touched}) => {
+  const renderForm = ({ errors, touched }) => {
     return (
       <Form className="d-flex flex-column align-items-center">
         <div className="form-group w-75">
@@ -39,12 +38,16 @@ const SignUp = ({loading, error, isAuth, onSignUp}) => {
             className={
               touched.username
                 ? errors.username || error
-                ? 'form-control is-invalid'
-                : 'form-control is-valid'
+                  ? 'form-control is-invalid'
+                  : 'form-control is-valid'
                 : 'form-control '
             }
           />
-          <ErrorMessage name="username" component="div" className="text-danger" />
+          <ErrorMessage
+            name="username"
+            component="div"
+            className="text-danger"
+          />
         </div>
 
         <div className="form-group w-75">
@@ -87,49 +90,48 @@ const SignUp = ({loading, error, isAuth, onSignUp}) => {
           />
         </div>
 
-        { error &&
-          <div className="text-danger mb-3">
-            {error.message}
-          </div>
-        }
+        {error && <div className="text-danger mb-3">{error.message}</div>}
 
-        { loading ?
-            <Spinner/>
-            :
-            <button
-              className="btn btn-success"
-              type="submit"
-              disabled={
-                !touched.email || !touched.password || !touched.username
-                ||  Object.keys(errors).length !== 0
-              }
-            >
-              Sign up
-            </button>
-        }
+        {loading ? (
+          <Spinner />
+        ) : (
+          <button
+            className="btn btn-success"
+            type="submit"
+            disabled={
+              !touched.email ||
+              !touched.password ||
+              !touched.username ||
+              Object.keys(errors).length !== 0
+            }
+          >
+            Sign up
+          </button>
+        )}
       </Form>
     );
   };
 
   if (isAuth) {
-    return <Redirect to='/'/>
+    return <Redirect to="/" />;
   }
 
   return (
     <div className="container card w-75 mt-5 p-4 shadow">
       <h3 className="text-center">Sign up</h3>
       <Formik
-        initialValues={{username: '', email: '', password: ''}}
-        onSubmit={(values, actions) => {onSubmit(values, actions)}}
+        initialValues={{ username: '', email: '', password: '' }}
+        onSubmit={(values, actions) => {
+          onSubmit(values, actions);
+        }}
         validationSchema={SignUpSchema}
         render={(formProps) => renderForm(formProps)}
       />
     </div>
   );
-
 };
 
-const mapStateToProps = ({auth: { loading, error, token }}) => {
+const mapStateToProps = ({ auth: { loading, error, token } }) => {
   return {
     loading,
     error,

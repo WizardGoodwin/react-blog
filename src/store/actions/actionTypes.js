@@ -8,4 +8,6 @@ export const SIGN_IN_FAIL = 'SIGN_IN_FAIL';
 
 export const LOG_OUT = 'LOG_OUT';
 
-export const SET_AUTH_REDIRECT_PATH = 'SET_AUTH_REDIRECT_PATH';
+export const GET_USERS_REQUEST = 'GET_USERS_REQUEST';
+export const GET_USERS_SUCCESS = 'GET_USERS_SUCCESS';
+export const GET_USERS_FAIL = 'GET_USERS_FAIL';

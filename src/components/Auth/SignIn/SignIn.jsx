@@ -17,13 +17,12 @@ const SignInSchema = Yup.object().shape({
 });
 
 const SignIn = ({ loading, error, isAuth, onSignIn }) => {
-
   const onSubmit = (values, actions) => {
     onSignIn(values);
     actions.setSubmitting(false);
   };
 
-  const renderForm = ({errors, touched}) => {
+  const renderForm = ({ errors, touched }) => {
     return (
       <Form className="d-flex flex-column align-items-center">
         <div className="form-group w-75">
@@ -36,9 +35,9 @@ const SignIn = ({ loading, error, isAuth, onSignIn }) => {
             className={
               touched.email
                 ? errors.email || error
-                ? "form-control is-invalid"
-                : "form-control is-valid"
-                : "form-control"
+                  ? 'form-control is-invalid'
+                  : 'form-control is-valid'
+                : 'form-control'
             }
           />
           <ErrorMessage name="email" component="div" className="text-danger" />
@@ -54,8 +53,8 @@ const SignIn = ({ loading, error, isAuth, onSignIn }) => {
             className={
               touched.password
                 ? errors.password || error
-                ? 'form-control is-invalid'
-                : 'form-control is-valid'
+                  ? 'form-control is-invalid'
+                  : 'form-control is-valid'
                 : 'form-control '
             }
           />
@@ -66,52 +65,51 @@ const SignIn = ({ loading, error, isAuth, onSignIn }) => {
           />
         </div>
 
-        { error &&
-        <div className="text-danger mb-3">
-          {error.message}
-        </div>
-        }
+        {error && <div className="text-danger mb-3">{error.message}</div>}
 
-        { loading ?
-          <Spinner/>
-          :
+        {loading ? (
+          <Spinner />
+        ) : (
           <button
             className="btn btn-success"
             type="submit"
             disabled={
-              !touched.email || !touched.password || Object.keys(errors).length !== 0
+              !touched.email ||
+              !touched.password ||
+              Object.keys(errors).length !== 0
             }
           >
             Sign in
           </button>
-        }
+        )}
       </Form>
     );
   };
 
   if (isAuth) {
-    return <Redirect to='/'/>
+    return <Redirect to="/" />;
   }
 
   return (
     <div className="container card w-75 mt-5 p-4 shadow">
       <h3 className="text-center">Sign in</h3>
       <Formik
-        initialValues={{email: '', password: ''}}
-        onSubmit={(values, actions) => {onSubmit(values, actions)}}
+        initialValues={{ email: '', password: '' }}
+        onSubmit={(values, actions) => {
+          onSubmit(values, actions);
+        }}
         validationSchema={SignInSchema}
         render={(formProps) => renderForm(formProps)}
       />
     </div>
   );
-
 };
 
-const mapStateToProps = ({auth: { loading, error, token }}) => {
+const mapStateToProps = ({ auth: { loading, error, token } }) => {
   return {
     loading,
     error,
-    isAuth: token !== null
+    isAuth: token !== null,
   };
 };
 

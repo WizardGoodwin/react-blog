@@ -7,22 +7,26 @@ import SignButtons from './SignButtons/SignButtons';
 import UserButton from './UserButton/UserButton';
 import * as actions from '../../store/actions/auth';
 
-const Header = ({isAuth, userId, onLogOut}) => {
+const Header = ({ isAuth, userId, onLogOut }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
       <div className="container">
         <Brand />
         <Navigation />
-        { isAuth ? <UserButton userId={userId} onLogOut={onLogOut} /> : <SignButtons /> }
+        {isAuth ? (
+          <UserButton userId={userId} onLogOut={onLogOut} />
+        ) : (
+          <SignButtons />
+        )}
       </div>
     </nav>
   );
 };
 
-const mapStateToProps = ({auth: { token, userId }}) => {
+const mapStateToProps = ({ auth: { token, userId } }) => {
   return {
     isAuth: token !== null,
-    userId
+    userId,
   };
 };
 

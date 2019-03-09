@@ -21,6 +21,46 @@ export const getUsersFail = (error) => {
   };
 };
 
+export const getUserByIdRequest = () => {
+  return {
+    type: actionTypes.GET_USER_BY_ID_REQUEST,
+  };
+};
+
+export const getUserByIdSuccess = (user) => {
+  return {
+    type: actionTypes.GET_USER_BY_ID_SUCCESS,
+    user: user,
+  };
+};
+
+export const getUserByIdFail = (error) => {
+  return {
+    type: actionTypes.GET_USER_BY_ID_FAIL,
+    error: error,
+  };
+};
+
+export const updateUserRequest = () => {
+  return {
+    type: actionTypes.UPDATE_USER_REQUEST,
+  };
+};
+
+export const updateUserSuccess = (user) => {
+  return {
+    type: actionTypes.UPDATE_USER_SUCCESS,
+    user: user,
+  };
+};
+
+export const updateUserFail = (error) => {
+  return {
+    type: actionTypes.UPDATE_USER_FAIL,
+    error: error,
+  };
+};
+
 export const getUsers = () => {
   return (dispatch) => {
     dispatch(getUsersRequest());
@@ -30,8 +70,37 @@ export const getUsers = () => {
         dispatch(getUsersSuccess(Object.values(response.data)));
       })
       .catch((err) => {
-        console.log(err.response);
         dispatch(getUsersFail(err.response.data.error));
+      });
+  };
+};
+
+export const getUserById = () => {
+  const id = localStorage.getItem('userId');
+  return (dispatch) => {
+    dispatch(getUserByIdRequest());
+    axios
+      .get(`/users/${id}.json`)
+      .then((response) => {
+        dispatch(getUserByIdSuccess(response.data));
+      })
+      .catch((err) => {
+        dispatch(getUserByIdFail(err.response.data.error));
+      });
+  };
+};
+
+export const updateUser = (user) => {
+  const id = localStorage.getItem('userId');
+  return (dispatch) => {
+    dispatch(updateUserRequest());
+    axios
+      .put(`/users/${id}.json`, user)
+      .then((response) => {
+        dispatch(updateUserSuccess(response.data));
+      })
+      .catch((err) => {
+        dispatch(updateUserFail(err.response.data.error));
       });
   };
 };

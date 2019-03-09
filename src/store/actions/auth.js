@@ -62,15 +62,20 @@ export const signUp = (authData) => {
       .post(url, { ...authData, returnSecureToken: true })
       .then((response) => {
         localStorage.setItem('token', response.data.idToken);
-        localStorage.setItem('userId', response.data.localId);
+        localStorage.setItem('userTempId', response.data.localId);
         const user = {
           id: response.data.localId,
           email: authData.email,
           username: authData.username,
+          name: '',
+          phone: '',
+          address: '',
+          website: '',
         };
         axios
           .post('/users.json', user)
-          .then(() => {
+          .then((response) => {
+            localStorage.setItem('userId', response.data.name);
             dispatch(
               signUpSuccess(response.data.idToken, response.data.localId),
             );
@@ -94,9 +99,20 @@ export const signIn = (authData) => {
     axios
       .post(url, { ...authData, returnSecureToken: true })
       .then((response) => {
-        localStorage.setItem('token', response.data.idToken);
-        localStorage.setItem('userId', response.data.localId);
-        dispatch(signInSuccess(response.data.idToken, response.data.localId));
+        const token = response.data.idToken;
+        const tempId = response.data.localId;
+        axios
+          .get('/users.json')
+          .then((response) => {
+            const users = Object.entries(response.data);
+            const user = users.find((user) => user[1].id === tempId);
+            localStorage.setItem('token', token);
+            localStorage.setItem('userId', user[0]);
+            dispatch(signInSuccess(token, user[0]));
+          })
+          .catch((err) => {
+            dispatch(signInFail(err.response.data.error));
+          });
       })
       .catch((err) => {
         dispatch(signInFail(err.response.data.error));

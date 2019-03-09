@@ -9,6 +9,7 @@ const User = ({ user }) => {
         <p className="card-text">Full name: {user.name}</p>
         <p className="card-text">E-mail: {user.email}</p>
         <p className="card-text">Phone: {user.phone}</p>
+        <p className="card-text">Address: {user.address}</p>
         <p className="card-text">Website: {user.website}</p>
       </div>
       <div className="card-footer">

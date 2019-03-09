@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -8,29 +8,22 @@ import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
 import { getUsers } from '../store/actions/users';
 
-const UsersContainer = ({ error, loading, users, getUsers }) => {
-
+const UsersContainer = ({ error, usersLoading, users, getUsers }) => {
   useEffect(() => {
     getUsers();
   }, []);
 
   if (error) {
-    return (
-      <ErrorIndicator/>
-    );
+    return <ErrorIndicator />;
   }
 
-  if (loading) {
+  if (usersLoading) {
     // если пользователи загружаются
-    return <Spinner/>
+    return <Spinner />;
   } else {
     return (
       <div>
-        <Route
-          path="/users"
-          exact
-          render={() => <UsersList users={users} />}
-        />
+        <Route path="/users" exact render={() => <UsersList users={users} />} />
         <Route
           path="/users/:username"
           render={(props) => {
@@ -42,15 +35,13 @@ const UsersContainer = ({ error, loading, users, getUsers }) => {
           }}
         />
       </div>
-    )
+    );
   }
-
-
 };
 
 //привязываем состояние из store к this.props
-const mapStateToProps = ({users: { users, loading, error }}) => {
-  return {users, loading, error};
+const mapStateToProps = ({ users: { users, usersLoading, error } }) => {
+  return { users, usersLoading, error };
 };
 
 //привязываем функцию из actions к this.props

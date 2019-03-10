@@ -4,18 +4,6 @@
   left: 25%;
 }
 
-.modal-login {
-  position: fixed;
-  width: 30%;
-  left: 35%;
-}
-
-.modal-registration {
-  position: fixed;
-  width: 50%;
-  left: 25%;
-}
-
 .overlay {
   position: fixed;
   top: 0;
@@ -27,7 +15,7 @@
 
 .ReactModal__Overlay {
   opacity: 0;
-  transition: opacity 500ms ease-in-out;
+  transition: opacity 300ms ease-in-out;
 }
 
 .ReactModal__Overlay--after-open {
@@ -41,7 +29,7 @@
 .ReactModal__Content {
   top: 0;
   opacity: 0;
-  transition: all 500ms ease-in-out;
+  transition: all 300ms ease-in-out;
 }
 
 .ReactModal__Content--after-open {

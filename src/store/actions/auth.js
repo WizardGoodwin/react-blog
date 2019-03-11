@@ -2,13 +2,13 @@ import axios from '../../axios';
 
 import * as actionTypes from './actionTypes';
 
-export const signUpRequest = () => {
+const signUpRequest = () => {
   return {
     type: actionTypes.SIGN_UP_REQUEST,
   };
 };
 
-export const signUpSuccess = (token, userId) => {
+const signUpSuccess = (token, userId) => {
   return {
     type: actionTypes.SIGN_UP_SUCCESS,
     token: token,
@@ -16,20 +16,20 @@ export const signUpSuccess = (token, userId) => {
   };
 };
 
-export const signUpFail = (error) => {
+const signUpFail = (error) => {
   return {
     type: actionTypes.SIGN_UP_FAIL,
     error: error,
   };
 };
 
-export const signInRequest = () => {
+const signInRequest = () => {
   return {
     type: actionTypes.SIGN_IN_REQUEST,
   };
 };
 
-export const signInSuccess = (token, userId) => {
+const signInSuccess = (token, userId) => {
   return {
     type: actionTypes.SIGN_IN_SUCCESS,
     token: token,
@@ -37,7 +37,7 @@ export const signInSuccess = (token, userId) => {
   };
 };
 
-export const signInFail = (error) => {
+const signInFail = (error) => {
   return {
     type: actionTypes.SIGN_IN_FAIL,
     error: error,

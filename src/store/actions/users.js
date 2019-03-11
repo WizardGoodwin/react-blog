@@ -1,60 +1,60 @@
 import axios from '../../axios';
 import * as actionTypes from './actionTypes';
 
-export const getUsersRequest = () => {
+const getUsersRequest = () => {
   return {
     type: actionTypes.GET_USERS_REQUEST,
   };
 };
 
-export const getUsersSuccess = (users) => {
+const getUsersSuccess = (users) => {
   return {
     type: actionTypes.GET_USERS_SUCCESS,
     users: users,
   };
 };
 
-export const getUsersFail = (error) => {
+const getUsersFail = (error) => {
   return {
     type: actionTypes.GET_USERS_FAIL,
     error: error,
   };
 };
 
-export const getUserByIdRequest = () => {
+const getUserByIdRequest = () => {
   return {
     type: actionTypes.GET_USER_BY_ID_REQUEST,
   };
 };
 
-export const getUserByIdSuccess = (user) => {
+const getUserByIdSuccess = (user) => {
   return {
     type: actionTypes.GET_USER_BY_ID_SUCCESS,
     user: user,
   };
 };
 
-export const getUserByIdFail = (error) => {
+const getUserByIdFail = (error) => {
   return {
     type: actionTypes.GET_USER_BY_ID_FAIL,
     error: error,
   };
 };
 
-export const updateUserRequest = () => {
+const updateUserRequest = () => {
   return {
     type: actionTypes.UPDATE_USER_REQUEST,
   };
 };
 
-export const updateUserSuccess = (user) => {
+const updateUserSuccess = (user) => {
   return {
     type: actionTypes.UPDATE_USER_SUCCESS,
     user: user,
   };
 };
 
-export const updateUserFail = (error) => {
+const updateUserFail = (error) => {
   return {
     type: actionTypes.UPDATE_USER_FAIL,
     error: error,

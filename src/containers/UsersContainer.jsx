@@ -18,7 +18,6 @@ const UsersContainer = ({ error, usersLoading, users, getUsers }) => {
   }
 
   if (usersLoading) {
-    // если пользователи загружаются
     return <Spinner />;
   } else {
     return (

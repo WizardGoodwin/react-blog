@@ -13,16 +13,14 @@ const addPostRequest = (state) => {
   return {
     ...state,
     error: null,
-    postUpdating: true,
   };
 };
 
 const addPostSuccess = (state, action) => {
   return {
     ...state,
-    post: action.post,
     error: null,
-    postUpdating: false,
+    posts: state.posts.concat(action.post),
   };
 };
 
@@ -30,7 +28,6 @@ const addPostFail = (state, action) => {
   return {
     ...state,
     error: action.error,
-    postUpdating: false,
   };
 };
 

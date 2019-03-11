@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import PostsList from '../pages/Posts/PostsList/PostsList';
 import Post from '../pages/Posts/Post/Post';
 import PostForm from '../pages/Posts/PostForm/PostForm';
+import AddPost from '../pages/Posts/AddPost/AddPost';
 import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
 import { addPost, getPosts } from '../store/actions/posts';
@@ -43,14 +44,9 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
   } else {
     return (
       <Fragment>
-        <div className="mt-4">
-          <button
-            className="btn btn-info"
-            onClick={() => setModalOpen(true)}
-          >
-            Add new post
-          </button>
-        </div>
+        <AddPost
+          setModalOpen={setModalOpen}
+        />
 
         <Modal
           isOpen={isModalOpen}

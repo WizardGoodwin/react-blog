@@ -80,14 +80,15 @@ const deletePostFail = (error) => {
   };
 };
 
-export const addPost = (post) => {
+export const addPost = (newPost) => {
+  const date = new Date().toLocaleString();
+  const post = {...newPost, created_at: date};
   return (dispatch) => {
     dispatch(addPostRequest());
     axios
       .post(`/posts.json`, post)
-      .then((response) => {
-        console.log(response.data);
-        dispatch(addPostSuccess(response.data));
+      .then(() => {
+        dispatch(addPostSuccess(post));
       })
       .catch((err) => {
         dispatch(addPostFail(err.response.data.error));

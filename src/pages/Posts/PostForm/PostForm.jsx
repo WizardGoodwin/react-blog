@@ -1,12 +1,11 @@
 import React from 'react';
 
-import Spinner from '../../../shared/Spinner/Spinner';
-
-const PostForm = ({ form, onPostChange, setModalOpen, onSubmit, userUpdating }) => {
+const PostForm = ({ form, isNewPost, onPostChange, setModalOpen, onSubmit }) => {
+  const { title, body } = form;
   return (
     <div className="card">
       <div className="card-header">
-        Add new Post
+        {isNewPost ? 'Add new Post' : 'Edit post'}
         <button
           className="close"
           onClick={() => setModalOpen(false)}
@@ -22,6 +21,7 @@ const PostForm = ({ form, onPostChange, setModalOpen, onSubmit, userUpdating }) 
               type="text"
               className="form-control"
               id="title"
+              defaultValue={title}
               onChange={(e) => onPostChange(e)}
             />
           </div>
@@ -31,16 +31,15 @@ const PostForm = ({ form, onPostChange, setModalOpen, onSubmit, userUpdating }) 
               className="form-control"
               id="body"
               rows="5"
+              defaultValue={body}
               onChange={(e) => onPostChange(e)}
             />
           </div>
-          {userUpdating ? (
-            <Spinner />
-          ) : (
-            <button className="btn btn-success" type="submit">
-              Save
-            </button>
-          )}
+
+          <button className="btn btn-success" type="submit">
+            Save
+          </button>
+
           <button
             className="btn btn-secondary float-right"
             onClick={() => setModalOpen(false)}

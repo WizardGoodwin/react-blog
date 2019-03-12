@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import image from '../../../assets/images/Post.jpg';
 
 const Post = ({ post }) => {
-  const { title, body, created_at } = post;
+  const { title, body, created_at } = post[1];
   return (
     <div className="card shadow my-4">
       <img className="card-img-top" src={image} alt="post" />

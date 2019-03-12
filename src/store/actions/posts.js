@@ -7,10 +7,11 @@ const addPostRequest = () => {
   };
 };
 
-const addPostSuccess = (post) => {
+const addPostSuccess = (id, post) => {
   return {
     type: actionTypes.ADD_POST_SUCCESS,
-    post: post,
+    id,
+    post,
   };
 };
 
@@ -87,8 +88,9 @@ export const addPost = (newPost) => {
     dispatch(addPostRequest());
     axios
       .post(`/posts.json`, post)
-      .then(() => {
-        dispatch(addPostSuccess(post));
+      .then((response) => {
+        const id = response.data.name;
+        dispatch(addPostSuccess(id, post));
       })
       .catch((err) => {
         dispatch(addPostFail(err.response.data.error));
@@ -102,7 +104,9 @@ export const getPosts = () => {
     axios
       .get('/posts.json')
       .then((response) => {
-        dispatch(getPostsSuccess(Object.values(response.data)));
+        //convert response object to array of arrays kind of [ id : post ]
+        const posts = Object.entries(response.data);
+        dispatch(getPostsSuccess(posts));
       })
       .catch((err) => {
         dispatch(getPostsFail(err.response.data.error));
@@ -110,13 +114,16 @@ export const getPosts = () => {
   };
 };
 
-export const updatePost = (post) => {
+export const updatePost = (id, post) => {
+  //console.log(id, post);
+
   return (dispatch) => {
     dispatch(updatePostRequest());
     axios
-      .put('/posts.json')
+      .put(`/posts/${id}.json`, post)
       .then((response) => {
-        //dispatch(updatePostSuccess(Object.values(response.data)));
+        console.log(response);
+        dispatch(updatePostSuccess(Object.values(response.data)));
       })
       .catch((err) => {
         dispatch(updatePostFail(err.response.data.error));
@@ -130,7 +137,7 @@ export const deletePost = (post) => {
     axios
       .delete('/posts.json')
       .then((response) => {
-        //dispatch(deletePostSuccess(Object.values(response.data)));
+        dispatch(deletePostSuccess(Object.values(response.data)));
       })
       .catch((err) => {
         dispatch(deletePostFail(err.response.data.error));

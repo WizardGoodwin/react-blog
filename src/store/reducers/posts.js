@@ -17,10 +17,11 @@ const addPostRequest = (state) => {
 };
 
 const addPostSuccess = (state, action) => {
+  const newPost = [action.id, action.post];
   return {
     ...state,
     error: null,
-    posts: state.posts.concat(action.post),
+    posts: state.posts.concat([newPost]),
   };
 };
 

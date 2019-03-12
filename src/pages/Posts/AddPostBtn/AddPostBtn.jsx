@@ -1,11 +1,11 @@
 import React from 'react';
 
-const AddPost = ({ setModalOpen }) => {
+const AddPostBtn = ({ onAddPost }) => {
   return (
     <div className="mt-4">
       <button
         className="btn btn-info"
-        onClick={() => setModalOpen(true)}
+        onClick={() => onAddPost()}
       >
         Add new post
       </button>
@@ -13,4 +13,4 @@ const AddPost = ({ setModalOpen }) => {
   )
 };
 
-export default AddPost;
+export default AddPostBtn;

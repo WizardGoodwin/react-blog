@@ -6,16 +6,19 @@ import Modal from 'react-modal';
 import PostsList from '../pages/Posts/PostsList/PostsList';
 import Post from '../pages/Posts/Post/Post';
 import PostForm from '../pages/Posts/PostForm/PostForm';
-import AddPost from '../pages/Posts/AddPost/AddPost';
+import AddPostBtn from '../pages/Posts/AddPostBtn/AddPostBtn';
 import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
-import { addPost, getPosts } from '../store/actions/posts';
+import { addPost, getPosts, updatePost } from '../store/actions/posts';
 
 Modal.setAppElement('#root');
 
 const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, getPosts }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isNewPost, setIsNew] = useState(false);
   const [form, setValues] = useState({title: '', body: ''});
+  const [postId, setId] = useState(null);
+
 
   useEffect(() => {
     getPosts();
@@ -29,9 +32,23 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
     });
   };
 
-  const onSubmit = (e) => {
+  const onAddPost = () => {
+    setIsNew(true);
+    setValues({title: '', body: ''});
+    setModalOpen(true);
+  };
+
+  const onPostEdit = (id, post) => {
+    setIsNew(false);
+    setValues(post);
+    setId(id);
+    setModalOpen(true);
+  };
+
+  const onPostSubmit = (e) => {
     e.preventDefault();
-    addPost(form);
+    //if its new post, then send add action else update action
+    isNewPost ? addPost(form) : updatePost(postId, form);
     setModalOpen(false);
   };
 
@@ -44,8 +61,8 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
   } else {
     return (
       <Fragment>
-        <AddPost
-          setModalOpen={setModalOpen}
+        <AddPostBtn
+          onAddPost={onAddPost}
         />
 
         <Modal
@@ -58,9 +75,10 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
         >
           <PostForm
             form={form}
+            isNewPost={isNewPost}
             onPostChange={onPostChange}
             setModalOpen={setModalOpen}
-            onSubmit={onSubmit}
+            onSubmit={onPostSubmit}
           />
         </Modal>
 
@@ -70,6 +88,8 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
           render={() =>
             <PostsList
               posts={posts}
+              setModalOpen={setModalOpen}
+              onPostEdit={onPostEdit}
               // users={users}
               // isLoggedIn={isLoggedIn}
               // authUsername={authUsername}
@@ -89,7 +109,7 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
           render={(props) =>  {
             const title = props.match.params.title;
             const selectedPost = posts.find(
-              (post) => post.title === title,
+              (post) => post[1].title === title
             );
           return (
             <Post
@@ -115,6 +135,7 @@ const mapStateToProps = ({ posts: { posts, postsLoading, error, postUpdating }})
 const mapDispatchToProps = (dispatch) => {
   return {
     addPost: (post) => dispatch(addPost(post)),
+    updatePost: (id, post) => dispatch(updatePost(id, post)),
     getPosts: () => dispatch(getPosts()),
   };
 };

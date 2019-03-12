@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 
 import image from '../../../assets/images/Post.jpg';
 
-const PostsList = ({ posts }) => {
-  return posts.map(post => {
+const PostsList = ({ posts, onPostEdit }) => {
+  return posts.map(item => {
+    // destructuring posts list items
+    const [id, post] = item;
     const { title, body, created_at } = post;
     return (
-      <div key={title} className="card shadow my-4">
+      <div key={id} className="card shadow my-4">
         <img className="card-img-top" src={image} alt="post" />
         <div className="card-body">
           <h3 className="card-title">
@@ -25,14 +27,14 @@ const PostsList = ({ posts }) => {
 
             <div>
               <button
-                className="btn btn-outline-danger btn-sm float-right ml-4"
+                className="btn btn-outline-danger float-right ml-4"
                 //onClick={() => deletePost(post.id)}
               >
                 Delete
               </button>
               < button
-                className="btn btn-outline-info btn-sm float-right"
-                //onClick={() => this.handlePostUpdateBtn(post)}
+                className="btn btn-outline-info float-right"
+                onClick={() => onPostEdit(id, post)}
               >
                 Edit
               </button>

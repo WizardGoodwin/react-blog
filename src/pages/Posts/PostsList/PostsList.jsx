@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 import image from '../../../assets/images/Post.jpg';
 
-const PostsList = ({ posts, onPostEdit }) => {
-  return posts.map(item => {
+const PostsList = ({ posts, onPostEdit, onPostDelete }) => {
+  return posts.map((item) => {
     // destructuring posts list items
     const [id, post] = item;
     const { title, body, created_at } = post;
@@ -22,28 +22,27 @@ const PostsList = ({ posts, onPostEdit }) => {
             <small className="text-muted">{created_at}</small>
           </p>
           {/*<Link to={'/users/' + this.getAuthor(post.userId)}>*/}
-            {/*by {this.getAuthor(post.userId)}*/}
+          {/*by {this.getAuthor(post.userId)}*/}
           {/*</Link>*/}
 
-            <div>
-              <button
-                className="btn btn-outline-danger float-right ml-4"
-                //onClick={() => deletePost(post.id)}
-              >
-                Delete
-              </button>
-              < button
-                className="btn btn-outline-info float-right"
-                onClick={() => onPostEdit(id, post)}
-              >
-                Edit
-              </button>
-            </div>
-
+          <div>
+            <button
+              className="btn btn-outline-danger float-right ml-4"
+              onClick={() => onPostDelete(id)}
+            >
+              Delete
+            </button>
+            <button
+              className="btn btn-outline-info float-right"
+              onClick={() => onPostEdit(id, post)}
+            >
+              Edit
+            </button>
+          </div>
         </div>
       </div>
-    )
-  })
+    );
+  });
 };
 
 export default PostsList;

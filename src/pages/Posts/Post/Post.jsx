@@ -15,14 +15,16 @@ const Post = ({ post }) => {
           <small className="text-muted">{created_at}</small>
         </p>
         {/*<Link to={'/users/' + author.username}>*/}
-          {/*by {author.username}*/}
+        {/*by {author.username}*/}
         {/*</Link>*/}
       </div>
       <div className="card-footer">
-        <Link to={'/posts'} className="card-link">Go to posts list</Link>
+        <Link to={'/posts'} className="card-link">
+          Go to posts list
+        </Link>
       </div>
     </div>
-  )
+  );
 };
 
 export default Post;

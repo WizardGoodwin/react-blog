@@ -9,16 +9,29 @@ import PostForm from '../pages/Posts/PostForm/PostForm';
 import AddPostBtn from '../pages/Posts/AddPostBtn/AddPostBtn';
 import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
-import { addPost, getPosts, updatePost } from '../store/actions/posts';
+import {
+  addPost,
+  deletePost,
+  getPosts,
+  updatePost,
+} from '../store/actions/posts';
 
 Modal.setAppElement('#root');
 
-const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, getPosts }) => {
+const PostsContainer = ({
+  posts,
+  postsLoading,
+  error,
+  postUpdating,
+  addPost,
+  getPosts,
+  updatePost,
+  deletePost,
+}) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isNewPost, setIsNew] = useState(false);
-  const [form, setValues] = useState({title: '', body: ''});
+  const [form, setValues] = useState({ title: '', body: '' });
   const [postId, setId] = useState(null);
-
 
   useEffect(() => {
     getPosts();
@@ -34,7 +47,7 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
 
   const onAddPost = () => {
     setIsNew(true);
-    setValues({title: '', body: ''});
+    setValues({ title: '', body: '' });
     setModalOpen(true);
   };
 
@@ -43,6 +56,10 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
     setValues(post);
     setId(id);
     setModalOpen(true);
+  };
+
+  const onPostDelete = (id) => {
+    deletePost(id);
   };
 
   const onPostSubmit = (e) => {
@@ -61,9 +78,7 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
   } else {
     return (
       <Fragment>
-        <AddPostBtn
-          onAddPost={onAddPost}
-        />
+        <AddPostBtn onAddPost={onAddPost} />
 
         <Modal
           isOpen={isModalOpen}
@@ -83,60 +98,55 @@ const PostsContainer = ({ posts, postsLoading, error, postUpdating, addPost, get
         </Modal>
 
         <Route
-          path='/posts'
+          path="/posts"
           exact
-          render={() =>
+          render={() => (
             <PostsList
               posts={posts}
               setModalOpen={setModalOpen}
               onPostEdit={onPostEdit}
+              onPostDelete={onPostDelete}
               // users={users}
               // isLoggedIn={isLoggedIn}
               // authUsername={authUsername}
-              // isNewPost={isNewPost}
-              // setIsNewPost={setIsNewPost}
-              // editedPost={editedPost}
-              // setEditedPost={setEditedPost}
-              // handlePostChange={handlePostChange}
-              // createPost={createPost}
-              // updatePost={updatePost}
-              // deletePost={deletePost}
             />
-          }
+          )}
         />
         <Route
-          path='/posts/:title'
-          render={(props) =>  {
+          path="/posts/:title"
+          render={(props) => {
             const title = props.match.params.title;
-            const selectedPost = posts.find(
-              (post) => post[1].title === title
+            const selectedPost = posts.find((post) => post[1].title === title);
+            return (
+              <Post
+                post={selectedPost}
+                // author={author}
+                // comments={selectedComments}
+                // addComment={addComment}
+                // handleCommentChange={handleCommentChange}
+                // defaultName={commentName}
+                // defaultBody={commentBody}
+              />
             );
-          return (
-            <Post
-              post={selectedPost}
-              // author={author}
-              // comments={selectedComments}
-              // addComment={addComment}
-              // handleCommentChange={handleCommentChange}
-              // defaultName={commentName}
-              // defaultBody={commentBody}
-            />
-          )}}
+          }}
         />
       </Fragment>
-    )
+    );
   }
 };
 
-const mapStateToProps = ({ posts: { posts, postsLoading, error, postUpdating }}) => {
+const mapStateToProps = ({
+  posts: { posts, postsLoading, error, postUpdating },
+}) => {
   return { posts, postsLoading, error, postUpdating };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    getPosts: () => dispatch(getPosts()),
     addPost: (post) => dispatch(addPost(post)),
     updatePost: (id, post) => dispatch(updatePost(id, post)),
-    getPosts: () => dispatch(getPosts()),
+    deletePost: (id) => dispatch(deletePost(id)),
   };
 };
 

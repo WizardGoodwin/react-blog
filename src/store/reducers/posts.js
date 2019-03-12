@@ -61,16 +61,18 @@ const updatePostRequest = (state) => {
   return {
     ...state,
     error: null,
-    postUpdating: true,
   };
 };
 
 const updatePostSuccess = (state, action) => {
+  const idx = state.posts.findIndex(post => post[0] === action.id);
+  const newPosts = state.posts.slice();
+  newPosts[idx] = [action.id, action.post];
+  console.log('newPosts', newPosts);
   return {
     ...state,
-    post: action.post,
+    posts: newPosts,
     error: null,
-    postUpdating: false,
   };
 };
 
@@ -78,7 +80,6 @@ const updatePostFail = (state, action) => {
   return {
     ...state,
     error: action.error,
-    postUpdating: false,
   };
 };
 
@@ -86,15 +87,16 @@ const deletePostRequest = (state) => {
   return {
     ...state,
     error: null,
-    postUpdating: true,
   };
 };
 
 const deletePostSuccess = (state, action) => {
+  // deleting from array post with id
+  const newPosts = state.posts.filter((post) => post[0] !== action.id);
   return {
     ...state,
+    posts: newPosts,
     error: null,
-    postUpdating: false,
   };
 };
 
@@ -102,7 +104,6 @@ const deletePostFail = (state, action) => {
   return {
     ...state,
     error: action.error,
-    postUpdating: false,
   };
 };
 

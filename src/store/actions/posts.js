@@ -48,10 +48,11 @@ const updatePostRequest = () => {
   };
 };
 
-const updatePostSuccess = (post) => {
+const updatePostSuccess = (id, post) => {
   return {
     type: actionTypes.UPDATE_POST_SUCCESS,
-    post: post,
+    id,
+    post,
   };
 };
 
@@ -68,9 +69,10 @@ const deletePostRequest = () => {
   };
 };
 
-const deletePostSuccess = (post) => {
+const deletePostSuccess = (id) => {
   return {
     type: actionTypes.DELETE_POST_SUCCESS,
+    id,
   };
 };
 
@@ -83,7 +85,7 @@ const deletePostFail = (error) => {
 
 export const addPost = (newPost) => {
   const date = new Date().toLocaleString();
-  const post = {...newPost, created_at: date};
+  const post = { ...newPost, created_at: date };
   return (dispatch) => {
     dispatch(addPostRequest());
     axios
@@ -114,16 +116,15 @@ export const getPosts = () => {
   };
 };
 
-export const updatePost = (id, post) => {
-  //console.log(id, post);
-
+export const updatePost = (id, editedPost) => {
+  const date = new Date().toLocaleString();
+  const post = { ...editedPost, created_at: date };
   return (dispatch) => {
     dispatch(updatePostRequest());
     axios
       .put(`/posts/${id}.json`, post)
-      .then((response) => {
-        console.log(response);
-        dispatch(updatePostSuccess(Object.values(response.data)));
+      .then(() => {
+        dispatch(updatePostSuccess(id, post));
       })
       .catch((err) => {
         dispatch(updatePostFail(err.response.data.error));
@@ -131,17 +132,16 @@ export const updatePost = (id, post) => {
   };
 };
 
-export const deletePost = (post) => {
+export const deletePost = (id) => {
   return (dispatch) => {
     dispatch(deletePostRequest());
     axios
-      .delete('/posts.json')
-      .then((response) => {
-        dispatch(deletePostSuccess(Object.values(response.data)));
+      .delete(`/posts/${id}.json`)
+      .then(() => {
+        dispatch(deletePostSuccess(id));
       })
       .catch((err) => {
         dispatch(deletePostFail(err.response.data.error));
       });
   };
 };
-

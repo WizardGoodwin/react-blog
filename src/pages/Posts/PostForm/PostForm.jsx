@@ -1,15 +1,18 @@
 import React from 'react';
 
-const PostForm = ({ form, isNewPost, onPostChange, setModalOpen, onSubmit }) => {
+const PostForm = ({
+  form,
+  isNewPost,
+  onPostChange,
+  setModalOpen,
+  onSubmit,
+}) => {
   const { title, body } = form;
   return (
     <div className="card">
       <div className="card-header">
         {isNewPost ? 'Add new Post' : 'Edit post'}
-        <button
-          className="close"
-          onClick={() => setModalOpen(false)}
-        >
+        <button className="close" onClick={() => setModalOpen(false)}>
           <span>&times;</span>
         </button>
       </div>
@@ -49,7 +52,7 @@ const PostForm = ({ form, isNewPost, onPostChange, setModalOpen, onSubmit }) => 
         </form>
       </div>
     </div>
-  )
+  );
 };
 
 export default PostForm;

@@ -85,7 +85,8 @@ const deletePostFail = (error) => {
 
 export const addPost = (newPost) => {
   const date = new Date().toLocaleString();
-  const post = { ...newPost, created_at: date };
+  const author = localStorage.getItem('username');
+  const post = { ...newPost, created_at: date, author };
   return (dispatch) => {
     dispatch(addPostRequest());
     axios

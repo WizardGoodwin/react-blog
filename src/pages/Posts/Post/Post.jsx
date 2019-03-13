@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import image from '../../../assets/images/Post.jpg';
 
 const Post = ({ post }) => {
-  const { title, body, created_at } = post[1];
+  const { title, body, created_at, author } = post[1];
   return (
     <div className="card shadow my-4">
       <img className="card-img-top" src={image} alt="post" />
@@ -14,9 +14,9 @@ const Post = ({ post }) => {
         <p className="card-text">
           <small className="text-muted">{created_at}</small>
         </p>
-        {/*<Link to={'/users/' + author.username}>*/}
-        {/*by {author.username}*/}
-        {/*</Link>*/}
+        <Link to={`/users/${author}`}>
+          by {author}
+        </Link>
       </div>
       <div className="card-footer">
         <Link to={'/posts'} className="card-link">

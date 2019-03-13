@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   token: localStorage.getItem('token'),
   userId: localStorage.getItem('userId'),
+  username: localStorage.getItem('username'),
   error: null,
   loading: false,
 };

@@ -19,6 +19,8 @@ import {
 Modal.setAppElement('#root');
 
 const PostsContainer = ({
+  isAuth,
+  username,
   posts,
   postsLoading,
   error,
@@ -78,7 +80,15 @@ const PostsContainer = ({
   } else {
     return (
       <Fragment>
-        <AddPostBtn onAddPost={onAddPost} />
+        {isAuth
+          // if user is logged in, then show button, else show text
+          ? <AddPostBtn onAddPost={onAddPost} />
+          : <div className="card shadow-sm mt-4">
+              <div className="card-body">
+                <h5 className="text-danger">Only registered users can add posts</h5>
+              </div>
+            </div>
+        }
 
         <Modal
           isOpen={isModalOpen}
@@ -106,9 +116,6 @@ const PostsContainer = ({
               setModalOpen={setModalOpen}
               onPostEdit={onPostEdit}
               onPostDelete={onPostDelete}
-              // users={users}
-              // isLoggedIn={isLoggedIn}
-              // authUsername={authUsername}
             />
           )}
         />
@@ -136,9 +143,13 @@ const PostsContainer = ({
 };
 
 const mapStateToProps = ({
+  auth: { token, username },
   posts: { posts, postsLoading, error, postUpdating },
 }) => {
-  return { posts, postsLoading, error, postUpdating };
+  return {
+    isAuth: token !== null, username,
+    posts, postsLoading, error, postUpdating
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

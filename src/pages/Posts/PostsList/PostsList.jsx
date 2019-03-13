@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 import image from '../../../assets/images/Post.jpg';
 
-const PostsList = ({ posts, onPostEdit, onPostDelete }) => {
+const PostsList = ({ username, posts, onPostEdit, onPostDelete }) => {
   return posts.map((item) => {
     // destructuring posts list items
     const [id, post] = item;
-    const { title, body, created_at } = post;
+    const { title, body, created_at, author } = post;
     return (
       <div key={id} className="card shadow my-4">
         <img className="card-img-top" src={image} alt="post" />
@@ -21,9 +21,9 @@ const PostsList = ({ posts, onPostEdit, onPostDelete }) => {
           <p className="card-text">
             <small className="text-muted">{created_at}</small>
           </p>
-          {/*<Link to={'/users/' + this.getAuthor(post.userId)}>*/}
-          {/*by {this.getAuthor(post.userId)}*/}
-          {/*</Link>*/}
+          <Link to={`/users/${author}`}>
+            by {author}
+          </Link>
 
           <div>
             <button

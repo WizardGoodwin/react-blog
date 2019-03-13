@@ -47,6 +47,7 @@ const signInFail = (error) => {
 export const logOut = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('userId');
+  localStorage.removeItem('username');
   return {
     type: actionTypes.LOG_OUT,
   };
@@ -104,10 +105,12 @@ export const signIn = (authData) => {
         axios
           .get('/users.json')
           .then((response) => {
+            console.log('users', response);
             const users = Object.entries(response.data);
             const user = users.find((user) => user[1].id === tempId);
             localStorage.setItem('token', token);
             localStorage.setItem('userId', user[0]);
+            localStorage.setItem('username', user[1].username);
             dispatch(signInSuccess(token, user[0]));
           })
           .catch((err) => {

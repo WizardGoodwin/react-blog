@@ -57,6 +57,31 @@ const getPostsFail = (state, action) => {
   };
 };
 
+const getLastPostsRequest = (state) => {
+  return {
+    ...state,
+    error: null,
+    postsLoading: true,
+  };
+};
+
+const getLastPostsSuccess = (state, action) => {
+  return {
+    ...state,
+    posts: action.posts,
+    error: null,
+    postsLoading: false,
+  };
+};
+
+const getLastPostsFail = (state, action) => {
+  return {
+    ...state,
+    error: action.error,
+    postsLoading: false,
+  };
+};
+
 const updatePostRequest = (state) => {
   return {
     ...state,
@@ -121,6 +146,12 @@ const postsReducer = (state = initialState, action) => {
       return getPostsSuccess(state, action);
     case actionTypes.GET_POSTS_FAIL:
       return getPostsFail(state, action);
+    case actionTypes.GET_LAST_POSTS_REQUEST:
+      return getLastPostsRequest(state, action);
+    case actionTypes.GET_LAST_POSTS_SUCCESS:
+      return getLastPostsSuccess(state, action);
+    case actionTypes.GET_LAST_POSTS_FAIL:
+      return getLastPostsFail(state, action);
     case actionTypes.UPDATE_POST_REQUEST:
       return updatePostRequest(state, action);
     case actionTypes.UPDATE_POST_SUCCESS:

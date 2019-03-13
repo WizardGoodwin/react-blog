@@ -8,7 +8,6 @@ import UserButton from './UserButton/UserButton';
 import { logOut } from '../../store/actions/auth';
 
 const Header = ({ isAuth, username, onLogOut }) => {
-  console.log(username);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
       <div className="container">

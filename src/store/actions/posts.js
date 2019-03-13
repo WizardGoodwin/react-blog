@@ -42,6 +42,26 @@ const getPostsFail = (error) => {
   };
 };
 
+const getLastPostsRequest = () => {
+  return {
+    type: actionTypes.GET_LAST_POSTS_REQUEST,
+  };
+};
+
+const getLastPostsSuccess = (posts) => {
+  return {
+    type: actionTypes.GET_LAST_POSTS_SUCCESS,
+    posts: posts,
+  };
+};
+
+const getLastPostsFail = (error) => {
+  return {
+    type: actionTypes.GET_LAST_POSTS_FAIL,
+    error: error,
+  };
+};
+
 const updatePostRequest = () => {
   return {
     type: actionTypes.UPDATE_POST_REQUEST,
@@ -113,6 +133,22 @@ export const getPosts = () => {
       })
       .catch((err) => {
         dispatch(getPostsFail(err.response.data.error));
+      });
+  };
+};
+
+export const getLastPosts = () => {
+  return (dispatch) => {
+    dispatch(getLastPostsRequest());
+    axios
+      .get('/posts.json')
+      .then((response) => {
+        //convert response object to array of arrays kind of [ id : post ]
+        const posts = Object.entries(response.data).slice(-3);
+        dispatch(getLastPostsSuccess(posts));
+      })
+      .catch((err) => {
+        dispatch(getLastPostsFail(err.response.data.error));
       });
   };
 };

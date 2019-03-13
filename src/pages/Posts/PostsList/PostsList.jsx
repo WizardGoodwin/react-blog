@@ -25,20 +25,24 @@ const PostsList = ({ username, posts, onPostEdit, onPostDelete }) => {
             by {author}
           </Link>
 
-          <div>
-            <button
-              className="btn btn-outline-danger float-right ml-4"
-              onClick={() => onPostDelete(id)}
-            >
-              Delete
-            </button>
-            <button
-              className="btn btn-outline-info float-right"
-              onClick={() => onPostEdit(id, post)}
-            >
-              Edit
-            </button>
-          </div>
+          { username === author &&
+            // if current user is author, then he can edit and delete post
+            <div>
+              <button
+                className="btn btn-outline-danger float-right ml-4"
+                onClick={() => onPostDelete(id)}
+              >
+                Delete
+              </button>
+              <button
+                className="btn btn-outline-info float-right"
+                onClick={() => onPostEdit(id, post)}
+              >
+                Edit
+              </button>
+            </div>
+          }
+
         </div>
       </div>
     );

@@ -14,7 +14,7 @@ const User = ({ user }) => {
       </div>
       <div className="card-footer">
         <Link to={'/users'} className="card-link">
-          Перейти к списку пользователей
+          Go to users list
         </Link>
       </div>
     </div>

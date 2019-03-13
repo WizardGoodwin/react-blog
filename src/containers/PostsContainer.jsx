@@ -116,6 +116,7 @@ const PostsContainer = ({
               setModalOpen={setModalOpen}
               onPostEdit={onPostEdit}
               onPostDelete={onPostDelete}
+              username={username}
             />
           )}
         />

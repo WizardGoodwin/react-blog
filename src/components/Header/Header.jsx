@@ -9,7 +9,7 @@ import { logOut } from '../../store/actions/auth';
 
 const Header = ({ isAuth, username, onLogOut }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark shadow">
       <div className="container">
         <Brand />
         <Navigation />

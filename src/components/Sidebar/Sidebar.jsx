@@ -18,7 +18,7 @@ const Sidebar = ({ posts, postsLoading, error, getLastPosts }) => {
   }
 
   return (
-    <div className="col-3">
+    <div className="d-none d-lg-block col-3">
       { postsLoading
         ? <Spinner />
         : <LastPostsList

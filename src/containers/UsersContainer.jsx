@@ -8,9 +8,9 @@ import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
 import { getUsers } from '../store/actions/users';
 
-const UsersContainer = ({ error, usersLoading, users, getUsers }) => {
+const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
   useEffect(() => {
-    getUsers();
+    getUsers(token);
   }, []);
 
   if (error) {
@@ -39,14 +39,14 @@ const UsersContainer = ({ error, usersLoading, users, getUsers }) => {
 };
 
 //привязываем состояние из store к this.props
-const mapStateToProps = ({ users: { users, usersLoading, error } }) => {
-  return { users, usersLoading, error };
+const mapStateToProps = ({ auth: { token }, users: { users, usersLoading, error } }) => {
+  return { token, users, usersLoading, error };
 };
 
 //привязываем функцию из actions к this.props
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUsers: () => dispatch(getUsers()),
+    getUsers: (token) => dispatch(getUsers(token)),
   };
 };
 

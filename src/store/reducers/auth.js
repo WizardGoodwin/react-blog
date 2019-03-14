@@ -43,8 +43,9 @@ const signInRequest = (state) => {
 const signInSuccess = (state, action) => {
   return {
     ...state,
-    token: action.idToken,
+    token: action.token,
     userId: action.userId,
+    username: action.username,
     error: null,
     loading: false,
   };
@@ -63,6 +64,7 @@ const logOut = (state) => {
     ...state,
     token: null,
     userId: null,
+    username: null,
   };
 };
 

@@ -61,26 +61,26 @@ const updateUserFail = (error) => {
   };
 };
 
-export const getUsers = () => {
+export const getUsers = (token) => {
   return (dispatch) => {
     dispatch(getUsersRequest());
     axios
-      .get('/users.json')
+      .get(`/users.json?auth=${token}`)
       .then((response) => {
         dispatch(getUsersSuccess(Object.values(response.data)));
       })
       .catch((err) => {
-        dispatch(getUsersFail(err.response.data.error));
+          dispatch(getUsersFail(err.response.data.error));
       });
   };
 };
 
-export const getUserById = () => {
+export const getUserById = (token) => {
   const id = localStorage.getItem('userId');
   return (dispatch) => {
     dispatch(getUserByIdRequest());
     axios
-      .get(`/users/${id}.json`)
+      .get(`/users/${id}.json?auth=${token}`)
       .then((response) => {
         dispatch(getUserByIdSuccess(response.data));
       })
@@ -90,12 +90,12 @@ export const getUserById = () => {
   };
 };
 
-export const updateUser = (user) => {
+export const updateUser = (token, user) => {
   const id = localStorage.getItem('userId');
   return (dispatch) => {
     dispatch(updateUserRequest());
     axios
-      .put(`/users/${id}.json`, user)
+      .put(`/users/${id}.json?auth=${token}`, user)
       .then((response) => {
         dispatch(updateUserSuccess(response.data));
       })

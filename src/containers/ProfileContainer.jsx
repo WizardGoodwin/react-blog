@@ -10,6 +10,7 @@ import ProfileForm from '../components/ProfileForm/ProfileForm';
 const ProfileContainer = (props) => {
   const {
     isAuth,
+    token,
     user,
     error,
     userLoading,
@@ -30,11 +31,11 @@ const ProfileContainer = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    updateUser(form);
+    updateUser(token, form);
   };
 
   useEffect(() => {
-    getUserById();
+    getUserById(token);
     setValues(user);
   }, [Object.keys(user).length]);
 
@@ -67,6 +68,7 @@ const mapStateToProps = ({
 }) => {
   return {
     isAuth: token !== null,
+    token,
     user,
     error,
     userLoading,
@@ -76,8 +78,8 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getUserById: () => dispatch(getUserById()),
-    updateUser: (user) => dispatch(updateUser(user)),
+    getUserById: (token) => dispatch(getUserById(token)),
+    updateUser: (token, user) => dispatch(updateUser(token, user)),
   };
 };
 

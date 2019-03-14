@@ -20,6 +20,7 @@ Modal.setAppElement('#root');
 
 const PostsContainer = ({
   isAuth,
+  token,
   username,
   posts,
   postsLoading,
@@ -36,7 +37,7 @@ const PostsContainer = ({
   const [postId, setId] = useState(null);
 
   useEffect(() => {
-    getPosts();
+    getPosts(token);
   }, []);
 
   const onPostChange = (e) => {
@@ -61,13 +62,13 @@ const PostsContainer = ({
   };
 
   const onPostDelete = (id) => {
-    deletePost(id);
+    deletePost(token, id);
   };
 
   const onPostSubmit = (e) => {
     e.preventDefault();
     //if its new post, then send add action else update action
-    isNewPost ? addPost(form) : updatePost(postId, form);
+    isNewPost ? addPost(token, form) : updatePost(token, postId, form);
     setModalOpen(false);
   };
 
@@ -148,17 +149,17 @@ const mapStateToProps = ({
   posts: { posts, postsLoading, error, postUpdating },
 }) => {
   return {
-    isAuth: token !== null, username,
+    isAuth: token !== null, token, username,
     posts, postsLoading, error, postUpdating
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getPosts: () => dispatch(getPosts()),
-    addPost: (post) => dispatch(addPost(post)),
-    updatePost: (id, post) => dispatch(updatePost(id, post)),
-    deletePost: (id) => dispatch(deletePost(id)),
+    getPosts: (token) => dispatch(getPosts(token)),
+    addPost: (token, post) => dispatch(addPost(token, post)),
+    updatePost: (token, id, post) => dispatch(updatePost(token, id, post)),
+    deletePost: (token, id) => dispatch(deletePost(token, id)),
   };
 };
 

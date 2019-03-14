@@ -103,14 +103,14 @@ const deletePostFail = (error) => {
   };
 };
 
-export const addPost = (newPost) => {
+export const addPost = (token, newPost) => {
   const date = new Date().toLocaleString();
   const author = localStorage.getItem('username');
   const post = { ...newPost, created_at: date, author };
   return (dispatch) => {
     dispatch(addPostRequest());
     axios
-      .post(`/posts.json`, post)
+      .post(`/posts.json?auth=${token}`, post)
       .then((response) => {
         const id = response.data.name;
         dispatch(addPostSuccess(id, post));
@@ -125,7 +125,7 @@ export const getPosts = () => {
   return (dispatch) => {
     dispatch(getPostsRequest());
     axios
-      .get('/posts.json')
+      .get(`/posts.json`)
       .then((response) => {
         //convert response object to array of arrays kind of [ id : post ]
         const posts = Object.entries(response.data);
@@ -141,7 +141,7 @@ export const getLastPosts = () => {
   return (dispatch) => {
     dispatch(getLastPostsRequest());
     axios
-      .get('/posts.json')
+      .get(`/posts.json`)
       .then((response) => {
         //convert response object to array of arrays kind of [ id : post ]
         const posts = Object.entries(response.data).slice(-3);
@@ -153,13 +153,13 @@ export const getLastPosts = () => {
   };
 };
 
-export const updatePost = (id, editedPost) => {
+export const updatePost = (token, id, editedPost) => {
   const date = new Date().toLocaleString();
   const post = { ...editedPost, created_at: date };
   return (dispatch) => {
     dispatch(updatePostRequest());
     axios
-      .put(`/posts/${id}.json`, post)
+      .put(`/posts/${id}.json?auth=${token}`, post)
       .then(() => {
         dispatch(updatePostSuccess(id, post));
       })
@@ -169,11 +169,11 @@ export const updatePost = (id, editedPost) => {
   };
 };
 
-export const deletePost = (id) => {
+export const deletePost = (token, id) => {
   return (dispatch) => {
     dispatch(deletePostRequest());
     axios
-      .delete(`/posts/${id}.json`)
+      .delete(`/posts/${id}.json?auth=${token}`)
       .then(() => {
         dispatch(deletePostSuccess(id));
       })

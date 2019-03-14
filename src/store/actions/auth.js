@@ -29,11 +29,12 @@ const signInRequest = () => {
   };
 };
 
-const signInSuccess = (token, userId) => {
+const signInSuccess = (token, userId, username) => {
   return {
     type: actionTypes.SIGN_IN_SUCCESS,
     token: token,
     userId: userId,
+    username: username,
   };
 };
 
@@ -49,7 +50,7 @@ export const logOut = () => {
   localStorage.removeItem('userId');
   localStorage.removeItem('username');
   return {
-    type: actionTypes.LOG_OUT,
+    type: actionTypes.LOG_OUT
   };
 };
 
@@ -105,13 +106,12 @@ export const signIn = (authData) => {
         axios
           .get('/users.json')
           .then((response) => {
-            console.log('users', response);
             const users = Object.entries(response.data);
             const user = users.find((user) => user[1].id === tempId);
             localStorage.setItem('token', token);
             localStorage.setItem('userId', user[0]);
             localStorage.setItem('username', user[1].username);
-            dispatch(signInSuccess(token, user[0]));
+            dispatch(signInSuccess(token, user[0], user[1].username));
           })
           .catch((err) => {
             dispatch(signInFail(err.response.data.error));

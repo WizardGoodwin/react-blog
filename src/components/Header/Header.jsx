@@ -36,7 +36,7 @@ const Header = ({ isAuth, username, onLogOut }) => {
 
       {
         isMenuOpen &&
-        <MobileMenu>
+        <MobileMenu setMenuOpen={setMenuOpen}>
           <Navigation />
           {isAuth
             ? <UserButton

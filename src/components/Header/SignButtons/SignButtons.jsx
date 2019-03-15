@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom';
 
 const SignButtons = () => {
   return (
-    <div>
-      <Link to="/sign-up" className="btn btn-outline-info my-2">
-        Sign up
-      </Link>
-      <Link to="/sign-in" className="btn btn-outline-info my-2 ml-4">
-        Sign in
-      </Link>
+    <div className="d-md-flex">
+      <div>
+        <Link to="/sign-up" className="btn btn-outline-info my-2 mr-3">
+          Sign up
+        </Link>
+      </div>
+      <div>
+        <Link to="/sign-in" className="btn btn-outline-info my-2 mr-3 ml-lg-4">
+          Sign in
+        </Link>
+      </div>
     </div>
   );
 };

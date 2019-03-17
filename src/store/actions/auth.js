@@ -50,7 +50,7 @@ export const logOut = () => {
   localStorage.removeItem('userId');
   localStorage.removeItem('username');
   return {
-    type: actionTypes.LOG_OUT
+    type: actionTypes.LOG_OUT,
   };
 };
 

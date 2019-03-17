@@ -39,7 +39,10 @@ const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
 };
 
 //привязываем состояние из store к this.props
-const mapStateToProps = ({ auth: { token }, users: { users, usersLoading, error } }) => {
+const mapStateToProps = ({
+  auth: { token },
+  users: { users, usersLoading, error },
+}) => {
   return { token, users, usersLoading, error };
 };
 

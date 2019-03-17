@@ -9,14 +9,17 @@ const withErrorHandler = (WrappedComponent) => {
       hasError: false,
     };
 
-    componentDidMount () {
-      axios.interceptors.response.use( res => res, error => {
-        if (error.response.status === 401) {
-          window.location = '/sign-in';
-        } else {
-          throw error;
-        }
-      });
+    componentDidMount() {
+      axios.interceptors.response.use(
+        (res) => res,
+        (error) => {
+          if (error.response.status === 401) {
+            window.location = '/sign-in';
+          } else {
+            throw error;
+          }
+        },
+      );
     }
 
     componentDidCatch() {

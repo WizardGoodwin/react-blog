@@ -3,7 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   posts: [],
   post: {},
-  error: null,
+  postsError: null,
   postLoading: true,
   postUpdating: false,
   postsLoading: true,
@@ -12,7 +12,7 @@ const initialState = {
 const addPostRequest = (state) => {
   return {
     ...state,
-    error: null,
+    postsError: null,
   };
 };
 
@@ -20,7 +20,7 @@ const addPostSuccess = (state, action) => {
   const newPost = [action.id, action.post];
   return {
     ...state,
-    error: null,
+    postsError: null,
     posts: state.posts.concat([newPost]),
   };
 };
@@ -28,14 +28,14 @@ const addPostSuccess = (state, action) => {
 const addPostFail = (state, action) => {
   return {
     ...state,
-    error: action.error,
+    postsError: action.error,
   };
 };
 
 const getPostsRequest = (state) => {
   return {
     ...state,
-    error: null,
+    postsError: null,
     postsLoading: true,
   };
 };
@@ -44,7 +44,7 @@ const getPostsSuccess = (state, action) => {
   return {
     ...state,
     posts: action.posts,
-    error: null,
+    postsError: null,
     postsLoading: false,
   };
 };
@@ -52,7 +52,7 @@ const getPostsSuccess = (state, action) => {
 const getPostsFail = (state, action) => {
   return {
     ...state,
-    error: action.error,
+    postsError: action.error,
     postsLoading: false,
   };
 };
@@ -60,7 +60,7 @@ const getPostsFail = (state, action) => {
 const getLastPostsRequest = (state) => {
   return {
     ...state,
-    error: null,
+    postsError: null,
     postsLoading: true,
   };
 };
@@ -69,7 +69,7 @@ const getLastPostsSuccess = (state, action) => {
   return {
     ...state,
     posts: action.posts,
-    error: null,
+    postsError: null,
     postsLoading: false,
   };
 };
@@ -77,7 +77,7 @@ const getLastPostsSuccess = (state, action) => {
 const getLastPostsFail = (state, action) => {
   return {
     ...state,
-    error: action.error,
+    postsError: action.error,
     postsLoading: false,
   };
 };
@@ -85,19 +85,19 @@ const getLastPostsFail = (state, action) => {
 const updatePostRequest = (state) => {
   return {
     ...state,
-    error: null,
+    postsError: null,
   };
 };
 
 const updatePostSuccess = (state, action) => {
-  const idx = state.posts.findIndex(post => post[0] === action.id);
+  const idx = state.posts.findIndex((post) => post[0] === action.id);
   const newPosts = state.posts.slice();
   newPosts[idx] = [action.id, action.post];
   console.log('newPosts', newPosts);
   return {
     ...state,
     posts: newPosts,
-    error: null,
+    postsError: null,
   };
 };
 
@@ -111,7 +111,7 @@ const updatePostFail = (state, action) => {
 const deletePostRequest = (state) => {
   return {
     ...state,
-    error: null,
+    postsError: null,
   };
 };
 
@@ -121,14 +121,14 @@ const deletePostSuccess = (state, action) => {
   return {
     ...state,
     posts: newPosts,
-    error: null,
+    postsError: null,
   };
 };
 
 const deletePostFail = (state, action) => {
   return {
     ...state,
-    error: action.error,
+    postsError: action.error,
   };
 };
 

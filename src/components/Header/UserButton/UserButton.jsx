@@ -9,7 +9,10 @@ const UserButton = ({ username, onLogOut }) => {
           {username}
         </Link>
       </div>
-      <button onClick={() => onLogOut()} className="btn btn-outline-info my-4 my-md-2">
+      <button
+        onClick={() => onLogOut()}
+        className="btn btn-outline-info my-4 my-md-2"
+      >
         Log Out
       </button>
     </div>

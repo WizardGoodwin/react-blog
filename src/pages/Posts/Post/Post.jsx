@@ -14,9 +14,7 @@ const Post = ({ post }) => {
         <p className="card-text">
           <small className="text-muted">{created_at}</small>
         </p>
-        <Link to={`/users/${author}`}>
-          by {author}
-        </Link>
+        <Link to={`/users/${author}`}>by {author}</Link>
       </div>
       <div className="card-footer">
         <Link to={'/posts'} className="card-link">

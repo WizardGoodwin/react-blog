@@ -8,7 +8,7 @@ const Layout = (props) => {
   return (
     <Fragment>
       <Header />
-      <main className="container row mx-auto">
+      <main className="container row mx-auto mb-5">
         <div className="col-lg-9">{props.children}</div>
         <Sidebar />
       </main>

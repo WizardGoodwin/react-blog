@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Modal from 'react-modal';
 
 import PostsList from '../pages/Posts/PostsList/PostsList';
-import Post from '../pages/Posts/Post/Post';
 import PostForm from '../pages/Posts/PostForm/PostForm';
+import PostContainer from './PostContainer';
 import AddPostBtn from '../pages/Posts/AddPostBtn/AddPostBtn';
 import Spinner from '../shared/Spinner/Spinner';
 import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
@@ -24,7 +24,7 @@ const PostsContainer = ({
   username,
   posts,
   postsLoading,
-  error,
+  postsError,
   postUpdating,
   addPost,
   getPosts,
@@ -33,30 +33,31 @@ const PostsContainer = ({
 }) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isNewPost, setIsNew] = useState(false);
-  const [form, setValues] = useState({ title: '', body: '' });
+  const [postForm, setPostValues] = useState({ title: '', body: '' });
   const [postId, setId] = useState(null);
 
   useEffect(() => {
     getPosts(token);
   }, []);
 
+  // handling posts form methods
   const onPostChange = (e) => {
     const { id, value } = e.target;
-    setValues({
-      ...form,
+    setPostValues({
+      ...postForm,
       [id]: value,
     });
   };
 
   const onAddPost = () => {
     setIsNew(true);
-    setValues({ title: '', body: '' });
+    setPostValues({ title: '', body: '' });
     setModalOpen(true);
   };
 
   const onPostEdit = (id, post) => {
     setIsNew(false);
-    setValues(post);
+    setPostValues(post);
     setId(id);
     setModalOpen(true);
   };
@@ -68,11 +69,11 @@ const PostsContainer = ({
   const onPostSubmit = (e) => {
     e.preventDefault();
     //if its new post, then send add action else update action
-    isNewPost ? addPost(token, form) : updatePost(token, postId, form);
+    isNewPost ? addPost(token, postForm) : updatePost(token, postId, postForm);
     setModalOpen(false);
   };
 
-  if (error) {
+  if (postsError) {
     return <ErrorIndicator />;
   }
 
@@ -81,44 +82,49 @@ const PostsContainer = ({
   } else {
     return (
       <Fragment>
-        {isAuth
-          // if user is logged in, then show button, else show text
-          ? <AddPostBtn onAddPost={onAddPost} />
-          : <div className="card shadow-sm mt-4">
-              <div className="card-body">
-                <h5 className="text-danger">Only registered users can add posts</h5>
-              </div>
-            </div>
-        }
-
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={() => setModalOpen(false)}
-          className="modal-post"
-          overlayClassName="overlay"
-          shouldCloseOnOverlayClick={true}
-          closeTimeoutMS={300}
-        >
-          <PostForm
-            form={form}
-            isNewPost={isNewPost}
-            onPostChange={onPostChange}
-            setModalOpen={setModalOpen}
-            onSubmit={onPostSubmit}
-          />
-        </Modal>
-
         <Route
           path="/posts"
           exact
           render={() => (
-            <PostsList
-              posts={posts}
-              setModalOpen={setModalOpen}
-              onPostEdit={onPostEdit}
-              onPostDelete={onPostDelete}
-              username={username}
-            />
+            <Fragment>
+              {isAuth ? (
+                // if user is logged in, then show button, else show text
+                <AddPostBtn onAddPost={onAddPost} />
+              ) : (
+                <div className="card shadow-sm mt-4">
+                  <div className="card-body">
+                    <h5 className="text-danger">
+                      Only registered users can add posts
+                    </h5>
+                  </div>
+                </div>
+              )}
+
+              <Modal
+                isOpen={isModalOpen}
+                onRequestClose={() => setModalOpen(false)}
+                className="modal-post"
+                overlayClassName="overlay"
+                shouldCloseOnOverlayClick={true}
+                closeTimeoutMS={300}
+              >
+                <PostForm
+                  form={postForm}
+                  isNewPost={isNewPost}
+                  onPostChange={onPostChange}
+                  setModalOpen={setModalOpen}
+                  onSubmit={onPostSubmit}
+                />
+              </Modal>
+
+              <PostsList
+                posts={posts}
+                setModalOpen={setModalOpen}
+                onPostEdit={onPostEdit}
+                onPostDelete={onPostDelete}
+                username={username}
+              />
+            </Fragment>
           )}
         />
         <Route
@@ -126,17 +132,7 @@ const PostsContainer = ({
           render={(props) => {
             const title = props.match.params.title;
             const selectedPost = posts.find((post) => post[1].title === title);
-            return (
-              <Post
-                post={selectedPost}
-                // author={author}
-                // comments={selectedComments}
-                // addComment={addComment}
-                // handleCommentChange={handleCommentChange}
-                // defaultName={commentName}
-                // defaultBody={commentBody}
-              />
-            );
+            return <PostContainer post={selectedPost} />;
           }}
         />
       </Fragment>
@@ -146,11 +142,16 @@ const PostsContainer = ({
 
 const mapStateToProps = ({
   auth: { token, username },
-  posts: { posts, postsLoading, error, postUpdating },
+  posts: { posts, postsLoading, postsError, postUpdating },
 }) => {
   return {
-    isAuth: token !== null, token, username,
-    posts, postsLoading, error, postUpdating
+    isAuth: token !== null,
+    token,
+    username,
+    posts,
+    postsLoading,
+    postsError,
+    postUpdating,
   };
 };
 

@@ -24,29 +24,24 @@ const Header = ({ isAuth, username, onLogOut }) => {
         <Brand />
         <div className="collapse navbar-collapse">
           <Navigation />
-          {isAuth
-            ? <UserButton
-              onLogOut={onLogOut}
-              username={username}
-            />
-            : <SignButtons />
-          }
+          {isAuth ? (
+            <UserButton onLogOut={onLogOut} username={username} />
+          ) : (
+            <SignButtons />
+          )}
         </div>
       </div>
 
-      {
-        isMenuOpen &&
+      {isMenuOpen && (
         <MobileMenu setMenuOpen={setMenuOpen}>
           <Navigation />
-          {isAuth
-            ? <UserButton
-              onLogOut={onLogOut}
-              username={username}
-            />
-            : <SignButtons />
-          }
+          {isAuth ? (
+            <UserButton onLogOut={onLogOut} username={username} />
+          ) : (
+            <SignButtons />
+          )}
         </MobileMenu>
-      }
+      )}
     </nav>
   );
 };

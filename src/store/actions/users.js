@@ -70,7 +70,7 @@ export const getUsers = (token) => {
         dispatch(getUsersSuccess(Object.values(response.data)));
       })
       .catch((err) => {
-          dispatch(getUsersFail(err.response.data.error));
+        dispatch(getUsersFail(err.response.data.error));
       });
   };
 };

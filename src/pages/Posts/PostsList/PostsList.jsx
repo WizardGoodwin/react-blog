@@ -21,11 +21,9 @@ const PostsList = ({ username, posts, onPostEdit, onPostDelete }) => {
           <p className="card-text">
             <small className="text-muted">{created_at}</small>
           </p>
-          <Link to={`/users/${author}`}>
-            by {author}
-          </Link>
+          <Link to={`/users/${author}`}>by {author}</Link>
 
-          { username === author &&
+          {username === author && (
             // if current user is author, then he can edit and delete post
             <div>
               <button
@@ -41,8 +39,7 @@ const PostsList = ({ username, posts, onPostEdit, onPostDelete }) => {
                 Edit
               </button>
             </div>
-          }
-
+          )}
         </div>
       </div>
     );

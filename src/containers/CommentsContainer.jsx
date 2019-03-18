@@ -18,6 +18,8 @@ const CommentsContainer = ({
   incLikeCounter,
   incDislikeCounter,
 }) => {
+
+  // fetching all comments from backend
   useEffect(() => {
     getComments();
   }, []);

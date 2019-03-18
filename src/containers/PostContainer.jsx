@@ -25,6 +25,7 @@ const PostContainer = ({
   incLikeCounter,
   incDislikeCounter,
 }) => {
+  // state for handling adding comment form
   const [commentForm, setCommentValues] = useState({
     commentTitle: '',
     commentBody: '',
@@ -33,11 +34,12 @@ const PostContainer = ({
   });
   const postId = post[0];
 
+  // fetching comments for one post from backend
   useEffect(() => {
     getCommentsByPostId(postId);
   }, []);
 
-  // handling comments form methods
+  // handling change of comment form inputs
   const onCommentChange = (e) => {
     const { id, value } = e.target;
     setCommentValues({
@@ -46,6 +48,7 @@ const PostContainer = ({
     });
   };
 
+  // handling comment form submit
   const onCommentSubmit = (e, postId) => {
     e.preventDefault();
     addComment(token, { ...commentForm, postId });
@@ -64,6 +67,7 @@ const PostContainer = ({
         <Post post={post} />
 
         { comments.length === 0
+          //if there are no comments, then text below, else render comments list
             ? <h5 className="text-info mb-4">There are no comments yet</h5>
             : <CommentsList
                 comments={comments}

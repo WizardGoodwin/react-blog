@@ -60,6 +60,7 @@ const SignInForm = ({ errors, touched, error, loading }) => {
         <ErrorMessage name="password" component="div" className="text-danger" />
       </div>
 
+      {/*outputting async validation error*/}
       {error && <div className="text-danger mb-3">{error.message}</div>}
 
       {loading ? (

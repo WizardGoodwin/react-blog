@@ -8,11 +8,12 @@ const signUpRequest = () => {
   };
 };
 
-const signUpSuccess = (token, userId) => {
+const signUpSuccess = (token, userId, username) => {
   return {
     type: actionTypes.SIGN_UP_SUCCESS,
-    token: token,
-    userId: userId,
+    token,
+    userId,
+    username,
   };
 };
 
@@ -32,9 +33,9 @@ const signInRequest = () => {
 const signInSuccess = (token, userId, username) => {
   return {
     type: actionTypes.SIGN_IN_SUCCESS,
-    token: token,
-    userId: userId,
-    username: username,
+    token,
+    userId,
+    username,
   };
 };
 
@@ -63,10 +64,11 @@ export const signUp = (authData) => {
     axios
       .post(url, { ...authData, returnSecureToken: true })
       .then((response) => {
-        localStorage.setItem('token', response.data.idToken);
-        localStorage.setItem('userTempId', response.data.localId);
+        const token = response.data.idToken;
+        const tempId = response.data.localId;
+        localStorage.setItem('token', token);
         const user = {
-          id: response.data.localId,
+          id: tempId,
           email: authData.email,
           username: authData.username,
           name: '',
@@ -74,13 +76,14 @@ export const signUp = (authData) => {
           address: '',
           website: '',
         };
+        // sending request to create user entity in firebase database
+        // (sign up action doesn't create user entity in db - feature of firebase)
         axios
           .post('/users.json', user)
           .then((response) => {
-            localStorage.setItem('userId', response.data.name);
-            dispatch(
-              signUpSuccess(response.data.idToken, response.data.localId),
-            );
+            const userId = response.data.name;
+            localStorage.setItem('userId', userId);
+            dispatch(signUpSuccess(token, userId, authData.username));
           })
           .catch((err) => {
             dispatch(signUpFail(err.response.data.error));
@@ -103,6 +106,7 @@ export const signIn = (authData) => {
       .then((response) => {
         const token = response.data.idToken;
         const tempId = response.data.localId;
+        // finding user in firebase database and setting to local storage his id and username
         axios
           .get('/users.json')
           .then((response) => {

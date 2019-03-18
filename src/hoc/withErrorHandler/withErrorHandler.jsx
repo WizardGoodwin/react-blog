@@ -9,6 +9,7 @@ const withErrorHandler = (WrappedComponent) => {
       hasError: false,
     };
 
+    // handling 401 error with axios interceptors
     componentDidMount() {
       axios.interceptors.response.use(
         (res) => res,

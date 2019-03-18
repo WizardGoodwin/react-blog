@@ -9,6 +9,8 @@ import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
 import { getUsers } from '../store/actions/users';
 
 const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
+
+  // fetching all users from backend
   useEffect(() => {
     getUsers(token);
   }, []);
@@ -26,6 +28,7 @@ const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
         <Route
           path="/users/:username"
           render={(props) => {
+            // extracting :username from path and finding user in the array
             const username = props.match.params.username;
             const selectedUser = users.find(
               (user) => user.username === username,
@@ -38,7 +41,6 @@ const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
   }
 };
 
-//привязываем состояние из store к this.props
 const mapStateToProps = ({
   auth: { token },
   users: { users, usersLoading, error },
@@ -46,7 +48,6 @@ const mapStateToProps = ({
   return { token, users, usersLoading, error };
 };
 
-//привязываем функцию из actions к this.props
 const mapDispatchToProps = (dispatch) => {
   return {
     getUsers: (token) => dispatch(getUsers(token)),

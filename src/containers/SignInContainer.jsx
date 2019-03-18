@@ -7,12 +7,15 @@ import * as Yup from 'yup';
 import SignInForm from '../components/Auth/SignInForm/SignInForm';
 import { signIn } from '../store/actions/auth';
 
+// validation schema
 const SignInSchema = Yup.object().shape({
   email: Yup.string().required('This field should be filled'),
   password: Yup.string().required('This field should be filled'),
 });
 
 const SignInContainer = ({ loading, error, isAuth, onSignIn }) => {
+
+  // handling sign in form submit
   const onSubmit = (values, actions) => {
     onSignIn(values);
     actions.setSubmitting(false);
@@ -29,6 +32,7 @@ const SignInContainer = ({ loading, error, isAuth, onSignIn }) => {
     );
   };
 
+  // if user is logged in already, then redirect to profile
   if (isAuth) {
     return <Redirect to="/profile" />;
   }

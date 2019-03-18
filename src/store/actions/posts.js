@@ -104,7 +104,9 @@ const deletePostFail = (error) => {
 };
 
 export const addPost = (token, newPost) => {
+  // time and date of creating post
   const date = new Date().toLocaleString();
+  // getting author from local storage
   const author = localStorage.getItem('username');
   const post = { ...newPost, created_at: date, author };
   return (dispatch) => {
@@ -154,6 +156,7 @@ export const getLastPosts = () => {
 };
 
 export const updatePost = (token, id, editedPost) => {
+  // time and date of updating post
   const date = new Date().toLocaleString();
   const post = { ...editedPost, created_at: date };
   return (dispatch) => {

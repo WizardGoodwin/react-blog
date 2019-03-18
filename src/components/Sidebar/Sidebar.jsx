@@ -8,6 +8,8 @@ import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { getLastPosts } from '../../store/actions/posts';
 
 const Sidebar = ({ posts, postsLoading, error, getLastPosts }) => {
+
+  // fetching latest posts from backend
   useEffect(() => {
     getLastPosts();
   }, []);

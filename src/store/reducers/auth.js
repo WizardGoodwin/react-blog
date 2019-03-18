@@ -16,9 +16,12 @@ const signUpRequest = (state) => {
   };
 };
 
-const signUpSuccess = (state) => {
+const signUpSuccess = (state, action) => {
   return {
     ...state,
+    token: action.token,
+    userId: action.userId,
+    username: action.username,
     error: null,
     loading: false,
   };

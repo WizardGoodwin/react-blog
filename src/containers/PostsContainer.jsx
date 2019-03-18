@@ -16,6 +16,7 @@ import {
   updatePost,
 } from '../store/actions/posts';
 
+//setting parent node for modal window
 Modal.setAppElement('#root');
 
 const PostsContainer = ({
@@ -31,16 +32,21 @@ const PostsContainer = ({
   updatePost,
   deletePost,
 }) => {
+  // state for handling modal windows
   const [isModalOpen, setModalOpen] = useState(false);
+  // state for handling change of add new/edit post
   const [isNewPost, setIsNew] = useState(false);
+  // state for handling adding post form
   const [postForm, setPostValues] = useState({ title: '', body: '' });
+  // state for setting current post id
   const [postId, setId] = useState(null);
 
+  // fetching all posts from backend
   useEffect(() => {
-    getPosts(token);
+    getPosts();
   }, []);
 
-  // handling posts form methods
+  // handling change of post form inputs
   const onPostChange = (e) => {
     const { id, value } = e.target;
     setPostValues({
@@ -49,12 +55,14 @@ const PostsContainer = ({
     });
   };
 
+  // handling click on "add new post" button
   const onAddPost = () => {
     setIsNew(true);
     setPostValues({ title: '', body: '' });
     setModalOpen(true);
   };
 
+  // handling click on "edit" button
   const onPostEdit = (id, post) => {
     setIsNew(false);
     setPostValues(post);
@@ -62,10 +70,12 @@ const PostsContainer = ({
     setModalOpen(true);
   };
 
+  // handling click on "delete" button
   const onPostDelete = (id) => {
     deletePost(token, id);
   };
 
+  // handling post form submit
   const onPostSubmit = (e) => {
     e.preventDefault();
     //if its new post, then send add action else update action
@@ -130,6 +140,7 @@ const PostsContainer = ({
         <Route
           path="/posts/:title"
           render={(props) => {
+            // extracting :title from path and finding corresponding post in the array
             const title = props.match.params.title;
             const selectedPost = posts.find((post) => post[1].title === title);
             return <PostContainer post={selectedPost} />;

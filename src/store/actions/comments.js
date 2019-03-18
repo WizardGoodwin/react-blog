@@ -71,6 +71,7 @@ const incCounter = (id, comment) => {
 };
 
 export const addComment = (token, newComment) => {
+  // taking author from local storage an adding it to comment object
   const author = localStorage.getItem('username');
   const comment = { ...newComment, author };
   return (dispatch) => {
@@ -95,6 +96,7 @@ export const getCommentsByPostId = (postId) => {
       .then((response) => {
         //convert response object to array of arrays kind of [ id : comment ]
         const allComments = Object.entries(response.data);
+        // and finding only those comments which have needed post id
         const comments = allComments.filter(
           (comment) => comment[1].postId === postId,
         );

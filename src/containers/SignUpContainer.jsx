@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import SignUpForm from '../components/Auth/SignUpForm/SignUpForm';
 import { signUp } from '../store/actions/auth';
 
+// validation schema
 const SignUpSchema = Yup.object().shape({
   username: Yup.string()
     .min(3, 'Username should consist of no less than 3 symbols')
@@ -20,6 +21,8 @@ const SignUpSchema = Yup.object().shape({
 });
 
 const SignUpContainer = ({ loading, error, isAuth, onSignUp }) => {
+
+  // handling sign up form submit
   const onSubmit = (values, actions) => {
     onSignUp(values);
     actions.setSubmitting(false);
@@ -36,6 +39,7 @@ const SignUpContainer = ({ loading, error, isAuth, onSignUp }) => {
     );
   };
 
+  // if user is logged in already, then redirect to profile
   if (isAuth) {
     return <Redirect to="/profile" />;
   }
@@ -45,9 +49,7 @@ const SignUpContainer = ({ loading, error, isAuth, onSignUp }) => {
       <h3 className="text-center">Sign up</h3>
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
-        onSubmit={(values, actions) => {
-          onSubmit(values, actions);
-        }}
+        onSubmit={(values, actions) => onSubmit(values, actions)}
         validationSchema={SignUpSchema}
         render={(formProps) => renderForm(formProps)}
       />

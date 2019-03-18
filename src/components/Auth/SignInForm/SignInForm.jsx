@@ -42,6 +42,7 @@ const SignInForm = ({ errors, touched, error, loading }) => {
         <ErrorMessage name="password" component="div" className="text-danger" />
       </div>
 
+      {/*outputting async validation error*/}
       {error && <div className="text-danger mb-3">{error.message}</div>}
 
       {loading ? (
@@ -50,11 +51,6 @@ const SignInForm = ({ errors, touched, error, loading }) => {
         <button
           className="btn btn-success"
           type="submit"
-          disabled={
-            !touched.email ||
-            !touched.password ||
-            Object.keys(errors).length !== 0
-          }
         >
           Sign in
         </button>

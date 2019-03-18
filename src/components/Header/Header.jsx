@@ -9,6 +9,7 @@ import { logOut } from '../../store/actions/auth';
 import MobileMenu from './MobileMenu/MobileMenu';
 
 const Header = ({ isAuth, username, onLogOut }) => {
+  //state for handling hamburger menu opening
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -24,7 +25,8 @@ const Header = ({ isAuth, username, onLogOut }) => {
         <Brand />
         <div className="collapse navbar-collapse">
           <Navigation />
-          {isAuth ? (
+          {/*if user is authenticated, then show username and log out button, else sign buttons*/}
+          { isAuth ? (
             <UserButton onLogOut={onLogOut} username={username} />
           ) : (
             <SignButtons />

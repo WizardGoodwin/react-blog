@@ -90,10 +90,12 @@ const updatePostRequest = (state) => {
 };
 
 const updatePostSuccess = (state, action) => {
+  // finding index of updating post in the array of posts
   const idx = state.posts.findIndex((post) => post[0] === action.id);
+  // creating copy of array
   const newPosts = state.posts.slice();
+  // changing updated post in the array
   newPosts[idx] = [action.id, action.post];
-  console.log('newPosts', newPosts);
   return {
     ...state,
     posts: newPosts,

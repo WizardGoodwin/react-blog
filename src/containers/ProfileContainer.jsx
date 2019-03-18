@@ -19,8 +19,16 @@ const ProfileContainer = (props) => {
     updateUser,
   } = props;
 
+  // state for handling profile form
   const [form, setValues] = useState(user);
 
+  // fetching user info by id from backend
+  useEffect(() => {
+    getUserById(token);
+    setValues(user);
+  }, [Object.keys(user).length]);
+
+  // handling change of profile form inputs
   const onProfileChange = (e) => {
     const { id, value } = e.target;
     setValues({
@@ -29,16 +37,13 @@ const ProfileContainer = (props) => {
     });
   };
 
+  // handling profile form submit
   const onSubmit = (e) => {
     e.preventDefault();
     updateUser(token, form);
   };
 
-  useEffect(() => {
-    getUserById(token);
-    setValues(user);
-  }, [Object.keys(user).length]);
-
+  // if user is not authenticated, then redirect to main page
   if (!isAuth) {
     return <Redirect to="/" />;
   }

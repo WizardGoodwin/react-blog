@@ -26,7 +26,7 @@ const Header = ({ isAuth, username, onLogOut }) => {
         <div className="collapse navbar-collapse">
           <Navigation />
           {/*if user is authenticated, then show username and log out button, else sign buttons*/}
-          { isAuth ? (
+          {isAuth ? (
             <UserButton onLogOut={onLogOut} username={username} />
           ) : (
             <SignButtons />

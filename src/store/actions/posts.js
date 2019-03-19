@@ -146,7 +146,7 @@ export const getLastPosts = () => {
       .get(`/posts.json`)
       .then((response) => {
         //convert response object to array of arrays kind of [ id : post ]
-        const posts = Object.entries(response.data).slice(-3);
+        const posts = Object.entries(response.data).slice(-5);
         dispatch(getLastPostsSuccess(posts));
       })
       .catch((err) => {

@@ -48,10 +48,7 @@ const SignInForm = ({ errors, touched, error, loading }) => {
       {loading ? (
         <Spinner />
       ) : (
-        <button
-          className="btn btn-success"
-          type="submit"
-        >
+        <button className="btn btn-success" type="submit">
           Sign in
         </button>
       )}

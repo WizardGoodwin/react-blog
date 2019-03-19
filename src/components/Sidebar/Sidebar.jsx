@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import About from './About/About';
 import LastPostsList from './LastPostsList/LastPostsList';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { getLastPosts } from '../../store/actions/posts';
 
 const Sidebar = ({ posts, postsLoading, error, getLastPosts }) => {
-
   // fetching latest posts from backend
   useEffect(() => {
     getLastPosts();
@@ -21,7 +19,6 @@ const Sidebar = ({ posts, postsLoading, error, getLastPosts }) => {
   return (
     <div className="d-none d-lg-block col-3">
       {postsLoading ? <Spinner /> : <LastPostsList postsList={posts} />}
-      <About />
     </div>
   );
 };

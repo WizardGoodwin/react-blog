@@ -21,7 +21,6 @@ const SignUpSchema = Yup.object().shape({
 });
 
 const SignUpContainer = ({ loading, error, isAuth, onSignUp }) => {
-
   // handling sign up form submit
   const onSubmit = (values, actions) => {
     onSignUp(values);

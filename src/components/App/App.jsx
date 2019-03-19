@@ -3,6 +3,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import UsersContainer from '../../containers/UsersContainer';
 import PostsContainer from '../../containers/PostsContainer';
 import CommentsContainer from '../../containers/CommentsContainer';
+import About from '../../pages/About/About';
 import NotFound from '../../shared/NotFound/NotFound';
 import Layout from '../Layout/Layot';
 import SignInContainer from '../../containers/SignInContainer';
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/posts" component={PostsContainer} />
         <Route path="/users" component={UsersContainer} />
         <Route path="/comments" component={CommentsContainer} />
+        <Route path="/about" component={About} />
         <Route component={NotFound} />
       </Switch>
     </Layout>

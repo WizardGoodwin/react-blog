@@ -66,15 +66,16 @@ const PostContainer = ({
       <Fragment>
         <Post post={post} />
 
-        { comments.length === 0
+        {comments.length === 0 ? (
           //if there are no comments, then text below, else render comments list
-            ? <h5 className="text-info mb-4">There are no comments yet</h5>
-            : <CommentsList
-                comments={comments}
-                incLikeCounter={incLikeCounter}
-                incDislikeCounter={incDislikeCounter}
-              />
-        }
+          <h5 className="text-info mb-4">There are no comments yet</h5>
+        ) : (
+          <CommentsList
+            comments={comments}
+            incLikeCounter={incLikeCounter}
+            incDislikeCounter={incDislikeCounter}
+          />
+        )}
 
         {isAuth ? (
           // if user is logged in, then show comment adding form, else show text

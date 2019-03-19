@@ -9,7 +9,6 @@ import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
 import { getUsers } from '../store/actions/users';
 
 const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
-
   // fetching all users from backend
   useEffect(() => {
     getUsers(token);

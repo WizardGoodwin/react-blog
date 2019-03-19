@@ -19,6 +19,11 @@ const Navigation = () => {
           Comments
         </Link>
       </li>
+      <li className="nav-item d-flex align-items-center ml-lg-3">
+        <Link className="nav-link" to="/about">
+          About
+        </Link>
+      </li>
     </ul>
   );
 };

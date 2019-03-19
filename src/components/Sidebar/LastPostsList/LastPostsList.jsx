@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const LastPostsList = ({ postsList }) => {
-
   const getLastPosts = () => {
     return postsList.map((item) => {
       const id = item[0];
@@ -21,7 +20,7 @@ const LastPostsList = ({ postsList }) => {
   };
 
   return (
-    <div className="card mt-4">
+    <div className="card my-4">
       <div className="card-header text-info">Last posts</div>
       <ul className="list-group list-group-flush">{getLastPosts()}</ul>
     </div>

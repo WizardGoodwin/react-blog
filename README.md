@@ -7,12 +7,12 @@ further use in real projects, as well as a demonstration of my knowledge and ski
 
 ## Technologies and Libs
 
-React 16.8.3 (including React Hooks)
-Redux - handling global app store
-Redux-thunk - handling store async requests
-Firebase -  imitation of backend, database, user authentication and for hosting
-Bootstrap - design appearance of app
-Formik и Yup - handling forms and validating forms
+- React 16.8.3 (including React Hooks)
+- Redux - handling global app store
+- Redux-thunk - handling store async requests
+- Firebase -  imitation of backend, database, user authentication and for hosting
+- Bootstrap - design appearance of app
+- Formik и Yup - handling forms and validating forms
 
 
 ## Implemented functionality

@@ -15,16 +15,15 @@ const About = () => {
             {' '}
             Maxim Patrushev{' '}
           </a>
-          for training and demonstration purposes.
+          for demonstration purposes.
         </p>
         <p>
-          The goal of it's creating - practicing skills and techniques for
-          working with React and it's environment for further use in real
-          projects, as well as a demonstration of my knowledge and skills.
+          The goal of it's creating is a demonstration of my knowledge and skills
+          for working with React and it's environment.
         </p>
         <h6>Implemented technologies and libs:</h6>
         <ul>
-          <li>React 16.8.3 (including React Hooks)</li>
+          <li>React 17.x.x (including React Hooks)</li>
           <li>Redux - handling global app store</li>
           <li>Redux-thunk - handling store async requests</li>
           <li>

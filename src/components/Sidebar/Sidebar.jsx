@@ -10,7 +10,7 @@ const Sidebar = ({ posts, postsLoading, error, getLastPosts }) => {
   // fetching latest posts from backend
   useEffect(() => {
     getLastPosts();
-  }, []);
+  }, [getLastPosts]);
 
   if (error) {
     return <ErrorIndicator />;

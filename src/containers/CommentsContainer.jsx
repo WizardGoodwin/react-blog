@@ -21,7 +21,7 @@ const CommentsContainer = ({
   // fetching all comments from backend
   useEffect(() => {
     getComments();
-  }, []);
+  }, [getComments]);
 
   if (commentsError) {
     return <ErrorIndicator />;

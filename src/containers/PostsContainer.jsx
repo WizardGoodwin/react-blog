@@ -44,7 +44,7 @@ const PostsContainer = ({
   // fetching all posts from backend
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [getPosts]);
 
   // handling change of post form inputs
   const onPostChange = (e) => {

@@ -26,7 +26,8 @@ const ProfileContainer = (props) => {
   useEffect(() => {
     getUserById(token);
     setValues(user);
-  }, [Object.keys(user).length]);
+    // eslint-disable-next-line
+  }, [getUserById, token, user.id]);
 
   // handling change of profile form inputs
   const onProfileChange = (e) => {

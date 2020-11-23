@@ -12,7 +12,7 @@ const UsersContainer = ({ token, error, usersLoading, users, getUsers }) => {
   // fetching all users from backend
   useEffect(() => {
     getUsers(token);
-  }, []);
+  }, [getUsers, token]);
 
   if (error) {
     return <ErrorIndicator />;

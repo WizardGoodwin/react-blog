@@ -23,6 +23,7 @@ rights (some operations are available only for authenticated users);
 
 ## Description of the app
 You can view the demo here [Demo](https://reactblog-d7743.firebaseapp.com)
+
 Typescript version take place on separate branch [Typescript](https://github.com/WizardGoodwin/react-blog/tree/typescript)
 
 ### Unregistered user

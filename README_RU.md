@@ -24,6 +24,7 @@
 
 ## Описание работы приложения
 Ознакомиться с демо можно здесь [Demo](https://reactblog-d7743.firebaseapp.com)
+
 Версия с использованием typescript находится на отдельной ветке [Typescript](https://github.com/WizardGoodwin/react-blog/tree/typescript)
 
 ### Незарегистрированный пользователь

@@ -1,13 +1,11 @@
 # React blog
 
-This is demo project, developed by me for training and demonstration purposes.
-The goal of it's creating - practicing skills and techniques for working with React and it's environment for <br>
-further use in real projects, as well as a demonstration of my knowledge and skills.
-
+This is demo project, developed by me for demonstration purposes.
+The goal of it's creating is a demonstration of my knowledge and skills for working with React and it's environment.
 
 ## Technologies and Libs
 
-- React 16.8.3 (including React Hooks)
+- React 17.x.x (including React Hooks)
 - Redux - handling global app store
 - Redux-thunk - handling store async requests
 - Firebase -  imitation of backend, database, user authentication and for hosting
@@ -30,7 +28,7 @@ You can view the application at [https://reactblog-d7743.firebaseapp.com](https:
 
 Unregistered user can view posts list on page `/posts`, clicking on the post title he will go to the page of a <br>
 separate post and can view comments list for that post. He can't add new posts or comments. When he tries to view <br> 
-the list of registered users at `/users`, he he will be redirected to the sign in page.
+the list of registered users at `/users`, he will be redirected to the sign in page.
 
 There are 5 registered users. For demonstration purposes, you can go under any of them or register new.
 

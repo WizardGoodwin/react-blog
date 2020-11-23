@@ -26,6 +26,7 @@ const Header: FunctionComponent<IProps> = ({ isAuth, username, onLogOut }) => {
     setMenuOpen(!isMenuOpen);
   };
 
+  // @ts-ignore
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark shadow">
       <div className="container">

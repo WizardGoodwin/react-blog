@@ -57,7 +57,7 @@ const PostContainer: FunctionComponent<IProps> = ({
   // fetching comments for one post from backend
   useEffect(() => {
     getCommentsByPostId(postId);
-  }, []);
+  }, [getCommentsByPostId, postId]);
 
   // handling change of comment form inputs
   const onCommentChange = (e: ChangeEvent) => {

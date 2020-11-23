@@ -26,7 +26,7 @@ const UsersContainer: FunctionComponent<IProps> = ({ token, error, usersLoading,
   // fetching all users from backend
   useEffect(() => {
     getUsers(token);
-  }, []);
+  }, [getUsers, token]);
 
   if (error) {
     return <ErrorIndicator />;

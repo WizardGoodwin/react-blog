@@ -63,7 +63,7 @@ const PostsContainer: FunctionComponent<IProps> = ({
   // fetching all posts from backend
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [getPosts]);
 
   // handling change of post form inputs
   const onPostChange = (e: ChangeEvent) => {
@@ -110,7 +110,6 @@ const PostsContainer: FunctionComponent<IProps> = ({
     return <Spinner />;
   } else {
     // @ts-ignore
-    // @ts-ignore
     return (
       <Fragment>
         <Route
@@ -147,10 +146,8 @@ const PostsContainer: FunctionComponent<IProps> = ({
                   onSubmit={onPostSubmit}
                 />
               </Modal>
-              // @ts-ignore
               <PostsList
                 posts={posts}
-                setModalOpen={setModalOpen}
                 onPostEdit={onPostEdit}
                 onPostDelete={onPostDelete}
                 username={username}
@@ -164,6 +161,7 @@ const PostsContainer: FunctionComponent<IProps> = ({
             // extracting :title from path and finding corresponding post in the array
             const title = props.match.params.title;
             const selectedPost = posts.find((post) => post[1].title === title);
+            // @ts-ignore
             return <PostContainer post={selectedPost} />;
           }}
         />

@@ -1,8 +1,7 @@
-import React, { FunctionComponent, ReactChildren } from 'react';
+import React, { FunctionComponent } from 'react';
 
 interface IProps {
   setMenuOpen(value: boolean): any;
-  children: ReactChildren;
 }
 
 const MobileMenu: FunctionComponent<IProps> = (props) => {

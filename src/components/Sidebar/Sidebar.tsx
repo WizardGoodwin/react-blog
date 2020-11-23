@@ -22,7 +22,7 @@ const Sidebar: FunctionComponent<IProps> = ({ posts, postsLoading, error, getLas
   // fetching latest posts from backend
   useEffect(() => {
     getLastPosts();
-  }, []);
+  }, [getLastPosts]);
 
   if (error) {
     return <ErrorIndicator />;

@@ -31,7 +31,7 @@ const CommentsContainer: FunctionComponent<IProps> = (props) => {
   // fetching all comments from backend
   useEffect(() => {
     getComments();
-  }, []);
+  }, [getComments]);
 
   if (commentsError) {
     return <ErrorIndicator />;

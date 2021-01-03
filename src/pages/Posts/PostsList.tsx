@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import image from '../../../assets/images/Post.jpg';
-import { IPost } from '../../../interfaces/post.interface';
-import { PostResponse } from '../../../interfaces/api-responses';
+import image from '../../assets/images/Post.jpg';
+import { IPost } from '../../interfaces/post.interface';
+import { PostResponse } from '../../interfaces/api-responses';
+
 
 interface IProps {
   username: string;
   posts: PostResponse[];
-  onPostEdit(id: string, post: IPost): any;
-  onPostDelete(id: string): any;
+  onPostEdit(id: string, post: IPost): void;
+  onPostDelete(id: string): void;
 }
 
 const PostsList: FC<IProps> = ({ username, posts, onPostEdit, onPostDelete }) => {

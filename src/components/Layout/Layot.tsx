@@ -1,23 +1,20 @@
-import React, { Fragment, FC } from 'react';
+import React, { FC } from 'react';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Sidebar from '../Sidebar/Sidebar';
 
-interface IProps {
-  children: any;
-}
 
-const Layout: FC<IProps> = (props) => {
+const Layout: FC = ({ children }) => {
   return (
-    <Fragment>
+    <>
       <Header />
       <main className="container row mx-auto mb-5">
-        <div className="col-lg-9">{props.children}</div>
+        <div className="col-lg-9">{children}</div>
         <Sidebar />
       </main>
       <Footer />
-    </Fragment>
+    </>
   );
 };
 

@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
-import { Form, Field, ErrorMessage } from 'formik';
+import { Form, Field, ErrorMessage, FormikErrors, FormikTouched } from 'formik';
 
-import Spinner from '../../../shared/Spinner/Spinner';
+import Spinner from '../../shared/Spinner/Spinner';
+import { ISignUpForm } from './SignUp';
+
 
 interface IProps {
-  errors?: any;
-  touched?: any;
-  error?: any;
-  loading?: boolean;
+  errors: FormikErrors<ISignUpForm>;
+  touched: FormikTouched<ISignUpForm>;
+  error: string | null;
+  loading: boolean;
 }
 
 const SignInForm: FC<IProps> = ({ errors, touched, error, loading }) => {
@@ -67,8 +69,7 @@ const SignInForm: FC<IProps> = ({ errors, touched, error, loading }) => {
         <ErrorMessage name="password" component="div" className="text-danger" />
       </div>
 
-      {/*outputting async validation error*/}
-      {error && <div className="text-danger mb-3">{error.message}</div>}
+      {error && <div className="text-danger mb-3">{error}</div>}
 
       {loading ? (
         <Spinner />

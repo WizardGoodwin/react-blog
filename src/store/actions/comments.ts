@@ -3,7 +3,7 @@ import { ActionTypes } from './actionTypes';
 import { IComment } from '../../interfaces/comment.interface';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { CommentResponse, IError } from '../../interfaces/api-responses';
+import { CommentResponse } from '../../interfaces/api-responses';
 
 export interface IAddCommentRequest {
   type: ActionTypes.ADD_COMMENT_REQUEST
@@ -129,51 +129,45 @@ export const addComment = (token: string, newComment: IComment): ThunkAction<Pro
   const comment = { ...newComment, author };
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(addCommentRequest());
-    axios
-      .post(`/comments.json?auth=${token}`, comment)
-      .then((response) => {
-        const id = response.data.name;
-        dispatch(addCommentSuccess(id, comment));
-      })
-      .catch((err: IError) => {
-        dispatch(addCommentFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.post(`/comments.json?auth=${token}`, comment);
+      const id = response.data.name;
+      dispatch(addCommentSuccess(id, comment));
+    } catch (err) {
+      dispatch(addCommentFail(err.response.data.error));
+    }
   };
 };
 
 export const getCommentsByPostId = (postId: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getCommentsByPostIdRequest());
-    axios
-      .get(`/comments.json`)
-      .then((response) => {
-        //convert response object to array of arrays kind of [ id : comment ]
-        const allComments = Object.entries(response.data);
-        // and finding only those comments which have needed post id
-        const comments: any[] = allComments.filter(
-          (comment: any) => comment[1].postId === postId,
-        );
-        dispatch(getCommentsByPostIdSuccess(comments));
-      })
-      .catch((err: IError) => {
-        dispatch(getCommentsByPostIdFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.get(`/comments.json`);
+      //convert response object to array of arrays kind of [ id : comment ]
+      const allComments: CommentResponse[] = Object.entries(response.data);
+      // and finding only those comments which have needed post id
+      const comments: CommentResponse[] = allComments.filter(
+        (comment: CommentResponse) => comment[1].postId === postId,
+      );
+      dispatch(getCommentsByPostIdSuccess(comments));
+    } catch(err) {
+      dispatch(getCommentsByPostIdFail(err.response.data.error));
+    }
   };
 };
 
 export const getComments = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getCommentsRequest());
-    axios
-      .get(`/comments.json`)
-      .then((response) => {
-        //convert response object to array of arrays kind of [ id : comment ]
-        const comments: any[] = Object.entries(response.data);
-        dispatch(getCommentsSuccess(comments));
-      })
-      .catch((err: IError) => {
-        dispatch(getCommentsFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.get(`/comments.json`);
+      //convert response object to array of arrays kind of [ id : comment ]
+      const comments: CommentResponse[] = Object.entries(response.data);
+      dispatch(getCommentsSuccess(comments));
+    } catch (err) {
+      dispatch(getCommentsFail(err.response.data.error));
+    }
   };
 };
 

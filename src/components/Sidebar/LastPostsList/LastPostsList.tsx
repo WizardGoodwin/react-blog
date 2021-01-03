@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { IState } from '../../../store/reducers';
 
 const LastPostsList: FC = () => {
-  const postsList = useSelector((state: IState) => state.posts.posts);
+  const postsList = useSelector((state: IState) => state.posts.list);
 
   const renderPost = (postInfo: PostResponse) => {
     const id = postInfo[0];

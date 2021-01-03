@@ -10,7 +10,7 @@ import {
 } from '../actions/users';
 
 export interface IUserState {
-  users: IUser[],
+  list: IUser[],
   user: IUser,
   error: string | null,
   userLoading: boolean,
@@ -19,7 +19,7 @@ export interface IUserState {
 }
 
 const initialState: IUserState = {
-  users: [],
+  list: [],
   user: {
     id: '',
     username: '',
@@ -43,7 +43,7 @@ const getUsersRequest = (state: IUserState): IUserState => {
 const getUsersSuccess = (state: IUserState, action: IGetUsersSuccess): IUserState => {
   return {
     ...state,
-    users: action.users,
+    list: action.users,
     error: null,
     usersLoading: false,
   };

@@ -10,13 +10,13 @@ import {
 import { ActionTypes } from '../actions/actionTypes';
 
 export interface ICommentState {
-  comments: CommentResponse[];
+  list: CommentResponse[];
   commentsError: string | null;
   commentsLoading: boolean;
 }
 
 const initialState: ICommentState = {
-  comments: [],
+  list: [],
   commentsError: null,
   commentsLoading: true,
 };
@@ -33,7 +33,7 @@ const addCommentSuccess = (state: ICommentState, action: IAddCommentSuccess): IC
   return {
     ...state,
     commentsError: null,
-    comments: state.comments.concat([newComment]),
+    list: state.list.concat([newComment]),
   };
 };
 
@@ -55,7 +55,7 @@ const getCommentsRequest = (state: ICommentState): ICommentState => {
 const getCommentsSuccess = (state: ICommentState, action: IGetCommentsSuccess): ICommentState => {
   return {
     ...state,
-    comments: action.comments,
+    list: action.comments,
     commentsError: null,
     commentsLoading: false,
   };
@@ -80,7 +80,7 @@ const getCommentsByPostIdRequest = (state: ICommentState): ICommentState => {
 const getCommentsByPostIdSuccess = (state: ICommentState, action: IGetCommentsByPostIdSuccess): ICommentState => {
   return {
     ...state,
-    comments: action.comments,
+    list: action.comments,
     commentsError: null,
     commentsLoading: false,
   };
@@ -95,7 +95,7 @@ const getCommentsByPostIdFail = (state: ICommentState, action: IGetCommentsByPos
 };
 
 const incCounter = (state: ICommentState, action: IIncCounter): ICommentState => {
-  const newComments: CommentResponse[] = state.comments.map((comment: CommentResponse) => {
+  const newComments: CommentResponse[] = state.list.map((comment: CommentResponse) => {
     if (comment[0] === action.id) {
       comment[1] = action.comment;
     }
@@ -103,7 +103,7 @@ const incCounter = (state: ICommentState, action: IIncCounter): ICommentState =>
   });
   return {
     ...state,
-    comments: newComments,
+    list: newComments,
   };
 };
 

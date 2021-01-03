@@ -1,11 +1,12 @@
 import React, { ChangeEvent, FormEvent, FC } from 'react';
 
+
 interface IProps {
   form: IPostForm;
   isNewPost?: boolean;
-  onPostChange(e: ChangeEvent): any;
-  setModalOpen(value: boolean): any;
-  onSubmit(e: FormEvent): any;
+  onPostChange(e: ChangeEvent): void;
+  setModalOpen(value: boolean): void;
+  onSubmit(e: FormEvent): void;
 }
 
 interface IPostForm {

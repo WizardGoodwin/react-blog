@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 
 interface IProps {
-  setMenuOpen(value: boolean): any;
+  setMenuOpen(value: boolean): void;
 }
 
 const MobileMenu: FC<IProps> = (props) => {

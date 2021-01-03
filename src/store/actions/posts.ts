@@ -1,7 +1,7 @@
 import axios from '../../axios';
 import { ActionTypes } from './actionTypes';
 import { IPost } from '../../interfaces/post.interface';
-import { IError, PostResponse } from '../../interfaces/api-responses';
+import { IUserPostResponse, PostResponse } from '../../interfaces/api-responses';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 
@@ -187,47 +187,41 @@ export const addPost = (token: string, newPost: IPost): ThunkAction<Promise<void
   const post = { ...newPost, created_at: date, author };
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(addPostRequest());
-    axios
-      .post(`/posts.json?auth=${token}`, post)
-      .then((response) => {
-        const id = response.data.name;
-        dispatch(addPostSuccess(id, post));
-      })
-      .catch((err: IError) => {
-        dispatch(addPostFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.post(`/posts.json?auth=${token}`, post)
+      const id = response.data.name;
+      dispatch(addPostSuccess(id, post));
+    } catch (err) {
+      dispatch(addPostFail(err.response.data.error));
+    }
   };
 };
 
 export const getPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getPostsRequest());
-    axios
-      .get(`/posts.json`)
-      .then((response) => {
-        //convert response object to array of arrays kind of [ id : post ]
-        const posts: any[] = Object.entries(response.data);
-        dispatch(getPostsSuccess(posts));
-      })
-      .catch((err: IError) => {
-        dispatch(getPostsFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.get(`/posts.json`);
+      //convert response object to array of arrays kind of [ id : post ]
+      const posts: PostResponse[] = Object.entries(response.data);
+      dispatch(getPostsSuccess(posts));
+    } catch (err) {
+      dispatch(getPostsFail(err.response.data.error));
+    }
   };
 };
 
 export const getLastPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getLastPostsRequest());
-    axios
-      .get(`/posts.json`)
-      .then((response) => {
-        //convert response object to array of arrays kind of [ id : post ]
-        const posts: any[] = Object.entries(response.data).slice(-5);
-        dispatch(getLastPostsSuccess(posts));
-      })
-      .catch((err: IError) => {
-        dispatch(getLastPostsFail(err.response.data.error));
-      });
+    try {
+      const response: IUserPostResponse = await axios.get(`/posts.json`)
+      //convert response object to array of arrays kind of [ id : post ]
+      const posts: PostResponse[] = Object.entries(response.data).slice(-5);
+      dispatch(getLastPostsSuccess(posts));
+    } catch (err) {
+      dispatch(getLastPostsFail(err.response.data.error));
+    }
   };
 };
 
@@ -237,28 +231,24 @@ export const updatePost = (token: string, id: string, editedPost: IPost): ThunkA
   const post = { ...editedPost, created_at: date };
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(updatePostRequest());
-    axios
-      .put(`/posts/${id}.json?auth=${token}`, post)
-      .then(() => {
-        dispatch(updatePostSuccess(id, post));
-      })
-      .catch((err: IError) => {
-        dispatch(updatePostFail(err.response.data.error));
-      });
+    try {
+      await axios.put(`/posts/${id}.json?auth=${token}`, post)
+      dispatch(updatePostSuccess(id, post));
+    } catch (err) {
+      dispatch(updatePostFail(err.response.data.error));
+    }
   };
 };
 
 export const deletePost = (token: string, id: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(deletePostRequest());
-    axios
-      .delete(`/posts/${id}.json?auth=${token}`)
-      .then(() => {
-        dispatch(deletePostSuccess(id));
-      })
-      .catch((err: IError) => {
-        dispatch(deletePostFail(err.response.data.error));
-      });
+    try {
+      await axios.delete(`/posts/${id}.json?auth=${token}`);
+      dispatch(deletePostSuccess(id));
+    } catch (err) {
+      dispatch(deletePostFail(err.response.data.error));
+    }
   };
 };
 

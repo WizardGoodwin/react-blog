@@ -1,7 +1,6 @@
 import axios from '../../axios';
 
 import { ActionTypes } from './actionTypes';
-import { IError } from '../../interfaces/api-responses';
 import { IUser } from '../../interfaces/user.interface';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
@@ -111,14 +110,12 @@ const updateUserFail = (error: string): IUpdateUserFail => {
 export const getUsers = (token: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getUsersRequest());
-    axios
-      .get(`/users.json?auth=${token}`)
-      .then((response) => {
-        dispatch(getUsersSuccess(Object.values(response.data)));
-      })
-      .catch((err: IError) => {
-        dispatch(getUsersFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.get(`/users.json?auth=${token}`);
+      dispatch(getUsersSuccess(Object.values(response.data)));
+    } catch (err) {
+      dispatch(getUsersFail(err.response.data.error));
+    }
   };
 };
 
@@ -126,14 +123,12 @@ export const getUserById = (token: string): ThunkAction<Promise<void>, {}, {}, A
   const id = localStorage.getItem('userId');
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(getUserByIdRequest());
-    axios
-      .get(`/users/${id}.json?auth=${token}`)
-      .then((response) => {
-        dispatch(getUserByIdSuccess(response.data));
-      })
-      .catch((err: IError) => {
-        dispatch(getUserByIdFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.get(`/users/${id}.json?auth=${token}`);
+      dispatch(getUserByIdSuccess(response.data));
+    } catch (err) {
+      dispatch(getUserByIdFail(err.response.data.error));
+    }
   };
 };
 
@@ -141,14 +136,12 @@ export const updateUser = (token: string, user: IUser): ThunkAction<Promise<void
   const id = localStorage.getItem('userId');
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(updateUserRequest());
-    axios
-      .put(`/users/${id}.json?auth=${token}`, user)
-      .then((response) => {
-        dispatch(updateUserSuccess(response.data));
-      })
-      .catch((err: IError) => {
-        dispatch(updateUserFail(err.response.data.error));
-      });
+    try {
+      const response = await axios.put(`/users/${id}.json?auth=${token}`, user);
+      dispatch(updateUserSuccess(response.data));
+    } catch (err) {
+      dispatch(updateUserFail(err.response.data.error));
+    }
   };
 };
 

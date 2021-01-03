@@ -1,12 +1,19 @@
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Formik } from 'formik';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 
-import SignUpForm from '../components/Auth/SignUpForm/SignUpForm';
-import { signUp } from '../store/actions/auth';
-import { IState } from '../store/reducers';
+import SignUpForm from './SignUpForm';
+import { signUp } from '../../store/actions/auth';
+import { IState } from '../../store/reducers';
+
+
+export interface ISignUpForm {
+  email: string;
+  password: string;
+  username: string;
+}
 
 // validation schema
 const SignUpSchema = Yup.object().shape({
@@ -21,18 +28,18 @@ const SignUpSchema = Yup.object().shape({
     .required('This field should be filled'),
 });
 
-const SignUpContainer: FC = () => {
+const SignUp: FC = () => {
   const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const loading = useSelector((state: IState) => state.auth.loading);
   const error = useSelector((state: IState) => state.auth.error);
   const dispatch = useDispatch();
 
-  const onSubmit = (values: any, actions: any) => {
+  const onSubmit = (values: ISignUpForm, actions: FormikHelpers<ISignUpForm>) => {
     dispatch(signUp(values));
     actions.setSubmitting(false);
   };
 
-  const renderForm = (formProps: any) => {
+  const renderForm = (formProps: FormikProps<ISignUpForm>) => {
     return (
       <SignUpForm
         errors={formProps.errors}
@@ -53,12 +60,12 @@ const SignUpContainer: FC = () => {
       <h3 className="text-center">Sign up</h3>
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
-        onSubmit={(values, actions) => onSubmit(values, actions)}
+        onSubmit={(values: ISignUpForm, actions: FormikHelpers<ISignUpForm>) => onSubmit(values, actions)}
         validationSchema={SignUpSchema}
-        render={(formProps) => renderForm(formProps)}
+        render={(formProps: FormikProps<ISignUpForm>) => renderForm(formProps)}
       />
     </div>
   );
 };
 
-export default SignUpContainer;
+export default SignUp;

@@ -5,7 +5,7 @@ export interface IAuthState {
   token: string;
   userId: string | null;
   username: string;
-  error?: any;
+  error: string | null;
   loading: boolean;
 }
 

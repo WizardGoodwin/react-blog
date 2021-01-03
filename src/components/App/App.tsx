@@ -1,28 +1,29 @@
 import React, { FC } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import UsersContainer from '../../containers/UsersContainer';
-import PostsContainer from '../../containers/PostsContainer';
-import CommentsContainer from '../../containers/CommentsContainer';
+
+import Users from '../../pages/Users/Users';
+import Posts from '../../pages/Posts/Posts';
+import Comments from '../../pages/Comments/Comments';
 import About from '../../pages/About/About';
 import NotFound from '../../shared/NotFound/NotFound';
 import Layout from '../Layout/Layot';
-import SignInContainer from '../../containers/SignInContainer';
-import SignUpContainer from '../../containers/SignUpContainer';
-import ProfileContainer from '../../containers/ProfileContainer';
+import SignIn from '../../pages/SignIn/SignIn';
+import SignUp from '../../pages/SignUp/SignUp';
+import Profile from '../../pages/Profile/Profile';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
-const App: FC = () => {
 
+const App: FC = () => {
   return (
     <Layout>
       <Switch>
         <Redirect from="/" exact to="/posts" />
-        <Route path="/sign-in" component={SignInContainer} />
-        <Route path="/sign-up" component={SignUpContainer} />
-        <Route path="/profile" component={ProfileContainer} />
-        <Route path="/posts" component={PostsContainer} />
-        <Route path="/users" component={UsersContainer} />
-        <Route path="/comments" component={CommentsContainer} />
+        <Route path="/sign-in" component={SignIn} />
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/posts" component={Posts} />
+        <Route path="/users" component={Users} />
+        <Route path="/comments" component={Comments} />
         <Route path="/about" component={About} />
         <Route component={NotFound} />
       </Switch>

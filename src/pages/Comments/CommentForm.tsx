@@ -1,10 +1,11 @@
 import React, { ChangeEvent, FormEvent, FC } from 'react';
 
+
 interface IProps {
   form: ICommentForm;
   postId: string;
-  onCommentChange(e: ChangeEvent): any;
-  onSubmit(e: FormEvent, postId: string): any;
+  onCommentChange(e: ChangeEvent): void;
+  onSubmit(e: FormEvent, postId: string): void;
 }
 
 interface ICommentForm {

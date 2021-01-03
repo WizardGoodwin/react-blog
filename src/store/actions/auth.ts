@@ -4,11 +4,10 @@ import { ActionTypes } from './actionTypes';
 import { IUser } from '../../interfaces/user.interface';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import {
-  IAuthResponse,
-  IError,
-  IUserPostResponse
-} from '../../interfaces/api-responses';
+import { IAuthResponse, IUserPostResponse, UserResponse } from '../../interfaces/api-responses';
+import { ISignInForm } from '../../pages/SignIn/SignIn';
+import { ISignUpForm } from '../../pages/SignUp/SignUp';
+import { SIGN_IN_URL, SIGN_UP_URL } from '../../shared/constants';
 
 export interface ISignUpRequest {
   type: ActionTypes.SIGN_UP_REQUEST
@@ -99,75 +98,55 @@ export const logOut = (): ILogOut => {
   };
 };
 
-export const signUp = (authData: IUser): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const signUp = (authData: ISignUpForm): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(signUpRequest());
-    const url =
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDl7p6TD5rS_sYqeXIeRsToBEpXbjk36F4';
-
-    axios
-      .post(url, { ...authData, returnSecureToken: true })
-      .then((response: IAuthResponse) => {
-        const token = response.data.idToken;
-        const tempId = response.data.localId;
-        localStorage.setItem('token', token);
-        const user: IUser = {
-          id: tempId,
-          email: authData.email,
-          username: authData.username,
-          name: '',
-          phone: '',
-          address: '',
-          website: '',
-        };
-        // sending request to create user entity in firebase database
-        // (sign up action doesn't create user entity in db - feature of firebase)
-        axios
-          .post('/users.json', user)
-          .then((response: IUserPostResponse) => {
-            const userId = response.data.name;
-            localStorage.setItem('userId', userId);
-            dispatch(signUpSuccess(token, userId, authData.username));
-          })
-          .catch((err: IError) => {
-            dispatch(signUpFail(err.response.data.error));
-          });
-      })
-      .catch((err: IError) => {
-        dispatch(signUpFail(err.response.data.error));
-      });
+    try {
+      const authResponse: IAuthResponse = await axios.post(SIGN_UP_URL, { ...authData, returnSecureToken: true });
+      const token = authResponse.data.idToken;
+      const tempId = authResponse.data.localId;
+      localStorage.setItem('token', token);
+      const user: IUser = {
+        id: tempId,
+        email: authData.email,
+        username: authData.username,
+        name: '',
+        phone: '',
+        address: '',
+        website: '',
+      };
+      // sending request to create user entity in firebase database
+      // (sign up action doesn't create user entity in db - feature of firebase)
+      const userResponse: IUserPostResponse = await axios.post('/users.json', user);
+      const userId = userResponse.data.name;
+      localStorage.setItem('userId', userId);
+      dispatch(signUpSuccess(token, userId, authData.username));
+    } catch(err) {
+      dispatch(signUpFail(err.response.data.error));
+    }
   };
 };
 
-export const signIn = (authData: IUser): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const signIn = (authData: ISignInForm): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
     dispatch(signInRequest());
-    const url =
-      'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDl7p6TD5rS_sYqeXIeRsToBEpXbjk36F4';
-
-    axios
-      .post(url, { ...authData, returnSecureToken: true })
-      .then((response: IAuthResponse) => {
-        const token = response.data.idToken;
-        const tempId = response.data.localId;
-        // finding user in firebase database and setting to local storage his id and username
-        axios
-          .get('/users.json')
-          .then((response) => {
-            const users: any[] = Object.entries(response.data);
-            const user = users.find((user: any) => user[1].id === tempId);
-            localStorage.setItem('token', token);
-            localStorage.setItem('userId', user[0]);
-            localStorage.setItem('username', user[1].username);
-            dispatch(signInSuccess(token, user[0], user[1].username));
-          })
-          .catch((err: IError) => {
-            dispatch(signInFail(err.response.data.error));
-          });
-      })
-      .catch((err: IError) => {
-        dispatch(signInFail(err.response.data.error));
-      });
+    try {
+      const authResponse: IAuthResponse = await axios.post(SIGN_IN_URL, { ...authData, returnSecureToken: true });
+      const token = authResponse.data.idToken;
+      const tempId = authResponse.data.localId;
+      // finding user in firebase database and setting to local storage his id and username
+      const usersResponse = await axios.get('/users.json');
+      const users: UserResponse[] = Object.entries(usersResponse.data);
+      const user = users.find((user: UserResponse) => user[1].id === tempId);
+      if (user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', user[0]);
+        localStorage.setItem('username', user[1].username);
+        dispatch(signInSuccess(token, user[0], user[1].username));
+      } else throw new Error('User not found');
+    } catch(err) {
+      dispatch(signInFail(err.response.data.error));
+    }
   };
 };
 

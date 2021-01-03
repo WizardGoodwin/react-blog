@@ -1,16 +1,17 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import { IComment } from '../../../interfaces/comment.interface';
+import { IComment } from '../../interfaces/comment.interface';
+import { incDislikeCounter, incLikeCounter } from '../../store/actions/comments';
+
 
 interface IProps {
   commentId: string;
   comment: IComment;
-  incLikeCounter(commentId: string, comment: IComment): any;
-  incDislikeCounter(commentId: string, comment: IComment): any;
 }
 
-const Comment: FC<IProps> = ({ commentId, comment, incLikeCounter, incDislikeCounter }) => {
+const Comment: FC<IProps> = ({ commentId, comment }) => {
   const {
     author,
     commentTitle,
@@ -18,6 +19,11 @@ const Comment: FC<IProps> = ({ commentId, comment, incLikeCounter, incDislikeCou
     likeCounter,
     dislikeCounter,
   } = comment;
+  const dispatch = useDispatch();
+
+  const increaseLikeCounter = () => dispatch(incLikeCounter(commentId, comment));
+
+  const increaseDislikeCounter = () => dispatch(incDislikeCounter(commentId, comment));
 
   return (
     <div className="media mt-4 ml-4">
@@ -31,14 +37,14 @@ const Comment: FC<IProps> = ({ commentId, comment, incLikeCounter, incDislikeCou
           <p className="text-info mr-5">
             <i
               className="fa fa-thumbs-up text-info pr-2"
-              onClick={() => incLikeCounter(commentId, comment)}
+              onClick={increaseLikeCounter}
             />
             {likeCounter}
           </p>
           <p className="text-danger">
             <i
               className="fa fa-thumbs-down pr-2"
-              onClick={() => incDislikeCounter(commentId, comment)}
+              onClick={increaseDislikeCounter}
             />
             {dislikeCounter}
           </p>

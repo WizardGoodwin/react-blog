@@ -3,30 +3,30 @@ import { Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 
-import PostsList from '../pages/Posts/PostsList/PostsList';
-import PostForm from '../pages/Posts/PostForm/PostForm';
-import PostContainer from './PostContainer';
-import AddPostBtn from '../pages/Posts/AddPostBtn/AddPostBtn';
-import Spinner from '../shared/Spinner/Spinner';
-import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
+import PostsList from './PostsList';
+import PostForm from './PostForm';
+import Post from './Post';
+import AddPostBtn from './AddPostBtn';
+import Spinner from '../../shared/Spinner/Spinner';
+import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import {
   addPost,
   deletePost,
   getPosts,
   updatePost,
-} from '../store/actions/posts';
-import { IPost } from '../interfaces/post.interface';
-import { IState } from '../store/reducers';
+} from '../../store/actions/posts';
+import { IPost } from '../../interfaces/post.interface';
+import { IState } from '../../store/reducers';
 
 
 //setting parent node for modal window
 Modal.setAppElement('#root');
 
-const PostsContainer: FC = () => {
+const Posts: FC = () => {
   const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const token = useSelector((state: IState) => state.auth.token);
   const username = useSelector((state: IState) => state.auth.username);
-  const posts = useSelector((state: IState) => state.posts.posts);
+  const postsList = useSelector((state: IState) => state.posts.list);
   const postsLoading = useSelector((state: IState) => state.posts.postsLoading);
   const postsError = useSelector((state: IState) => state.posts.postsError);
   const dispatch = useDispatch();
@@ -46,8 +46,8 @@ const PostsContainer: FC = () => {
   }, [dispatch]);
 
   // handling change of post form inputs
-  const onPostChange = (e: ChangeEvent) => {
-    const { id, value } = e.target as any;
+  const onPostChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
     setPostValues({
       ...postForm,
       [id]: value,
@@ -125,7 +125,7 @@ const PostsContainer: FC = () => {
                 />
               </Modal>
               <PostsList
-                posts={posts}
+                posts={postsList}
                 onPostEdit={onPostEdit}
                 onPostDelete={onPostDelete}
                 username={username}
@@ -136,15 +136,13 @@ const PostsContainer: FC = () => {
         <Route
           path="/posts/:title"
           render={(props) => {
-            // extracting :title from path and finding corresponding post in the array
             const title = props.match.params.title;
-            const selectedPost = posts.find((post) => post[1].title === title);
-            // @ts-ignore
-            return <PostContainer post={selectedPost} />;
+            const selectedPost = postsList.find((post) => post[1].title === title);
+            return selectedPost && <Post post={selectedPost} />;
           }}
         />
       </>
     );
 };
 
-export default PostsContainer;
+export default Posts;

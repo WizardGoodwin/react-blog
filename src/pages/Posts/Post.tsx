@@ -1,30 +1,30 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Post from '../pages/Posts/Post/Post';
-import CommentForm from '../pages/Comments/CommentForm/CommentForm';
-import CommentsList from '../pages/Comments/CommentsList/CommentsList';
-import Spinner from '../shared/Spinner/Spinner';
-import ErrorIndicator from '../shared/ErrorIndicator/ErrorIndicator';
+import CommentForm from '../Comments/CommentForm';
+import Spinner from '../../shared/Spinner/Spinner';
+import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import {
   addComment,
   getCommentsByPostId,
-  incDislikeCounter,
-  incLikeCounter,
-} from '../store/actions/comments';
-import { IState } from '../store/reducers';
-import { PostResponse } from '../interfaces/api-responses';
+} from '../../store/actions/comments';
+import { IState } from '../../store/reducers';
+import { PostResponse } from '../../interfaces/api-responses';
+import image from '../../assets/images/Post.jpg';
+import CommentsList from '../Comments/CommentsList';
+
 
 interface IProps {
   post: PostResponse;
 }
 
-const PostContainer: FC<IProps> = ({
-  post,
-}) => {
+const Post: FC<IProps> = ({ post }) => {
+  const postId = post[0];
+  const { title, body, created_at, author } = post[1];
   const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const token = useSelector((state: IState) => state.auth.token);
-  const comments = useSelector((state: IState) => state.comments.comments);
+  const commentsList = useSelector((state: IState) => state.comments.list);
   const commentsLoading = useSelector((state: IState) => state.comments.commentsLoading);
   const commentsError = useSelector((state: IState) => state.comments.commentsError);
   const dispatch = useDispatch();
@@ -35,7 +35,6 @@ const PostContainer: FC<IProps> = ({
     likeCounter: 0,
     dislikeCounter: 0,
   });
-  const postId = post[0];
 
   // fetching comments for one post from backend
   useEffect(() => {
@@ -43,8 +42,8 @@ const PostContainer: FC<IProps> = ({
   }, [dispatch, postId]);
 
   // handling change of comment form inputs
-  const onCommentChange = (e: ChangeEvent) => {
-    const { id, value } = e.target as any;
+  const onCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
     setCommentValues({
       ...commentForm,
       [id]: value,
@@ -71,16 +70,27 @@ const PostContainer: FC<IProps> = ({
     <Spinner />
   ): (
     <>
-      <Post post={post} />
+      <div className="card shadow my-4">
+        <img className="card-img-top" src={image} alt="post" />
+        <div className="card-body">
+          <h3 className="card-title">{title}</h3>
+          <p className="card-text">{body}</p>
+          <p className="card-text">
+            <small className="text-muted">{created_at}</small>
+          </p>
+          <Link to={`/users/${author}`}>by {author}</Link>
+        </div>
+        <div className="card-footer">
+          <Link to={'/posts'} className="card-link">
+            Go to posts list
+          </Link>
+        </div>
+      </div>
 
-      {comments.length === 0 ? (
+      {commentsList.length === 0 ? (
         <h5 className="text-info mb-4">There are no comments yet</h5>
       ) : (
-        <CommentsList
-          comments={comments}
-          incLikeCounter={incLikeCounter}
-          incDislikeCounter={incDislikeCounter}
-        />
+        <CommentsList />
       )}
 
       {isAuth ? (
@@ -104,4 +114,4 @@ const PostContainer: FC<IProps> = ({
   );
 };
 
-export default PostContainer;
+export default Post;

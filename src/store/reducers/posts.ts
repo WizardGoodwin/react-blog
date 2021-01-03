@@ -11,7 +11,7 @@ import {
 } from '../actions/posts';
 
 export interface IPostState {
-  posts: PostResponse[];
+  list: PostResponse[];
   post: IPost;
   postsError: string | null;
   postLoading: boolean;
@@ -20,7 +20,7 @@ export interface IPostState {
 }
 
 const initialState: IPostState = {
-  posts: [],
+  list: [],
   post: {
     author: '',
     title: '',
@@ -45,7 +45,7 @@ const addPostSuccess = (state: IPostState, action: IAddPostSuccess): IPostState 
   return {
     ...state,
     postsError: null,
-    posts: state.posts.concat([newPost]),
+    list: state.list.concat([newPost]),
   };
 };
 
@@ -67,7 +67,7 @@ const getPostsRequest = (state: IPostState): IPostState => {
 const getPostsSuccess = (state: IPostState, action: IGetPostsSuccess): IPostState => {
   return {
     ...state,
-    posts: action.posts,
+    list: action.posts,
     postsError: null,
     postsLoading: false,
   };
@@ -92,7 +92,7 @@ const getLastPostsRequest = (state: IPostState): IPostState => {
 const getLastPostsSuccess = (state: IPostState, action: IGetLastPostsSuccess): IPostState => {
   return {
     ...state,
-    posts: action.posts,
+    list: action.posts,
     postsError: null,
     postsLoading: false,
   };
@@ -115,14 +115,14 @@ const updatePostRequest = (state: IPostState): IPostState => {
 
 const updatePostSuccess = (state: IPostState, action: IUpdatePostSuccess): IPostState => {
   // finding index of updating post in the array of posts
-  const idx = state.posts.findIndex((post) => post[0] === action.id);
+  const idx = state.list.findIndex((post) => post[0] === action.id);
   // creating copy of array
-  const newPosts: PostResponse[] = state.posts.slice();
+  const newPosts: PostResponse[] = state.list.slice();
   // changing updated post in the array
   newPosts[idx] = [action.id, action.post];
   return {
     ...state,
-    posts: newPosts,
+    list: newPosts,
     postsError: null,
   };
 };
@@ -143,10 +143,10 @@ const deletePostRequest = (state: IPostState): IPostState => {
 
 const deletePostSuccess = (state: IPostState, action: IDeletePostSuccess): IPostState => {
   // deleting from array post with id
-  const newPosts: PostResponse[] = state.posts.filter((post) => post[0] !== action.id);
+  const newPosts: PostResponse[] = state.list.filter((post) => post[0] !== action.id);
   return {
     ...state,
-    posts: newPosts,
+    list: newPosts,
     postsError: null,
   };
 };

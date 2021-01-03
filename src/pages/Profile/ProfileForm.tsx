@@ -4,8 +4,8 @@ import Spinner from '../../shared/Spinner/Spinner';
 
 interface IProps {
   form: IProfileForm;
-  onProfileChange(e: ChangeEvent): any;
-  onSubmit(e: FormEvent): any;
+  onProfileChange(e: ChangeEvent): void;
+  onSubmit(e: FormEvent): void;
   userUpdating?: boolean;
 }
 

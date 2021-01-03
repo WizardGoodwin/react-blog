@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, FunctionComponent } from 'react';
+import React, { ChangeEvent, FormEvent, FC } from 'react';
 
 interface IProps {
   form: IPostForm;
@@ -13,7 +13,7 @@ interface IPostForm {
   body: string;
 }
 
-const PostForm: FunctionComponent<IProps> = ({
+const PostForm: FC<IProps> = ({
   form,
   isNewPost,
   onPostChange,

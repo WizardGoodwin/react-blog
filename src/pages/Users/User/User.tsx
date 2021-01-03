@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { IUser } from '../../../interfaces/user.interface';
 
@@ -6,7 +6,7 @@ interface IProps {
   user: IUser
 }
 
-const User: FunctionComponent<IProps> = ({ user }) => {
+const User: FC<IProps> = ({ user }) => {
   return (
     <div className="card shadow-sm my-4">
       <h5 className="card-header">{user.username}</h5>

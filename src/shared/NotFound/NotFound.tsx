@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const NotFound:FunctionComponent = () => {
+const NotFound:FC = () => {
   return (
     <div className="container pt-5">
       <h1 className="mt-5 text-center">Страница не найдена</h1>

@@ -1,7 +1,7 @@
 import axios from '../../axios';
 
 import { ActionTypes } from './actionTypes';
-import { IError, UserResponse } from '../../interfaces/api-responses';
+import { IError } from '../../interfaces/api-responses';
 import { IUser } from '../../interfaces/user.interface';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
@@ -12,7 +12,7 @@ export interface IGetUsersRequest {
 
 export interface IGetUsersSuccess {
   type: ActionTypes.GET_USERS_SUCCESS;
-  users: UserResponse[]
+  users: IUser[]
 }
 
 export interface IGetUsersFail {
@@ -54,7 +54,7 @@ const getUsersRequest = (): IGetUsersRequest => {
   };
 };
 
-const getUsersSuccess = (users: UserResponse[]): IGetUsersSuccess => {
+const getUsersSuccess = (users: IUser[]): IGetUsersSuccess => {
   return {
     type: ActionTypes.GET_USERS_SUCCESS,
     users,

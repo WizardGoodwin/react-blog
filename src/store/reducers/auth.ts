@@ -2,17 +2,17 @@ import { AuthAction, ISignInFail, ISignInSuccess, ISignUpFail, ISignUpSuccess } 
 import { ActionTypes } from '../actions/actionTypes';
 
 export interface IAuthState {
-  token: string | null;
+  token: string;
   userId: string | null;
-  username: string | null;
+  username: string;
   error?: any;
   loading: boolean;
 }
 
 const initialState: IAuthState = {
-  token: localStorage.getItem('token'),
+  token: localStorage.getItem('token') || '',
   userId: localStorage.getItem('userId'),
-  username: localStorage.getItem('username'),
+  username: localStorage.getItem('username') || '',
   error: null,
   loading: false,
 };
@@ -74,9 +74,9 @@ const signInFail = (state: IAuthState, action: ISignInFail): IAuthState => {
 const logOut = (state: IAuthState): IAuthState => {
   return {
     ...state,
-    token: null,
+    token: '',
     userId: null,
-    username: null,
+    username: '',
   };
 };
 

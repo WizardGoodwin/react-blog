@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from 'react';
+import React, { Fragment, FC } from 'react';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -8,7 +8,7 @@ interface IProps {
   children: any;
 }
 
-const Layout: FunctionComponent<IProps> = (props) => {
+const Layout: FC<IProps> = (props) => {
   return (
     <Fragment>
       <Header />

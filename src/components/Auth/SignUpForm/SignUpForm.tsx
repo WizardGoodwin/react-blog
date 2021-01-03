@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Form, Field, ErrorMessage } from 'formik';
 
 import Spinner from '../../../shared/Spinner/Spinner';
@@ -10,7 +10,7 @@ interface IProps {
   loading?: boolean;
 }
 
-const SignInForm: FunctionComponent<IProps> = ({ errors, touched, error, loading }) => {
+const SignInForm: FC<IProps> = ({ errors, touched, error, loading }) => {
   return (
     <Form className="d-flex flex-column align-items-center">
       <div className="form-group w-75">

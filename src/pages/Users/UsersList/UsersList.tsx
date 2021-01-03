@@ -1,4 +1,4 @@
-import React, { Fragment, FunctionComponent } from 'react';
+import React, { Fragment, FC } from 'react';
 import { Link } from 'react-router-dom';
 import { IUser } from '../../../interfaces/user.interface';
 
@@ -6,7 +6,7 @@ interface IProps {
   users: IUser[]
 }
 
-const UsersList: FunctionComponent<IProps> = ({ users }) => {
+const UsersList: FC<IProps> = ({ users }) => {
   return (
     <Fragment>
       <h2 className="mt-4 text-info">Registered users</h2>

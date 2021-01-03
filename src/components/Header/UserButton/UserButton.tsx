@@ -1,12 +1,16 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux'
+  ;
+import { IState } from '../../../store/reducers';
+import { logOut } from '../../../store/actions/auth';
 
-interface IProps {
-  username: string;
-  onLogOut(): any;
-}
+const UserButton: FC = () => {
+  const username = useSelector((state: IState) => state.auth.username);
+  const dispatch = useDispatch();
 
-const UserButton: FunctionComponent<IProps> = ({ username, onLogOut }) => {
+  const handleLogout = () => dispatch(logOut());
+
   return (
     <div className="d-md-flex align-items-center">
       <div>
@@ -15,7 +19,7 @@ const UserButton: FunctionComponent<IProps> = ({ username, onLogOut }) => {
         </Link>
       </div>
       <button
-        onClick={() => onLogOut()}
+        onClick={handleLogout}
         className="btn btn-outline-info my-4 my-md-2"
       >
         Log Out

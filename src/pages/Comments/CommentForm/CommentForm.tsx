@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, FunctionComponent } from 'react';
+import React, { ChangeEvent, FormEvent, FC } from 'react';
 
 interface IProps {
   form: ICommentForm;
@@ -12,7 +12,7 @@ interface ICommentForm {
   commentBody: string;
 }
 
-const CommentForm: FunctionComponent<IProps> = ({ form, postId, onCommentChange, onSubmit }) => {
+const CommentForm: FC<IProps> = ({ form, postId, onCommentChange, onSubmit }) => {
   const { commentTitle, commentBody } = form;
   return (
     <form className="mb-5" onSubmit={(e) => onSubmit(e, postId)}>

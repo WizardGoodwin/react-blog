@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, FunctionComponent } from 'react';
+import React, { ChangeEvent, FormEvent, FC } from 'react';
 
 import Spinner from '../../shared/Spinner/Spinner';
 
@@ -18,7 +18,7 @@ interface IProfileForm {
   website?: string;
 }
 
-const ProfileForm: FunctionComponent<IProps> = ({ form, onProfileChange, onSubmit, userUpdating }) => {
+const ProfileForm: FC<IProps> = ({ form, onProfileChange, onSubmit, userUpdating }) => {
   const { username, email, name, phone, address, website } = form;
   return (
     <div className="card mt-4">

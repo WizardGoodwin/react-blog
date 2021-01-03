@@ -1,6 +1,6 @@
-import React, { ChangeEvent, FormEvent, Fragment, FunctionComponent, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-modal';
 
 import PostsList from '../pages/Posts/PostsList/PostsList';
@@ -15,42 +15,22 @@ import {
   getPosts,
   updatePost,
 } from '../store/actions/posts';
-import { PostResponse } from '../interfaces/api-responses';
 import { IPost } from '../interfaces/post.interface';
 import { IState } from '../store/reducers';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { IAuthState } from '../store/reducers/auth';
-import { IPostState } from '../store/reducers/posts';
+
 
 //setting parent node for modal window
 Modal.setAppElement('#root');
 
-interface IProps {
-  isAuth: boolean;
-  token: string;
-  username: string;
-  posts: PostResponse[];
-  postsLoading: boolean;
-  postsError: string;
-  addPost(token: string, post: IPost): any;
-  getPosts(): any;
-  updatePost(token: string, id: string, post: IPost): any;
-  deletePost(token: string, id: string): any;
-}
+const PostsContainer: FC = () => {
+  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
+  const token = useSelector((state: IState) => state.auth.token);
+  const username = useSelector((state: IState) => state.auth.username);
+  const posts = useSelector((state: IState) => state.posts.posts);
+  const postsLoading = useSelector((state: IState) => state.posts.postsLoading);
+  const postsError = useSelector((state: IState) => state.posts.postsError);
+  const dispatch = useDispatch();
 
-const PostsContainer: FunctionComponent<IProps> = ({
-  isAuth,
-  token,
-  username,
-  posts,
-  postsLoading,
-  postsError,
-  addPost,
-  getPosts,
-  updatePost,
-  deletePost,
-}) => {
   // state for handling modal windows
   const [isModalOpen, setModalOpen] = useState(false);
   // state for handling change of add new/edit post
@@ -62,8 +42,8 @@ const PostsContainer: FunctionComponent<IProps> = ({
 
   // fetching all posts from backend
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+    dispatch(getPosts());
+  }, [dispatch]);
 
   // handling change of post form inputs
   const onPostChange = (e: ChangeEvent) => {
@@ -91,14 +71,14 @@ const PostsContainer: FunctionComponent<IProps> = ({
 
   // handling click on "delete" button
   const onPostDelete = (id: string) => {
-    deletePost(token, id);
+    dispatch(deletePost(token, id));
   };
 
   // handling post form submit
   const onPostSubmit = (e: FormEvent) => {
     e.preventDefault();
     //if its new post, then send add action else update action
-    isNewPost ? addPost(token, postForm) : updatePost(token, postId, postForm);
+    isNewPost ? dispatch(addPost(token, postForm)) : dispatch(updatePost(token, postId, postForm));
     setModalOpen(false);
   };
 
@@ -106,17 +86,15 @@ const PostsContainer: FunctionComponent<IProps> = ({
     return <ErrorIndicator />;
   }
 
-  if (postsLoading) {
-    return <Spinner />;
-  } else {
-    // @ts-ignore
-    return (
-      <Fragment>
+  return postsLoading ? (
+      <Spinner />
+    ) : (
+      <>
         <Route
           path="/posts"
           exact
           render={() => (
-            <Fragment>
+            <>
               {isAuth ? (
                 // if user is logged in, then show button, else show text
                 <AddPostBtn onAddPost={onAddPost} />
@@ -152,7 +130,7 @@ const PostsContainer: FunctionComponent<IProps> = ({
                 onPostDelete={onPostDelete}
                 username={username}
               />
-            </Fragment>
+            </>
           )}
         />
         <Route
@@ -165,32 +143,8 @@ const PostsContainer: FunctionComponent<IProps> = ({
             return <PostContainer post={selectedPost} />;
           }}
         />
-      </Fragment>
+      </>
     );
-  }
 };
 
-const mapStateToProps = (state: IState) => {
-  const authState: IAuthState = state.auth;
-  const postsState: IPostState = state.posts;
-  return {
-    isAuth: authState.token !== null,
-    token: authState.token,
-    username: authState.username,
-    posts: postsState.posts,
-    postsLoading: postsState.postsLoading,
-    postsError: postsState.postsError
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    getPosts: () => dispatch(getPosts()),
-    addPost: (token: string, post: IPost) => dispatch(addPost(token, post)),
-    updatePost: (token: string, id: string, post: IPost) => dispatch(updatePost(token, id, post)),
-    deletePost: (token: string, id: string) => dispatch(deletePost(token, id)),
-  };
-};
-
-// @ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps)(PostsContainer);
+export default PostsContainer;

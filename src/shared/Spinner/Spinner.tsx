@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
 import SpinnerImage from '../../assets/images/Spinner.svg';
 
-const Spinner: FunctionComponent = () => {
+const Spinner: FC = () => {
   return <img src={SpinnerImage} alt="Loading..." />;
 };
 

@@ -1,16 +1,12 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Formik } from 'formik';
-// @ts-ignore
 import * as Yup from 'yup';
 
 import SignInForm from '../components/Auth/SignInForm/SignInForm';
 import { signIn } from '../store/actions/auth';
 import { IState } from '../store/reducers';
-import { IAuthState } from '../store/reducers/auth';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
 
 // validation schema
 const SignInSchema = Yup.object().shape({
@@ -18,17 +14,14 @@ const SignInSchema = Yup.object().shape({
   password: Yup.string().required('This field should be filled'),
 });
 
-interface IProps {
-  loading: boolean;
-  error: string;
-  isAuth: boolean;
-  onSignIn(value: any): any;
-}
+const SignInContainer: FC = () => {
+  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
+  const loading = useSelector((state: IState) => state.auth.loading);
+  const error = useSelector((state: IState) => state.auth.error);
+  const dispatch = useDispatch();
 
-const SignInContainer: FunctionComponent<IProps> = ({ loading, error, isAuth, onSignIn }) => {
-  // handling sign in form submit
   const onSubmit = (values: any, actions: any) => {
-    onSignIn(values);
+    dispatch(signIn(values));
     actions.setSubmitting(false);
   };
 
@@ -61,20 +54,4 @@ const SignInContainer: FunctionComponent<IProps> = ({ loading, error, isAuth, on
   );
 };
 
-const mapStateToProps = (state: IState) => {
-  const authState: IAuthState = state.auth;
-  return {
-    loading: authState.loading,
-    error: authState.error,
-    isAuth: authState.token !== null,
-  };
-};
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<any, any, AnyAction>) => {
-  return {
-    onSignIn: (authData: any) => dispatch(signIn(authData)),
-  };
-};
-
-// @ts-ignore
-export default connect(mapStateToProps, mapDispatchToProps,)(SignInContainer);
+export default SignInContainer;

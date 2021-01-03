@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
 interface IProps {
   setMenuOpen(value: boolean): any;
 }
 
-const MobileMenu: FunctionComponent<IProps> = (props) => {
+const MobileMenu: FC<IProps> = (props) => {
   return (
     <div
       className="container d-md-none"

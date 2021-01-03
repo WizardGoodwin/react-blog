@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import { IComment } from '../../../interfaces/comment.interface';
@@ -10,7 +10,7 @@ interface IProps {
   incDislikeCounter(commentId: string, comment: IComment): any;
 }
 
-const Comment: FunctionComponent<IProps> = ({ commentId, comment, incLikeCounter, incDislikeCounter }) => {
+const Comment: FC<IProps> = ({ commentId, comment, incLikeCounter, incDislikeCounter }) => {
   const {
     author,
     commentTitle,

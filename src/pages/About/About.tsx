@@ -1,6 +1,6 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
-const About: FunctionComponent = () => {
+const About: FC = () => {
   return (
     <div className="card shadow-sm my-4">
       <div className="card-body">

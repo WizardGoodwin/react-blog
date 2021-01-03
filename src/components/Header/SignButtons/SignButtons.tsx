@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const SignButtons: FunctionComponent = () => {
+const SignButtons: FC = () => {
   return (
     <div className="d-md-flex">
       <div>

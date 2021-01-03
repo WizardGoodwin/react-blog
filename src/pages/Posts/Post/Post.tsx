@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import image from '../../../assets/images/Post.jpg';
@@ -8,7 +8,7 @@ interface IProps {
   post: PostResponse;
 }
 
-const Post: FunctionComponent<IProps> = ({ post }) => {
+const Post: FC<IProps> = ({ post }) => {
   const { title, body, created_at, author } = post[1];
   return (
     <div className="card shadow my-4">

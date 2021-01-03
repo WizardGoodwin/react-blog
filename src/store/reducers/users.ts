@@ -1,5 +1,4 @@
 import { ActionTypes } from '../actions/actionTypes';
-import { UserResponse } from '../../interfaces/api-responses';
 import { IUser } from '../../interfaces/user.interface';
 import {
   IGetUserByIdFail,
@@ -11,7 +10,7 @@ import {
 } from '../actions/users';
 
 export interface IUserState {
-  users: UserResponse[],
+  users: IUser[],
   user: IUser,
   error: string | null,
   userLoading: boolean,

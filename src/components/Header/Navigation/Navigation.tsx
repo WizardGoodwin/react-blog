@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const Navigation: FunctionComponent = () => {
+const Navigation: FC = () => {
   return (
     <ul className="navbar-nav mr-auto">
       <li className="nav-item d-flex align-items-center ml-lg-3">

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import UsersContainer from '../../containers/UsersContainer';
 import PostsContainer from '../../containers/PostsContainer';
@@ -11,7 +11,7 @@ import SignUpContainer from '../../containers/SignUpContainer';
 import ProfileContainer from '../../containers/ProfileContainer';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
-const App: FunctionComponent = () => {
+const App: FC = () => {
 
   return (
     <Layout>

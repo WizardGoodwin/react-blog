@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import Brand from '../Header/Brand/Brand';
 
-const Footer: FunctionComponent = () => {
+const Footer: FC = () => {
   return (
     <div className="fixed-bottom bg-secondary">
       <div className="container d-flex justify-content-between align-items-center">

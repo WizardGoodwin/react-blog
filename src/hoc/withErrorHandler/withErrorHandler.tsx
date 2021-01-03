@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-
-import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
+import React, { Component, FC } from 'react';
 import axios from '../../axios';
 
-const withErrorHandler = (WrappedComponent) => {
+import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
+
+const withErrorHandler = (WrappedComponent: FC) => {
   return class extends Component {
     state = {
       hasError: false,
@@ -15,7 +15,7 @@ const withErrorHandler = (WrappedComponent) => {
         (res) => res,
         (error) => {
           if (error.response.status === 401) {
-            window.location = '/sign-in';
+            window.location.href = '/sign-in';
           } else {
             throw error;
           }

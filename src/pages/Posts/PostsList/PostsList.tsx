@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 import image from '../../../assets/images/Post.jpg';
@@ -12,7 +12,7 @@ interface IProps {
   onPostDelete(id: string): any;
 }
 
-const PostsList: FunctionComponent<IProps> = ({ username, posts, onPostEdit, onPostDelete }) => {
+const PostsList: FC<IProps> = ({ username, posts, onPostEdit, onPostDelete }) => {
   return (
     <div>
       {posts.map((item: PostResponse) => {

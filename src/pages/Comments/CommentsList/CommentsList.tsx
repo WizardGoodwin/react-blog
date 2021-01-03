@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FC } from 'react';
 
 import Comment from '../Comment/Comment';
 import { IComment } from '../../../interfaces/comment.interface';
@@ -12,7 +12,7 @@ interface IProps {
   incDislikeCounter(commentId: string, comment: IComment): any;
 }
 
-const CommentsList: FunctionComponent<IProps> = ({ comments, incLikeCounter, incDislikeCounter }) => {
+const CommentsList: FC<IProps> = ({ comments, incLikeCounter, incDislikeCounter }) => {
   return (
     <div className="comment-list mt-5">s
       <h4 className="mb-5">Comments:</h4>

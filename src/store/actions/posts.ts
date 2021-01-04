@@ -4,6 +4,7 @@ import { ActionTypes } from './actionTypes';
 import { IPost } from '../../interfaces/post.interface';
 import { IUserPostResponse, PostResponse } from '../../interfaces/api-responses';
 import { AppThunkAction, AppThunkDispatch } from '../store';
+import { getStorageItem } from '../../shared/helpers';
 
 export interface IAddPostRequest {
   type: ActionTypes.ADD_POST_REQUEST
@@ -183,7 +184,7 @@ export const addPost = (token: string, newPost: IPost): AppThunkAction<PostActio
   // time and date of creating post
   const date = new Date().toLocaleString();
   // getting author from local storage
-  const author = localStorage.getItem('username');
+  const author = getStorageItem('username');
   const post = { ...newPost, created_at: date, author };
   return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(addPostRequest());

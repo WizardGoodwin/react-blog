@@ -5,6 +5,7 @@ import { PostResponse } from '../../../interfaces/api-responses';
 import { useSelector } from 'react-redux';
 import { IState } from '../../../store/reducers';
 
+
 const LastPostsList: FC = () => {
   const postsList = useSelector((state: IState) => state.posts.list);
 

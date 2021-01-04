@@ -7,6 +7,7 @@ import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { getLastPosts } from '../../store/actions/posts';
 import { IState } from '../../store/reducers';
 
+
 const Sidebar: FC = () => {
   const postsLoading = useSelector((state: IState) => state.posts.postsLoading);
   const error = useSelector((state: IState) => state.posts.postsError);

@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import SignInForm from './SignInForm';
 import { signIn } from '../../store/actions/auth';
 import { IState } from '../../store/reducers';
+import { isUserLoggedIn } from '../../shared/helpers';
 
 
 export interface ISignInForm {
@@ -21,7 +22,6 @@ const SignInSchema = Yup.object().shape({
 });
 
 const SignIn: FC = () => {
-  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const loading = useSelector((state: IState) => state.auth.loading);
   const error = useSelector((state: IState) => state.auth.error);
   const dispatch = useDispatch();
@@ -31,19 +31,8 @@ const SignIn: FC = () => {
     actions.setSubmitting(false);
   };
 
-  const renderForm = (formProps: FormikProps<ISignInForm>) => {
-    return (
-      <SignInForm
-        errors={formProps.errors}
-        touched={formProps.touched}
-        error={error}
-        loading={loading}
-      />
-    );
-  };
-
   // if user is logged in already, then redirect to profile
-  if (isAuth) {
+  if (isUserLoggedIn()) {
     return <Redirect to="/profile" />;
   }
 
@@ -54,8 +43,16 @@ const SignIn: FC = () => {
         initialValues={{ email: '', password: '' }}
         onSubmit={(values: ISignInForm, actions: FormikHelpers<ISignInForm>) => onSubmit(values, actions)}
         validationSchema={SignInSchema}
-        render={(formProps: FormikProps<ISignInForm>) => renderForm(formProps)}
-      />
+      >
+        {(formProps: FormikProps<ISignInForm>) => (
+          <SignInForm
+            errors={formProps.errors}
+            touched={formProps.touched}
+            error={error}
+            loading={loading}
+          />
+        )}
+      </Formik>
     </div>
   );
 };

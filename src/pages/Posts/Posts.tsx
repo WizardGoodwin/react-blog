@@ -17,13 +17,13 @@ import {
 } from '../../store/actions/posts';
 import { IPost } from '../../interfaces/post.interface';
 import { IState } from '../../store/reducers';
+import { isUserLoggedIn } from '../../shared/helpers';
 
 
 //setting parent node for modal window
 Modal.setAppElement('#root');
 
 const Posts: FC = () => {
-  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const token = useSelector((state: IState) => state.auth.token);
   const username = useSelector((state: IState) => state.auth.username);
   const postsList = useSelector((state: IState) => state.posts.list);
@@ -95,7 +95,7 @@ const Posts: FC = () => {
           exact
           render={() => (
             <>
-              {isAuth ? (
+              {isUserLoggedIn() ? (
                 // if user is logged in, then show button, else show text
                 <AddPostBtn onAddPost={onAddPost} />
               ) : (

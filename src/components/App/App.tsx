@@ -11,6 +11,7 @@ import SignIn from '../../pages/SignIn/SignIn';
 import SignUp from '../../pages/SignUp/SignUp';
 import Profile from '../../pages/Profile/Profile';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import PrivateRoute from '../PrivateRoute/PrivateRoute';
 
 
 const App: FC = () => {
@@ -20,9 +21,9 @@ const App: FC = () => {
         <Redirect from="/" exact to="/posts" />
         <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
-        <Route path="/profile" component={Profile} />
+        <PrivateRoute path="/profile" component={Profile} />
         <Route path="/posts" component={Posts} />
-        <Route path="/users" component={Users} />
+        <PrivateRoute path="/users" component={Users} />
         <Route path="/comments" component={Comments} />
         <Route path="/about" component={About} />
         <Route component={NotFound} />

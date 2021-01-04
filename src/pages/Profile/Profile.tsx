@@ -1,5 +1,4 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
-import { Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getUserById, updateUser } from '../../store/actions/users';
@@ -10,7 +9,6 @@ import { IState } from '../../store/reducers';
 
 
 const Profile: FC = () => {
-  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
   const token = useSelector((state: IState) => state.auth.token);
   const user = useSelector((state: IState) => state.users.user);
   const userLoading = useSelector((state: IState) => state.users.userLoading);
@@ -42,11 +40,6 @@ const Profile: FC = () => {
     e.preventDefault();
     updateUser(token, form);
   };
-
-  // if user is not authenticated, then redirect to sign in page
-  if (!isAuth) {
-    return <Redirect to="/sign-in" />;
-  }
 
   if (error) {
     return <ErrorIndicator />;

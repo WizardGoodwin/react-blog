@@ -13,6 +13,7 @@ import { IState } from '../../store/reducers';
 import { PostResponse } from '../../interfaces/api-responses';
 import image from '../../assets/images/Post.jpg';
 import CommentsList from '../Comments/CommentsList';
+import { isUserLoggedIn } from '../../shared/helpers';
 
 
 interface IProps {
@@ -22,7 +23,7 @@ interface IProps {
 const Post: FC<IProps> = ({ post }) => {
   const postId = post[0];
   const { title, body, created_at, author } = post[1];
-  const isAuth = useSelector((state: IState) => state.auth.token.length > 0);
+
   const token = useSelector((state: IState) => state.auth.token);
   const commentsList = useSelector((state: IState) => state.comments.list);
   const commentsLoading = useSelector((state: IState) => state.comments.commentsLoading);
@@ -93,7 +94,7 @@ const Post: FC<IProps> = ({ post }) => {
         <CommentsList />
       )}
 
-      {isAuth ? (
+      {isUserLoggedIn() ? (
         // if user is logged in, then show comment adding form, else show text
         <CommentForm
           form={commentForm}

@@ -1,5 +1,7 @@
 import React, { FC } from 'react';
+
 import Brand from '../Header/Brand/Brand';
+
 
 const Footer: FC = () => {
   return (

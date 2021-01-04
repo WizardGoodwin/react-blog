@@ -4,6 +4,7 @@ import { ActionTypes } from './actionTypes';
 import { IComment } from '../../interfaces/comment.interface';
 import { CommentResponse } from '../../interfaces/api-responses';
 import { AppThunkAction, AppThunkDispatch } from '../store';
+import { getStorageItem } from '../../shared/helpers';
 
 export interface IAddCommentRequest {
   type: ActionTypes.ADD_COMMENT_REQUEST
@@ -125,7 +126,7 @@ const incCounter = (id: string, comment: IComment): IIncCounter => {
 
 export const addComment = (token: string, newComment: IComment): AppThunkAction<CommentAction> => {
   // taking author from local storage an adding it to comment object
-  const author = localStorage.getItem('username');
+  const author = getStorageItem('username');
   const comment = { ...newComment, author };
   return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(addCommentRequest());

@@ -4,6 +4,7 @@ interface IProps {
   setMenuOpen(value: boolean): void;
 }
 
+
 const MobileMenu: FC<IProps> = (props) => {
   return (
     <div

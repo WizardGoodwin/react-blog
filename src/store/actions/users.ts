@@ -3,6 +3,7 @@ import axios from '../../axios';
 import { ActionTypes } from './actionTypes';
 import { IUser } from '../../interfaces/user.interface';
 import { AppThunkAction, AppThunkDispatch } from '../store';
+import { getStorageItem } from '../../shared/helpers';
 
 export interface IGetUsersRequest {
   type: ActionTypes.GET_USERS_REQUEST;
@@ -119,7 +120,7 @@ export const getUsers = (token: string): AppThunkAction<UserAction> => {
 };
 
 export const getUserById = (token: string): AppThunkAction<UserAction> => {
-  const id = localStorage.getItem('userId');
+  const id = getStorageItem('userId');
   return async (dispatch: AppThunkDispatch<UserAction>) => {
     dispatch(getUserByIdRequest());
     try {
@@ -132,7 +133,7 @@ export const getUserById = (token: string): AppThunkAction<UserAction> => {
 };
 
 export const updateUser = (token: string, user: IUser): AppThunkAction<UserAction> => {
-  const id = localStorage.getItem('userId');
+  const id = getStorageItem('userId');
   return async (dispatch: AppThunkDispatch<UserAction>) => {
     dispatch(updateUserRequest());
     try {

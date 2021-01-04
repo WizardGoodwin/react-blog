@@ -1,5 +1,6 @@
 import { AuthAction, ISignInFail, ISignInSuccess, ISignUpFail, ISignUpSuccess } from '../actions/auth';
 import { ActionTypes } from '../actions/actionTypes';
+import { getStorageItem } from '../../shared/helpers';
 
 export interface IAuthState {
   token: string;
@@ -10,9 +11,9 @@ export interface IAuthState {
 }
 
 const initialState: IAuthState = {
-  token: localStorage.getItem('token') || '',
-  userId: localStorage.getItem('userId'),
-  username: localStorage.getItem('username') || '',
+  token: getStorageItem('token') || '',
+  userId: getStorageItem('userId'),
+  username: getStorageItem('username') || '',
   error: null,
   loading: false,
 };

@@ -7,6 +7,7 @@ import { ISignInForm } from '../../pages/SignIn/SignIn';
 import { ISignUpForm } from '../../pages/SignUp/SignUp';
 import { SIGN_IN_URL, SIGN_UP_URL } from '../../shared/constants';
 import { AppThunkAction, AppThunkDispatch } from '../store';
+import { deleteStorageItem, setStorageItem } from '../../shared/helpers';
 
 export interface ISignUpRequest {
   type: ActionTypes.SIGN_UP_REQUEST
@@ -89,9 +90,9 @@ const signInFail = (error: string): ISignInFail => {
 };
 
 export const logOut = (): ILogOut => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('userId');
-  localStorage.removeItem('username');
+  deleteStorageItem('token');
+  deleteStorageItem('userId');
+  deleteStorageItem('username');
   return {
     type: ActionTypes.LOG_OUT,
   };
@@ -104,7 +105,7 @@ export const signUp = (authData: ISignUpForm): AppThunkAction<AuthAction> => {
       const authResponse: IAuthResponse = await axios.post(SIGN_UP_URL, { ...authData, returnSecureToken: true });
       const token = authResponse.data.idToken;
       const tempId = authResponse.data.localId;
-      localStorage.setItem('token', token);
+      setStorageItem('token', token);
       const user: IUser = {
         id: tempId,
         email: authData.email,
@@ -118,7 +119,7 @@ export const signUp = (authData: ISignUpForm): AppThunkAction<AuthAction> => {
       // (sign up action doesn't create user entity in db - feature of firebase)
       const userResponse: IUserPostResponse = await axios.post('/users.json', user);
       const userId = userResponse.data.name;
-      localStorage.setItem('userId', userId);
+      setStorageItem('userId', userId);
       dispatch(signUpSuccess(token, userId, authData.username));
     } catch(err) {
       dispatch(signUpFail(err.response.data.error));
@@ -138,9 +139,9 @@ export const signIn = (authData: ISignInForm): AppThunkAction<AuthAction> => {
       const users: UserResponse[] = Object.entries(usersResponse.data);
       const user = users.find((user: UserResponse) => user[1].id === tempId);
       if (user) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', user[0]);
-        localStorage.setItem('username', user[1].username);
+        setStorageItem('token', token);
+        setStorageItem('userId', user[0]);
+        setStorageItem('username', user[1].username);
         dispatch(signInSuccess(token, user[0], user[1].username));
       } else throw new Error('User not found');
     } catch(err) {

@@ -1,9 +1,9 @@
 import axios from '../../axios';
+
 import { ActionTypes } from './actionTypes';
 import { IPost } from '../../interfaces/post.interface';
 import { IUserPostResponse, PostResponse } from '../../interfaces/api-responses';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { AppThunkAction, AppThunkDispatch } from '../store';
 
 export interface IAddPostRequest {
   type: ActionTypes.ADD_POST_REQUEST
@@ -179,13 +179,13 @@ const deletePostFail = (error: string): IDeletePostFail => {
   };
 };
 
-export const addPost = (token: string, newPost: IPost): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const addPost = (token: string, newPost: IPost): AppThunkAction<PostAction> => {
   // time and date of creating post
   const date = new Date().toLocaleString();
   // getting author from local storage
   const author = localStorage.getItem('username');
   const post = { ...newPost, created_at: date, author };
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(addPostRequest());
     try {
       const response = await axios.post(`/posts.json?auth=${token}`, post)
@@ -197,8 +197,8 @@ export const addPost = (token: string, newPost: IPost): ThunkAction<Promise<void
   };
 };
 
-export const getPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const getPosts = (): AppThunkAction<PostAction> => {
+  return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(getPostsRequest());
     try {
       const response = await axios.get(`/posts.json`);
@@ -211,8 +211,8 @@ export const getPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
   };
 };
 
-export const getLastPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const getLastPosts = (): AppThunkAction<PostAction> => {
+  return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(getLastPostsRequest());
     try {
       const response: IUserPostResponse = await axios.get(`/posts.json`)
@@ -225,11 +225,11 @@ export const getLastPosts = (): ThunkAction<Promise<void>, {}, {}, AnyAction> =>
   };
 };
 
-export const updatePost = (token: string, id: string, editedPost: IPost): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const updatePost = (token: string, id: string, editedPost: IPost): AppThunkAction<PostAction> => {
   // time and date of updating post
   const date = new Date().toLocaleString();
   const post = { ...editedPost, created_at: date };
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(updatePostRequest());
     try {
       await axios.put(`/posts/${id}.json?auth=${token}`, post)
@@ -240,8 +240,8 @@ export const updatePost = (token: string, id: string, editedPost: IPost): ThunkA
   };
 };
 
-export const deletePost = (token: string, id: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const deletePost = (token: string, id: string): AppThunkAction<PostAction> => {
+  return async (dispatch: AppThunkDispatch<PostAction>) => {
     dispatch(deletePostRequest());
     try {
       await axios.delete(`/posts/${id}.json?auth=${token}`);

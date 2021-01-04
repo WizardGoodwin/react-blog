@@ -2,8 +2,7 @@ import axios from '../../axios';
 
 import { ActionTypes } from './actionTypes';
 import { IUser } from '../../interfaces/user.interface';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { AppThunkAction, AppThunkDispatch } from '../store';
 
 export interface IGetUsersRequest {
   type: ActionTypes.GET_USERS_REQUEST;
@@ -107,8 +106,8 @@ const updateUserFail = (error: string): IUpdateUserFail => {
   };
 };
 
-export const getUsers = (token: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const getUsers = (token: string): AppThunkAction<UserAction> => {
+  return async (dispatch: AppThunkDispatch<UserAction>) => {
     dispatch(getUsersRequest());
     try {
       const response = await axios.get(`/users.json?auth=${token}`);
@@ -119,9 +118,9 @@ export const getUsers = (token: string): ThunkAction<Promise<void>, {}, {}, AnyA
   };
 };
 
-export const getUserById = (token: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const getUserById = (token: string): AppThunkAction<UserAction> => {
   const id = localStorage.getItem('userId');
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<UserAction>) => {
     dispatch(getUserByIdRequest());
     try {
       const response = await axios.get(`/users/${id}.json?auth=${token}`);
@@ -132,9 +131,9 @@ export const getUserById = (token: string): ThunkAction<Promise<void>, {}, {}, A
   };
 };
 
-export const updateUser = (token: string, user: IUser): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const updateUser = (token: string, user: IUser): AppThunkAction<UserAction> => {
   const id = localStorage.getItem('userId');
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<UserAction>) => {
     dispatch(updateUserRequest());
     try {
       const response = await axios.put(`/users/${id}.json?auth=${token}`, user);

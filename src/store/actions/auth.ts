@@ -2,12 +2,11 @@ import axios from '../../axios';
 
 import { ActionTypes } from './actionTypes';
 import { IUser } from '../../interfaces/user.interface';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
 import { IAuthResponse, IUserPostResponse, UserResponse } from '../../interfaces/api-responses';
 import { ISignInForm } from '../../pages/SignIn/SignIn';
 import { ISignUpForm } from '../../pages/SignUp/SignUp';
 import { SIGN_IN_URL, SIGN_UP_URL } from '../../shared/constants';
+import { AppThunkAction, AppThunkDispatch } from '../store';
 
 export interface ISignUpRequest {
   type: ActionTypes.SIGN_UP_REQUEST
@@ -98,8 +97,8 @@ export const logOut = (): ILogOut => {
   };
 };
 
-export const signUp = (authData: ISignUpForm): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const signUp = (authData: ISignUpForm): AppThunkAction<AuthAction> => {
+  return async (dispatch: AppThunkDispatch<AuthAction>) => {
     dispatch(signUpRequest());
     try {
       const authResponse: IAuthResponse = await axios.post(SIGN_UP_URL, { ...authData, returnSecureToken: true });
@@ -127,8 +126,8 @@ export const signUp = (authData: ISignUpForm): ThunkAction<Promise<void>, {}, {}
   };
 };
 
-export const signIn = (authData: ISignInForm): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const signIn = (authData: ISignInForm): AppThunkAction<AuthAction> => {
+  return async (dispatch: AppThunkDispatch<AuthAction>) => {
     dispatch(signInRequest());
     try {
       const authResponse: IAuthResponse = await axios.post(SIGN_IN_URL, { ...authData, returnSecureToken: true });

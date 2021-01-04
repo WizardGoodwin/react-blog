@@ -1,9 +1,9 @@
 import axios from '../../axios';
+
 import { ActionTypes } from './actionTypes';
 import { IComment } from '../../interfaces/comment.interface';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
 import { CommentResponse } from '../../interfaces/api-responses';
+import { AppThunkAction, AppThunkDispatch } from '../store';
 
 export interface IAddCommentRequest {
   type: ActionTypes.ADD_COMMENT_REQUEST
@@ -123,11 +123,11 @@ const incCounter = (id: string, comment: IComment): IIncCounter => {
   };
 };
 
-export const addComment = (token: string, newComment: IComment): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const addComment = (token: string, newComment: IComment): AppThunkAction<CommentAction> => {
   // taking author from local storage an adding it to comment object
   const author = localStorage.getItem('username');
   const comment = { ...newComment, author };
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(addCommentRequest());
     try {
       const response = await axios.post(`/comments.json?auth=${token}`, comment);
@@ -139,8 +139,8 @@ export const addComment = (token: string, newComment: IComment): ThunkAction<Pro
   };
 };
 
-export const getCommentsByPostId = (postId: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const getCommentsByPostId = (postId: string): AppThunkAction<CommentAction> => {
+  return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(getCommentsByPostIdRequest());
     try {
       const response = await axios.get(`/comments.json`);
@@ -157,8 +157,8 @@ export const getCommentsByPostId = (postId: string): ThunkAction<Promise<void>, 
   };
 };
 
-export const getComments = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+export const getComments = (): AppThunkAction<CommentAction> => {
+  return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(getCommentsRequest());
     try {
       const response = await axios.get(`/comments.json`);
@@ -171,17 +171,17 @@ export const getComments = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => 
   };
 };
 
-export const incLikeCounter = (id: string, comment: IComment): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const incLikeCounter = (id: string, comment: IComment): AppThunkAction<CommentAction> => {
   comment.likeCounter++;
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(incCounter(id, comment));
     axios.put(`/comments/${id}.json`, comment);
   };
 };
 
-export const incDislikeCounter = (id: string, comment: IComment): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const incDislikeCounter = (id: string, comment: IComment): AppThunkAction<CommentAction> => {
   comment.dislikeCounter++;
-  return async (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+  return async (dispatch: AppThunkDispatch<CommentAction>) => {
     dispatch(incCounter(id, comment));
     axios.put(`/comments/${id}.json`, comment);
   };

@@ -6,8 +6,8 @@ import * as Yup from 'yup';
 
 import SignInForm from './SignInForm';
 import { signIn } from '../../store/actions/auth';
-import { IState } from '../../store/reducers';
 import { isUserLoggedIn } from '../../shared/helpers';
+import { selectAuthError, selectAuthLoading } from '../../store/selectors/auth';
 
 
 export interface ISignInForm {
@@ -22,8 +22,8 @@ const SignInSchema = Yup.object().shape({
 });
 
 const SignIn: FC = () => {
-  const loading = useSelector((state: IState) => state.auth.loading);
-  const error = useSelector((state: IState) => state.auth.error);
+  const loading = useSelector(selectAuthLoading);
+  const error = useSelector(selectAuthError);
   const dispatch = useDispatch();
 
   const onSubmit = (values: ISignInForm, actions: FormikHelpers<ISignInForm>) => {

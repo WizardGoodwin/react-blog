@@ -5,15 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommentForm from '../Comments/CommentForm';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
-import {
-  addComment,
-  getCommentsByPostId,
-} from '../../store/actions/comments';
-import { IState } from '../../store/reducers';
+import { addComment, getCommentsByPostId } from '../../store/actions/comments';
 import { PostResponse } from '../../interfaces/api-responses';
 import image from '../../assets/images/Post.jpg';
 import CommentsList from '../Comments/CommentsList';
 import { isUserLoggedIn } from '../../shared/helpers';
+import { selectAuthToken } from '../../store/selectors/auth';
+import { selectCommentsError, selectCommentsList, selectCommentsLoading } from '../../store/selectors/comments';
 
 
 interface IProps {
@@ -24,10 +22,10 @@ const Post: FC<IProps> = ({ post }) => {
   const postId = post[0];
   const { title, body, created_at, author } = post[1];
 
-  const token = useSelector((state: IState) => state.auth.token);
-  const commentsList = useSelector((state: IState) => state.comments.list);
-  const commentsLoading = useSelector((state: IState) => state.comments.commentsLoading);
-  const commentsError = useSelector((state: IState) => state.comments.commentsError);
+  const token = useSelector(selectAuthToken);
+  const commentsList = useSelector(selectCommentsList);
+  const commentsLoading = useSelector(selectCommentsLoading);
+  const commentsError = useSelector(selectCommentsError);
   const dispatch = useDispatch();
 
   const [commentForm, setCommentValues] = useState({
@@ -37,12 +35,10 @@ const Post: FC<IProps> = ({ post }) => {
     dislikeCounter: 0,
   });
 
-  // fetching comments for one post from backend
   useEffect(() => {
     dispatch(getCommentsByPostId(postId));
   }, [dispatch, postId]);
 
-  // handling change of comment form inputs
   const onCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setCommentValues({
@@ -51,7 +47,6 @@ const Post: FC<IProps> = ({ post }) => {
     });
   };
 
-  // handling comment form submit
   const onCommentSubmit = (e: FormEvent, postId: string) => {
     e.preventDefault();
     dispatch(addComment(token, { ...commentForm, postId }));

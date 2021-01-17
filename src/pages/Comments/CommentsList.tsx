@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 
-import { IState } from '../../store/reducers';
 import { CommentResponse } from '../../interfaces/api-responses';
+import { selectCommentsList } from '../../store/selectors/comments';
 import Comment from './Comment';
 
 
 const CommentsList: FC = () => {
-  const commentsList = useSelector((state: IState) => state.comments.list);
+  const commentsList = useSelector(selectCommentsList);
 
   return (
     <div className="comment-list mt-5">

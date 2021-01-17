@@ -5,12 +5,12 @@ import LastPostsList from './LastPostsList/LastPostsList';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { getLastPosts } from '../../store/actions/posts';
-import { IState } from '../../store/reducers';
+import { selectPostsError, selectPostsLoading } from '../../store/selectors/posts';
 
 
 const Sidebar: FC = () => {
-  const postsLoading = useSelector((state: IState) => state.posts.postsLoading);
-  const error = useSelector((state: IState) => state.posts.postsError);
+  const postsLoading = useSelector(selectPostsLoading);
+  const error = useSelector(selectPostsError);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { IState } from '../../../store/reducers';
 import { logOut } from '../../../store/actions/auth';
+import { selectUsername } from '../../../store/selectors/auth';
 
 
 const UserButton: FC = () => {
-  const username = useSelector((state: IState) => state.auth.username);
+  const username = useSelector(selectUsername);
   const dispatch = useDispatch();
 
   const handleLogout = () => dispatch(logOut());

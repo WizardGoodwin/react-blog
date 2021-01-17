@@ -16,36 +16,31 @@ import {
   updatePost,
 } from '../../store/actions/posts';
 import { IPost } from '../../interfaces/post.interface';
-import { IState } from '../../store/reducers';
 import { isUserLoggedIn } from '../../shared/helpers';
+import { selectAuthToken, selectUsername } from '../../store/selectors/auth';
+import { selectPostsError, selectPostsList, selectPostsLoading } from '../../store/selectors/posts';
 
 
 //setting parent node for modal window
 Modal.setAppElement('#root');
 
 const Posts: FC = () => {
-  const token = useSelector((state: IState) => state.auth.token);
-  const username = useSelector((state: IState) => state.auth.username);
-  const postsList = useSelector((state: IState) => state.posts.list);
-  const postsLoading = useSelector((state: IState) => state.posts.postsLoading);
-  const postsError = useSelector((state: IState) => state.posts.postsError);
+  const token = useSelector(selectAuthToken);
+  const username = useSelector(selectUsername);
+  const postsList = useSelector(selectPostsList);
+  const postsLoading = useSelector(selectPostsLoading);
+  const postsError = useSelector(selectPostsError);
   const dispatch = useDispatch();
 
-  // state for handling modal windows
   const [isModalOpen, setModalOpen] = useState(false);
-  // state for handling change of add new/edit post
   const [isNewPost, setIsNew] = useState(false);
-  // state for handling adding post form
   const [postForm, setPostValues] = useState({ title: '', body: '' });
-  // state for setting current post id
   const [postId, setId] = useState('');
 
-  // fetching all posts from backend
   useEffect(() => {
     dispatch(getPosts());
   }, [dispatch]);
 
-  // handling change of post form inputs
   const onPostChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setPostValues({
@@ -54,14 +49,12 @@ const Posts: FC = () => {
     });
   };
 
-  // handling click on "add new post" button
   const onAddPost = () => {
     setIsNew(true);
     setPostValues({ title: '', body: '' });
     setModalOpen(true);
   };
 
-  // handling click on "edit" button
   const onPostEdit = (id: string, post: IPost) => {
     setIsNew(false);
     setPostValues(post);
@@ -69,15 +62,12 @@ const Posts: FC = () => {
     setModalOpen(true);
   };
 
-  // handling click on "delete" button
   const onPostDelete = (id: string) => {
     dispatch(deletePost(token, id));
   };
 
-  // handling post form submit
   const onPostSubmit = (e: FormEvent) => {
     e.preventDefault();
-    //if its new post, then send add action else update action
     isNewPost ? dispatch(addPost(token, postForm)) : dispatch(updatePost(token, postId, postForm));
     setModalOpen(false);
   };
@@ -96,7 +86,6 @@ const Posts: FC = () => {
           render={() => (
             <>
               {isUserLoggedIn() ? (
-                // if user is logged in, then show button, else show text
                 <AddPostBtn onAddPost={onAddPost} />
               ) : (
                 <div className="card shadow-sm mt-4">

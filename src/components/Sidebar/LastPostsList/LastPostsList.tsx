@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 
 import { PostResponse } from '../../../interfaces/api-responses';
 import { useSelector } from 'react-redux';
-import { IState } from '../../../store/reducers';
+import { selectPostsList } from '../../../store/selectors/posts';
 
 
 const LastPostsList: FC = () => {
-  const postsList = useSelector((state: IState) => state.posts.list);
+  const postsList = useSelector(selectPostsList);
 
   const renderPost = (postInfo: PostResponse) => {
     const id = postInfo[0];

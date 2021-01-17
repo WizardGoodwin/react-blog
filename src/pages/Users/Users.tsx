@@ -7,15 +7,16 @@ import UsersList from './UsersList';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { getUsers } from '../../store/actions/users';
-import { IState } from '../../store/reducers';
 import { isUserLoggedIn } from '../../shared/helpers';
+import { selectAuthToken } from '../../store/selectors/auth';
+import { selectUsersError, selectUsersList, selectUsersLoading } from '../../store/selectors/users';
 
 
 const Users: FC = () => {
-  const token = useSelector((state: IState) => state.auth.token);
-  const usersList = useSelector((state: IState) => state.users.list);
-  const usersLoading = useSelector((state: IState) => state.users.usersLoading);
-  const error = useSelector((state: IState) => state.users.error);
+  const token = useSelector(selectAuthToken);
+  const usersList = useSelector(selectUsersList);
+  const usersLoading = useSelector(selectUsersLoading);
+  const error = useSelector(selectUsersError);
   const dispatch = useDispatch();
 
   useEffect(() => {

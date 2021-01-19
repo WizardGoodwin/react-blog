@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getComments } from '../../store/actions/comments';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import Spinner from '../../shared/Spinner/Spinner';
 import CommentsList from './CommentsList';
 import { selectCommentsError, selectCommentsLoading } from '../../store/selectors/comments';
+import { getComments } from './commentsSlice';
 
 
 const Comments: FC = () => {

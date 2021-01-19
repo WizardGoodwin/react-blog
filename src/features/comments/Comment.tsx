@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 import { IComment } from '../../interfaces/comment.interface';
-import { incDislikeCounter, incLikeCounter } from '../../store/actions/comments';
+import { incrementDislikeCounter, incrementLikeCounter } from './commentsSlice';
 
 
 interface IProps {
@@ -21,9 +21,9 @@ const Comment: FC<IProps> = ({ commentId, comment }) => {
   } = comment;
   const dispatch = useDispatch();
 
-  const increaseLikeCounter = () => dispatch(incLikeCounter(commentId, comment));
+  const increaseLikeCounter = () => dispatch(incrementLikeCounter(commentId, comment));
 
-  const increaseDislikeCounter = () => dispatch(incDislikeCounter(commentId, comment));
+  const increaseDislikeCounter = () => dispatch(incrementDislikeCounter(commentId, comment));
 
   return (
     <div className="media mt-4 ml-4">

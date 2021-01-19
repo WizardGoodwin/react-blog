@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import authReducer, { IAuthState } from './auth';
-import usersReducer, { IUserState } from './users';
-import postsReducer, { IPostState } from './posts';
-import commentsReducer, { ICommentState } from './comments';
+import authReducer, { IAuthState } from '../features/auth/authSlice';
+import usersReducer, { IUserState } from '../features/users/usersSlice';
+import postsReducer, { IPostState } from '../features/posts/postsSlice';
+import commentsReducer, { ICommentState } from '../features/comments/commentsSlice';
 
 export interface IState {
   auth: IAuthState;

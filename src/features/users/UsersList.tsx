@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+
 import { IUser } from '../../interfaces/user.interface';
 
 

@@ -7,7 +7,7 @@ import { PostResponse } from '../../interfaces/api-responses';
 
 
 interface IProps {
-  username: string;
+  username: string | null;
   posts: PostResponse[];
   onPostEdit(id: string, post: IPost): void;
   onPostDelete(id: string): void;
@@ -17,7 +17,6 @@ const PostsList: FC<IProps> = ({ username, posts, onPostEdit, onPostDelete }) =>
   return (
     <div>
       {posts.map((item: PostResponse) => {
-        // destructuring posts list items
         const [id, post] = item;
         const { title, body, created_at, author } = post;
         return (

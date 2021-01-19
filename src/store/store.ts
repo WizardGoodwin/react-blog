@@ -1,37 +1,21 @@
-import { createStore, applyMiddleware, compose, Action } from 'redux';
-import logger from 'redux-logger';
-import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { configureStore } from '@reduxjs/toolkit';
 
-import { IState, rootReducer } from './reducers';
+import { IState, rootReducer } from './rootReducer';
 
-let composeEnhancers = null;
 
-// in development mode only and if redux devtools are installed
-if (
-  process.env.NODE_ENV === 'development' &&
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-) {
-  composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-} else {
-  composeEnhancers = compose;
+export const store = configureStore({
+  reducer: rootReducer
+})
+
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./rootReducer', () => {
+    const newRootReducer = require('./rootReducer').default
+    store.replaceReducer(newRootReducer)
+  })
 }
 
-export const store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk, logger)),
-);
+export type AppThunk = ThunkAction<void, IState, unknown, Action<string>>
 
-export type AppThunkAction<ActionType extends Action, ReturnType = void> = ThunkAction<
-  ReturnType,
-  IState,
-  unknown,
-  ActionType
->
-
-export type AppThunkDispatch<ActionType extends Action> = ThunkDispatch<
-  IState,
-  unknown,
-  ActionType
-  >
-
-
+export type AppThunkDispatch = ThunkDispatch<IState, unknown, Action<string>>

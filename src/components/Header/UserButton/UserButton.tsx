@@ -2,15 +2,15 @@ import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { logOut } from '../../../store/actions/auth';
 import { selectUsername } from '../../../store/selectors/auth';
+import { userLogOut } from '../../../features/auth/authSlice';
 
 
 const UserButton: FC = () => {
   const username = useSelector(selectUsername);
   const dispatch = useDispatch();
 
-  const handleLogout = () => dispatch(logOut());
+  const handleLogout = () => dispatch(userLogOut());
 
   return (
     <div className="d-md-flex align-items-center">

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import LastPostsList from './LastPostsList/LastPostsList';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
-import { getLastPosts } from '../../store/actions/posts';
 import { selectPostsError, selectPostsLoading } from '../../store/selectors/posts';
+import { getPosts } from '../../features/posts/postsSlice';
 
 
 const Sidebar: FC = () => {
@@ -14,7 +14,7 @@ const Sidebar: FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getLastPosts());
+    dispatch(getPosts());
   }, [dispatch]);
 
   if (error) {

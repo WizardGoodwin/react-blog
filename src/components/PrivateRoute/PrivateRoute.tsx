@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Redirect, Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-import { isUserLoggedIn } from '../../shared/helpers';
+import { selectIsUserLoggedIn } from '../../store/selectors/auth';
 
 
 interface IProps {
@@ -10,11 +11,13 @@ interface IProps {
 }
 
 const PrivateRoute: FC<IProps> = ({ component: Component, ...rest }) => {
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
+
   return (
     <Route
       {...rest}
       render={() =>
-        isUserLoggedIn() ? (
+        isUserLoggedIn ? (
           <Component />
         ) : (
           <Redirect to="/sign-in" />

@@ -2,16 +2,15 @@ import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import CommentForm from '../Comments/CommentForm';
+import CommentForm from '../comments/CommentForm';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
-import { addComment, getCommentsByPostId } from '../../store/actions/comments';
 import { PostResponse } from '../../interfaces/api-responses';
 import image from '../../assets/images/Post.jpg';
-import CommentsList from '../Comments/CommentsList';
-import { isUserLoggedIn } from '../../shared/helpers';
-import { selectAuthToken } from '../../store/selectors/auth';
+import CommentsList from '../comments/CommentsList';
+import { selectAuthToken, selectIsUserLoggedIn } from '../../store/selectors/auth';
 import { selectCommentsError, selectCommentsList, selectCommentsLoading } from '../../store/selectors/comments';
+import { addComment, getCommentsByPostId } from '../comments/commentsSlice';
 
 
 interface IProps {
@@ -23,6 +22,7 @@ const Post: FC<IProps> = ({ post }) => {
   const { title, body, created_at, author } = post[1];
 
   const token = useSelector(selectAuthToken);
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const commentsList = useSelector(selectCommentsList);
   const commentsLoading = useSelector(selectCommentsLoading);
   const commentsError = useSelector(selectCommentsError);
@@ -89,8 +89,7 @@ const Post: FC<IProps> = ({ post }) => {
         <CommentsList />
       )}
 
-      {isUserLoggedIn() ? (
-        // if user is logged in, then show comment adding form, else show text
+      {isUserLoggedIn ? (
         <CommentForm
           form={commentForm}
           postId={postId}

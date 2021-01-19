@@ -5,9 +5,8 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 
 import SignInForm from './SignInForm';
-import { signIn } from '../../store/actions/auth';
-import { isUserLoggedIn } from '../../shared/helpers';
-import { selectAuthError, selectAuthLoading } from '../../store/selectors/auth';
+import { selectAuthError, selectAuthLoading, selectIsUserLoggedIn } from '../../store/selectors/auth';
+import { signIn } from './authSlice';
 
 
 export interface ISignInForm {
@@ -22,6 +21,7 @@ const SignInSchema = Yup.object().shape({
 });
 
 const SignIn: FC = () => {
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const loading = useSelector(selectAuthLoading);
   const error = useSelector(selectAuthError);
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const SignIn: FC = () => {
   };
 
   // if user is logged in already, then redirect to profile
-  if (isUserLoggedIn()) {
+  if (isUserLoggedIn) {
     return <Redirect to="/profile" />;
   }
 

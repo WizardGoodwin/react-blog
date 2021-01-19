@@ -1,20 +1,19 @@
 import React, { FC, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Brand from './Brand/Brand';
 import Navigation from './Navigation/Navigation';
 import SignButtons from './SignButtons/SignButtons';
 import UserButton from './UserButton/UserButton';
 import MobileMenu from './MobileMenu/MobileMenu';
-import { isUserLoggedIn } from '../../shared/helpers';
+import { selectIsUserLoggedIn } from '../../store/selectors/auth';
 
 
 const Header: FC = () => {
-  //state for handling hamburger menu opening
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
+  const toggleMenu = () => setMenuOpen(!isMenuOpen);
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark shadow">
@@ -26,7 +25,7 @@ const Header: FC = () => {
         <div className="collapse navbar-collapse">
           <Navigation />
           {/*if user is authenticated, then show username and log out button, else sign buttons*/}
-          {isUserLoggedIn() ? (
+          {isUserLoggedIn ? (
             <UserButton />
           ) : (
             <SignButtons />
@@ -37,7 +36,7 @@ const Header: FC = () => {
       {isMenuOpen && (
         <MobileMenu setMenuOpen={setMenuOpen}>
           <Navigation />
-          {isUserLoggedIn() ? (
+          {isUserLoggedIn ? (
             <UserButton />
           ) : (
             <SignButtons />

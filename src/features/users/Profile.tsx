@@ -1,7 +1,6 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getUserById, updateUser } from '../../store/actions/users';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import Spinner from '../../shared/Spinner/Spinner';
 import ProfileForm from './ProfileForm';
@@ -12,6 +11,7 @@ import {
   selectUsersLoading,
   selectUserUpdating,
 } from '../../store/selectors/users';
+import { getUserById, updateUser } from './usersSlice';
 
 
 const Profile: FC = () => {

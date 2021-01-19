@@ -9,16 +9,11 @@ import Post from './Post';
 import AddPostBtn from './AddPostBtn';
 import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
-import {
-  addPost,
-  deletePost,
-  getPosts,
-  updatePost,
-} from '../../store/actions/posts';
 import { IPost } from '../../interfaces/post.interface';
-import { isUserLoggedIn } from '../../shared/helpers';
-import { selectAuthToken, selectUsername } from '../../store/selectors/auth';
+import { selectAuthToken, selectIsUserLoggedIn, selectUsername } from '../../store/selectors/auth';
 import { selectPostsError, selectPostsList, selectPostsLoading } from '../../store/selectors/posts';
+import { addPost, deletePost, getPosts, updatePost } from './postsSlice';
+import { PostResponse } from '../../interfaces/api-responses';
 
 
 //setting parent node for modal window
@@ -26,6 +21,7 @@ Modal.setAppElement('#root');
 
 const Posts: FC = () => {
   const token = useSelector(selectAuthToken);
+  const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const username = useSelector(selectUsername);
   const postsList = useSelector(selectPostsList);
   const postsLoading = useSelector(selectPostsLoading);
@@ -85,7 +81,7 @@ const Posts: FC = () => {
           exact
           render={() => (
             <>
-              {isUserLoggedIn() ? (
+              {isUserLoggedIn ? (
                 <AddPostBtn onAddPost={onAddPost} />
               ) : (
                 <div className="card shadow-sm mt-4">
@@ -126,7 +122,7 @@ const Posts: FC = () => {
           path="/posts/:title"
           render={(props) => {
             const title = props.match.params.title;
-            const selectedPost = postsList.find((post) => post[1].title === title);
+            const selectedPost = postsList.find((post: PostResponse) => post[1].title === title);
             return selectedPost && <Post post={selectedPost} />;
           }}
         />

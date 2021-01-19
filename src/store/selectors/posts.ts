@@ -1,5 +1,6 @@
-import { IState } from '../reducers';
+import { IState } from '../rootReducer';
 
 export const selectPostsList = (state: IState) => state.posts.list;
-export const selectPostsLoading = (state: IState) => state.posts.postsLoading;
-export const selectPostsError = (state: IState) => state.posts.postsError;
+export const selectLastPostsList = (state: IState) => state.posts.list.slice(-5);
+export const selectPostsLoading = (state: IState) => state.posts.loading;
+export const selectPostsError = (state: IState) => state.posts.error;

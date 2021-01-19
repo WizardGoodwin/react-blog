@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
-import Users from '../../pages/Users/Users';
-import Posts from '../../pages/Posts/Posts';
-import Comments from '../../pages/Comments/Comments';
-import About from '../../pages/About/About';
+import Users from '../../features/users/Users';
+import Posts from '../../features/posts/Posts';
+import Comments from '../../features/comments/Comments';
+import About from '../About/About';
 import NotFound from '../../shared/NotFound/NotFound';
-import Layout from '../Layout/Layot';
-import SignIn from '../../pages/SignIn/SignIn';
-import SignUp from '../../pages/SignUp/SignUp';
-import Profile from '../../pages/Profile/Profile';
+import Layout from '../Layout/Layout';
+import SignIn from '../../features/auth/SignIn';
+import SignUp from '../../features/auth/SignUp';
+import Profile from '../../features/users/Profile';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import PrivateRoute from '../PrivateRoute/PrivateRoute';
 

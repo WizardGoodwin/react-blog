@@ -7,5 +7,3 @@ export const setStorageItem = (name: string, value: string): void =>
   window.localStorage.setItem(name, JSON.stringify(value));
 
 export const deleteStorageItem = (name: string): void => window.localStorage.removeItem(name);
-
-export const isUserLoggedIn = (): boolean => !!getStorageItem('token');

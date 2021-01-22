@@ -1,5 +1,7 @@
 import React, { ChangeEvent, FormEvent, FC } from 'react';
 
+import ButtonSpinner from '../../shared/Spinner/ButtonSpinner';
+
 
 interface IProps {
   form: IPostForm;
@@ -7,6 +9,7 @@ interface IProps {
   onPostChange(e: ChangeEvent): void;
   setModalOpen(value: boolean): void;
   onSubmit(e: FormEvent): void;
+  postUpdating: boolean;
 }
 
 interface IPostForm {
@@ -20,6 +23,7 @@ const PostForm: FC<IProps> = ({
   onPostChange,
   setModalOpen,
   onSubmit,
+  postUpdating,
 }) => {
   const { title, body } = form;
   return (
@@ -53,9 +57,13 @@ const PostForm: FC<IProps> = ({
             />
           </div>
 
-          <button className="btn btn-success" type="submit">
-            Save
-          </button>
+          {postUpdating ? (
+            <ButtonSpinner />
+          ) : (
+            <button className="btn btn-success" type="submit">
+              Save
+            </button>
+          )}
 
           <button
             className="btn btn-secondary float-right"

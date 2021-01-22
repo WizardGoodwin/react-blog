@@ -18,7 +18,7 @@ const Header: FC = () => {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-dark shadow">
       <div className="container">
-        <button className="navbar-toggler" onClick={() => toggleMenu()}>
+        <button className="navbar-toggler" onClick={toggleMenu}>
           <span className="navbar-toggler-icon" />
         </button>
         <Brand />

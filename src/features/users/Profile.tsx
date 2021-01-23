@@ -40,7 +40,7 @@ const Profile: FC = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    updateUser(token, form);
+    dispatch(updateUser({ token, user: form }));
   };
 
   if (error) {

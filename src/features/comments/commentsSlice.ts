@@ -1,21 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from '../../axios';
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import { CommentResponse } from '../../interfaces/api-responses';
 import { IComment } from '../../interfaces/comment.interface';
-import { AppThunk, AppThunkDispatch } from '../../store/store';
 import { getStorageItem } from '../../shared/helpers';
+import * as api from '../../api';
+
 
 export interface ICommentState {
   list: CommentResponse[];
   error: string | null;
   loading: boolean;
+  adding: boolean;
 }
 
 const initialState: ICommentState = {
   list: [],
   error: null,
   loading: false,
+  adding: false,
 };
 
 const startLoading = (state: ICommentState) => {
@@ -27,31 +30,34 @@ const loadingFailed = (state: ICommentState, action: PayloadAction<string>) => {
   state.error = action.payload
 }
 
+const startAdding = (state: ICommentState) => {
+  state.adding = true
+}
+
+const addingFailed = (state: ICommentState, action: PayloadAction<string>) => {
+  state.adding = false
+  state.error = action.payload
+}
+
 const comments = createSlice({
   name: 'comments',
   initialState: initialState,
   reducers: {
-    incLikeCounter(state, { payload }: PayloadAction<string>) {
+    incLikeCounterSuccess(state, { payload }: PayloadAction<string>) {
       const id = state.list.findIndex((comment: CommentResponse) => comment[0] === payload);
       if (id) {
         state.list[id][1].likeCounter++;
       }
     },
-    incDislikeCounter(state, { payload }: PayloadAction<string>) {
+    incDislikeCounterSuccess(state, { payload }: PayloadAction<string>) {
       const index = state.list.findIndex((comment: CommentResponse) => comment[0] === payload);
       if (index) {
         state.list[index][1].dislikeCounter++;
       }
     },
-    getCommentsStart: startLoading,
-    getCommentsByPostIdStart: startLoading,
-    addCommentStart: startLoading,
+    getComments: startLoading,
+    addComment: startAdding,
     getCommentsSuccess(state, { payload }: PayloadAction<CommentResponse[]>) {
-      state.list = payload;
-      state.loading = false;
-      state.error = null;
-    },
-    getCommentsByPostIdSuccess(state, { payload }: PayloadAction<CommentResponse[]>) {
       state.list = payload;
       state.loading = false;
       state.error = null;
@@ -59,87 +65,73 @@ const comments = createSlice({
     addCommentSuccess(state, { payload }: PayloadAction<{ id: string, comment: IComment }>) {
       const newComment: CommentResponse = [payload.id, payload.comment];
       state.list.push(newComment);
-      state.loading = false;
+      state.adding = false;
       state.error = null;
     },
     getCommentsFailure: loadingFailed,
-    getCommentsByPostIdFailure: loadingFailed,
-    addCommentFailure: loadingFailed
+    addCommentFailure: addingFailed
   }
 })
 
 export const {
-  incLikeCounter,
-  incDislikeCounter,
-  getCommentsStart,
-  getCommentsByPostIdStart,
-  addCommentStart,
+  getComments,
   getCommentsSuccess,
-  getCommentsByPostIdSuccess,
   addCommentSuccess,
+  incLikeCounterSuccess,
+  incDislikeCounterSuccess,
   getCommentsFailure,
-  getCommentsByPostIdFailure,
   addCommentFailure
 } = comments.actions;
 
+export const addComment = createAction<{ token: string | null, newComment: IComment }>('comments/addComment');
+
+export const incLikeCounter = createAction<{ id: string, comment: IComment }>('comments/incLikeCounter');
+
+export const incDislikeCounter = createAction<{ id: string, comment: IComment }>('comments/incDislikeCounter');
+
 export default comments.reducer;
 
-export const getComments = (): AppThunk => async (dispatch: AppThunkDispatch) => {
+
+function* getCommentsSaga() {
   try {
-    dispatch(getCommentsStart());
-    const response = await axios.get(`/comments.json`);
+    const response = yield call(api.getComments);
     //convert response object to array of arrays kind of [ id : comment ]
     const comments: CommentResponse[] = Object.entries(response.data);
-    dispatch(getCommentsSuccess(comments));
+    yield put(getCommentsSuccess(comments))
   } catch (err) {
-    dispatch(getCommentsFailure(err.response.data.error));
+    yield put(getCommentsFailure(err.response.data.error))
   }
 }
 
-export const getCommentsByPostId = (postId: string): AppThunk => {
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(getCommentsByPostIdStart());
-      const response = await axios.get(`/comments.json`);
-      //convert response object to array of arrays kind of [ id : comment ]
-      const allComments: CommentResponse[] = Object.entries(response.data);
-      // and finding only those comments which have needed post id
-      const comments: CommentResponse[] = allComments.filter(
-        (comment: CommentResponse) => comment[1].postId === postId,
-      );
-      dispatch(getCommentsByPostIdSuccess(comments));
-    } catch(err) {
-      dispatch(getCommentsByPostIdFailure(err.response.data.error));
-    }
-  };
-};
+function* addCommentSaga({ payload }: PayloadAction<{ token: string, newComment: IComment }>) {
+  try {
+    const { newComment, token } = payload;
+    // taking author from local storage an adding it to comment object
+    const author = getStorageItem('username');
+    const comment = { ...newComment, author };
+    const response = yield call(api.addComment, token, comment);
+    const id = response.data.name;
+    yield put(addCommentSuccess({ id, comment }))
+  } catch (err) {
+    yield put(addCommentFailure(err.response.data.error))
+  }
+}
 
-export const addComment = (token: string | null, newComment: IComment): AppThunk => {
-  // taking author from local storage an adding it to comment object
-  const author = getStorageItem('username');
-  const comment = { ...newComment, author };
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(addCommentStart());
-      const response = await axios.post(`/comments.json?auth=${token}`, comment);
-      const id = response.data.name;
-      dispatch(addCommentSuccess({id, comment}));
-    } catch (err) {
-      dispatch(addCommentFailure(err.response.data.error));
-    }
-  };
-};
+function* incrementLikeCounter({ payload }: PayloadAction<{ id: string, comment: IComment }>) {
+  const { comment, id } = payload;
+  yield put(incLikeCounterSuccess(id));
+  yield call(api.updateComment, id, comment);
+}
 
-export const incrementLikeCounter = (id: string, comment: IComment): AppThunk => {
-  return (dispatch: AppThunkDispatch) => {
-    dispatch(incLikeCounter(id));
-    axios.put(`/comments/${id}.json`, comment);
-  };
-};
+function* incrementDislikeCounter({ payload }: PayloadAction<{ id: string, comment: IComment }>) {
+  const { comment, id } = payload;
+  yield put(incDislikeCounterSuccess(id));
+  yield call(api.updateComment, id, comment);
+}
 
-export const incrementDislikeCounter = (id: string, comment: IComment): AppThunk => {
-  return (dispatch: AppThunkDispatch) => {
-    dispatch(incDislikeCounter(id));
-    axios.put(`/comments/${id}.json`, comment);
-  };
-};
+export function* commentsSaga() {
+  yield takeLatest(getComments, getCommentsSaga);
+  yield takeEvery(addComment, addCommentSaga);
+  yield takeEvery(incLikeCounter, incrementLikeCounter);
+  yield takeEvery(incDislikeCounter, incrementDislikeCounter);
+}

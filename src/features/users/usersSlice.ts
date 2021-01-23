@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from '../../axios';
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
-import { AppThunk, AppThunkDispatch } from '../../store/store';
 import { getStorageItem } from '../../shared/helpers';
 import { IUser } from '../../interfaces/user.interface';
+import * as api from '../../api';
+
 
 export interface IUserState {
   list: IUser[],
@@ -45,12 +46,12 @@ const updatingFailed = (state: IUserState, action: PayloadAction<string>) => {
 }
 
 const users = createSlice({
-  name: 'posts',
+  name: 'users',
   initialState: initialState,
   reducers: {
-    getUsersStart: startLoading,
-    getUserByIdStart: startLoading,
-    updateUserStart: startUpdating,
+    getUsers: startLoading,
+    getUserById: startLoading,
+    updateUser: startUpdating,
     getUsersSuccess(state, { payload }: PayloadAction<IUser[]>) {
       state.list = payload;
       state.loading = false;
@@ -73,9 +74,6 @@ const users = createSlice({
 })
 
 export const {
-  getUsersStart,
-  getUserByIdStart,
-  updateUserStart,
   getUsersSuccess,
   getUserByIdSuccess,
   updateUserSuccess,
@@ -84,42 +82,47 @@ export const {
   updateUserFailure,
 } = users.actions;
 
+export const getUsers = createAction<string | null>('users/getUsers');
+
+export const getUserById = createAction<string | null>('users/getUserById');
+
+export const updateUser = createAction<{ token: string | null, user: IUser }>('users/updateUser');
+
 export default users.reducer;
 
-export const getUsers = (token: string | null): AppThunk => {
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(getUsersStart());
-      const response = await axios.get(`/users.json?auth=${token}`);
-      dispatch(getUsersSuccess(Object.values(response.data)));
-    } catch (err) {
-      dispatch(getUsersFailure(err.response.data.error));
-    }
-  };
-};
 
-export const getUserById = (token: string | null): AppThunk => {
-  const id = getStorageItem('userId');
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(getUsersStart());
-      const response = await axios.get(`/users/${id}.json?auth=${token}`);
-      dispatch(getUserByIdSuccess(response.data));
-    } catch (err) {
-      dispatch(getUserByIdFailure(err.response.data.error));
-    }
-  };
-};
+function* getUsersSaga({ payload }: PayloadAction<string | null>) {
+  try {
+    const response = yield call(api.getUsers, payload);
+    yield put(getUsersSuccess(Object.values(response.data)))
+  } catch (err) {
+    yield put(getUsersFailure(err.response.data.error))
+  }
+}
 
-export const updateUser = (token: string | null, user: IUser): AppThunk => {
-  const id = getStorageItem('userId');
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(updateUserStart());
-      const response = await axios.put(`/users/${id}.json?auth=${token}`, user);
-      dispatch(updateUserSuccess(response.data));
-    } catch (err) {
-      dispatch(updateUserFailure(err.response.data.error));
-    }
-  };
-};
+function* getUserByIdSaga({ payload }: PayloadAction<string | null>) {
+  try {
+    const id = getStorageItem('userId');
+    const response = yield call(api.getUserById, payload, id);
+    yield put(getUserByIdSuccess(response.data));
+  } catch (err) {
+    yield put(getUserByIdFailure(err.response.data.error))
+  }
+}
+
+function* updateUserSaga({ payload }: PayloadAction<{ token: string | null, user: IUser }>) {
+  try {
+    const { token, user } = payload;
+    const id = getStorageItem('userId');
+    const response = yield call(api.updateUser, token, id, user);
+    yield put(updateUserSuccess(response.data));
+  } catch (err) {
+    yield put(updateUserFailure(err.response.data.error))
+  }
+}
+
+export function* usersSaga() {
+  yield takeLatest(getUsers, getUsersSaga);
+  yield takeLatest(getUserById, getUserByIdSaga);
+  yield takeEvery(updateUser, updateUserSaga);
+}

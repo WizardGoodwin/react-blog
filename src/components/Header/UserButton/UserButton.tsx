@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectUsername } from '../../../store/selectors/auth';
-import { userLogOut } from '../../../features/auth/authSlice';
+import { logOut } from '../../../features/auth/authSlice';
 
 
 const UserButton: FC = () => {
   const username = useSelector(selectUsername);
   const dispatch = useDispatch();
 
-  const handleLogout = () => dispatch(userLogOut());
+  const handleLogout = () => dispatch(logOut());
 
   return (
     <div className="d-md-flex align-items-center">

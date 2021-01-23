@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Form, Field, ErrorMessage, FormikErrors, FormikTouched } from 'formik';
 
-import Spinner from '../../shared/Spinner/Spinner';
+import ButtonSpinner from '../../shared/Spinner/ButtonSpinner';
 import { ISignUpForm } from './SignUp';
 
 
@@ -72,7 +72,7 @@ const SignInForm: FC<IProps> = ({ errors, touched, error, loading }) => {
       {error && <div className="text-danger mb-3">{error}</div>}
 
       {loading ? (
-        <Spinner />
+        <ButtonSpinner />
       ) : (
         <button
           className="btn btn-success"

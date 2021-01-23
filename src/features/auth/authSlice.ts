@@ -1,13 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from '../../axios';
+import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
-import { AppThunk, AppThunkDispatch } from '../../store/store';
 import { deleteStorageItem, getStorageItem, setStorageItem } from '../../shared/helpers';
 import { IUser } from '../../interfaces/user.interface';
 import { ISignUpForm } from './SignUp';
-import { IAuthResponse, IUserPostResponse, UserResponse } from '../../interfaces/api-responses';
-import { SIGN_IN_URL, SIGN_UP_URL } from '../../shared/constants';
 import { ISignInForm } from './SignIn';
+import { UserResponse } from '../../interfaces/api-responses';
+import * as api from '../../api';
+
 
 export interface IAuthState {
   token: string | null;
@@ -53,13 +53,13 @@ const auth = createSlice({
   name: 'posts',
   initialState: initialState,
   reducers: {
-    signInStart: startLoading,
-    signUpStart: startLoading,
+    signIn: startLoading,
+    signUp: startLoading,
     signUpSuccess: signSuccess,
     signInSuccess: signSuccess,
     signInFailure: loadingFailed,
     signUpFailure: loadingFailed,
-    logOut(state) {
+    logOutSuccess(state) {
       state.token = '';
       state.userId = '';
       state.username = '';
@@ -68,74 +68,75 @@ const auth = createSlice({
 })
 
 export const {
-  signInStart,
-  signUpStart,
   signInSuccess,
   signUpSuccess,
+  logOutSuccess,
   signInFailure,
   signUpFailure,
-  logOut
 } = auth.actions;
+
+export const signUp = createAction<ISignUpForm>('auth/signUp');
+
+export const signIn = createAction<ISignInForm>('auth/signIn');
+
+export const logOut = createAction<undefined>('auth/logOut');
 
 export default auth.reducer;
 
-export const signUp = (authData: ISignUpForm): AppThunk => {
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(signUpStart());
-      const authResponse: IAuthResponse = await axios.post(SIGN_UP_URL, { ...authData, returnSecureToken: true });
-      const token = authResponse.data.idToken;
-      const tempId = authResponse.data.localId;
+
+function* signUpSaga({ payload }: PayloadAction<ISignUpForm>) {
+  try {
+    const authResponse = yield call(api.signUp, payload);
+    const { idToken: token, localId: tempId } = authResponse.data;
+    setStorageItem('token', token);
+    const user: IUser = {
+      id: tempId,
+      email: payload.email,
+      username: payload.username,
+      name: '',
+      phone: '',
+      address: '',
+      website: '',
+    };
+    // sending request to create user entity in firebase database
+    // (sign up action doesn't create user entity in db - feature of firebase)
+    const userResponse = yield call(api.addUser, user);
+    const userId = userResponse.data.name;
+    setStorageItem('userId', userId);
+    yield put(signUpSuccess({ token, userId, username: payload.username }));
+  } catch (err) {
+    yield put(signUpFailure(err.response.data.error))
+  }
+}
+
+function* signInSaga({ payload }: PayloadAction<ISignInForm>) {
+  try {
+    const authResponse = yield call(api.signIn, payload);
+    const { idToken: token, localId: tempId } = authResponse.data;
+    // finding user in firebase database and setting to local storage his id and username
+    const usersResponse = yield call(api.getUsers, token);
+    const users: UserResponse[] = Object.entries(usersResponse.data);
+    const user = users.find((user: UserResponse) => user[1].id === tempId);
+    if (user) {
       setStorageItem('token', token);
-      const user: IUser = {
-        id: tempId,
-        email: authData.email,
-        username: authData.username,
-        name: '',
-        phone: '',
-        address: '',
-        website: '',
-      };
-      // sending request to create user entity in firebase database
-      // (sign up action doesn't create user entity in db - feature of firebase)
-      const userResponse: IUserPostResponse = await axios.post('/users.json', user);
-      const userId = userResponse.data.name;
-      setStorageItem('userId', userId);
-      dispatch(signUpSuccess({ token, userId, username: authData.username }));
-    } catch(err) {
-      dispatch(signUpFailure(err.response.data.error));
-    }
-  };
-};
+      setStorageItem('userId', user[0]);
+      setStorageItem('username', user[1].username);
+      yield put(signInSuccess({ token, userId: user[0], username: user[1].username }));
+    } else throw new Error('User not found');
+  } catch (err) {
+    yield put(signInFailure(err.response.data.error))
+  }
+}
 
-export const signIn = (authData: ISignInForm): AppThunk => {
-  return async (dispatch: AppThunkDispatch) => {
-    try {
-      dispatch(signInStart());
-      const authResponse: IAuthResponse = await axios.post(SIGN_IN_URL, { ...authData, returnSecureToken: true });
-      const token = authResponse.data.idToken;
-      const tempId = authResponse.data.localId;
-      // finding user in firebase database and setting to local storage his id and username
-      const usersResponse = await axios.get('/users.json');
-      const users: UserResponse[] = Object.entries(usersResponse.data);
-      const user = users.find((user: UserResponse) => user[1].id === tempId);
-      if (user) {
-        setStorageItem('token', token);
-        setStorageItem('userId', user[0]);
-        setStorageItem('username', user[1].username);
-        dispatch(signInSuccess({ token, userId: user[0], username: user[1].username }));
-      } else throw new Error('User not found');
-    } catch(err) {
-      dispatch(signInFailure(err.response.data.error));
-    }
-  };
-};
-
-export const userLogOut = () => {
+function* logOutSaga() {
   deleteStorageItem('token');
   deleteStorageItem('userId');
   deleteStorageItem('username');
-  return (dispatch: AppThunkDispatch) => {
-    dispatch(logOut());
-  };
+  yield put(logOutSuccess())
+}
+
+export function* authSaga() {
+  yield takeLatest(signUp, signUpSaga);
+  yield takeLatest(signIn, signInSaga);
+  yield takeEvery(logOut, logOutSaga);
 }

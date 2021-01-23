@@ -1,6 +1,7 @@
 import React, { ChangeEvent, FormEvent, FC } from 'react';
 
-import Spinner from '../../shared/Spinner/Spinner';
+import ButtonSpinner from '../../shared/Spinner/ButtonSpinner';
+
 
 interface IProps {
   form: IProfileForm;
@@ -101,7 +102,7 @@ const ProfileForm: FC<IProps> = ({ form, onProfileChange, onSubmit, userUpdating
             </div>
           </div>
           {userUpdating ? (
-            <Spinner />
+            <ButtonSpinner />
           ) : (
             <button className="btn btn-success" type="submit">
               Save changes

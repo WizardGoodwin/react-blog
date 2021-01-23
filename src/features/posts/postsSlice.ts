@@ -124,9 +124,10 @@ export const deletePost = createAction<{ token: string | null, id: string }>('po
 
 export default posts.reducer;
 
+
 function* getPostsSaga() {
   try {
-    const response = yield call(api.getUsers);
+    const response = yield call(api.getPosts);
     //convert response object to array of arrays kind of [ id : post ]
     const posts: PostResponse[] = Object.entries(response.data);
     yield put(getPostsSuccess(posts))
@@ -143,7 +144,7 @@ function* addPostSaga({ payload }: PayloadAction<{ token: string, newPost: IPost
     // getting author from local storage
     const author = getStorageItem('username');
     const post = { ...newPost, created_at: date, author };
-    const response = yield call(api.addUser, token, post);
+    const response = yield call(api.addPost, token, post);
     const id = response.data.name;
     yield put(addPostSuccess({ id, post }))
   } catch (err) {
@@ -157,7 +158,7 @@ function* updatePostSaga({ payload }: PayloadAction<{ token: string | null, id: 
     // time and date of updating post
     const date = new Date().toLocaleString();
     const post = { ...editedPost, created_at: date };
-    yield call(api.updateUser, token, id, post);
+    yield call(api.updatePost, token, id, post);
     yield put(updatePostSuccess({ id, post }))
   } catch (err) {
     yield put(updatePostFailure(err.response.data.error))
@@ -167,7 +168,7 @@ function* updatePostSaga({ payload }: PayloadAction<{ token: string | null, id: 
 function* deletePostSaga({ payload }: PayloadAction<{ token: string | null, id: string, editedPost: IPost }>) {
   const { token, id } = payload;
   try {
-    yield call(api.deleteUser, token, id);
+    yield call(api.deletePost, token, id);
     yield put(deletePostSuccess(id))
   } catch (err) {
     yield put(deletePostFailure(err.response.data.error))

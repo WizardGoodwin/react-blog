@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import image from '../../assets/images/Post.jpg';
 import { IPost } from '../../interfaces/post.interface';
 import { PostResponse } from '../../interfaces/api-responses';
+import ButtonSpinner from '../../shared/Spinner/ButtonSpinner';
 
 
 interface IProps {
@@ -11,9 +12,16 @@ interface IProps {
   posts: PostResponse[];
   onPostEdit(id: string, post: IPost): void;
   onPostDelete(id: string): void;
+  postDeleting: boolean;
 }
 
-const PostsList: FC<IProps> = ({ username, posts, onPostEdit, onPostDelete }) => {
+const PostsList: FC<IProps> = ({
+  username,
+  posts,
+  onPostEdit,
+  onPostDelete,
+  postDeleting
+}) => {
   return (
     <div>
       {posts.map((item: PostResponse) => {
@@ -37,12 +45,16 @@ const PostsList: FC<IProps> = ({ username, posts, onPostEdit, onPostDelete }) =>
               {username === author && (
                 // if current user is author, then he can edit and delete post
                 <div>
-                  <button
-                    className="btn btn-outline-danger float-right ml-4"
-                    onClick={() => onPostDelete(id)}
-                  >
-                    Delete
-                  </button>
+                  {postDeleting ? (
+                    <ButtonSpinner className="float-right ml-4" />
+                  ) : (
+                    <button
+                      className="btn btn-outline-danger float-right ml-4"
+                      onClick={() => onPostDelete(id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                   <button
                     className="btn btn-outline-info float-right"
                     onClick={() => onPostEdit(id, post)}

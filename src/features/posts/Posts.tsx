@@ -11,7 +11,14 @@ import Spinner from '../../shared/Spinner/Spinner';
 import ErrorIndicator from '../../shared/ErrorIndicator/ErrorIndicator';
 import { IPost } from '../../interfaces/post.interface';
 import { selectAuthToken, selectIsUserLoggedIn, selectUsername } from '../../store/selectors/auth';
-import { selectPostsError, selectPostsList, selectPostsLoading } from '../../store/selectors/posts';
+import {
+  selectPostDeleting,
+  selectPostsError,
+  selectPostsList,
+  selectPostsLoading,
+  selectPostUpdated,
+  selectPostUpdating,
+} from '../../store/selectors/posts';
 import { addPost, deletePost, getPosts, updatePost } from './postsSlice';
 import { PostResponse } from '../../interfaces/api-responses';
 
@@ -25,6 +32,9 @@ const Posts: FC = () => {
   const username = useSelector(selectUsername);
   const postsList = useSelector(selectPostsList);
   const postsLoading = useSelector(selectPostsLoading);
+  const postUpdating = useSelector(selectPostUpdating);
+  const postUpdated = useSelector(selectPostUpdated);
+  const postDeleting = useSelector(selectPostDeleting);
   const postsError = useSelector(selectPostsError);
   const dispatch = useDispatch();
 
@@ -32,10 +42,6 @@ const Posts: FC = () => {
   const [isNewPost, setIsNew] = useState(false);
   const [postForm, setPostValues] = useState({ title: '', body: '' });
   const [postId, setId] = useState('');
-
-  useEffect(() => {
-    dispatch(getPosts());
-  }, [dispatch]);
 
   const onPostChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -65,8 +71,15 @@ const Posts: FC = () => {
   const onPostSubmit = (e: FormEvent) => {
     e.preventDefault();
     isNewPost ? dispatch(addPost(token, postForm)) : dispatch(updatePost(token, postId, postForm));
-    setModalOpen(false);
   };
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (postUpdated) setModalOpen(false);
+  }, [postUpdated]);
 
   if (postsError) {
     return <ErrorIndicator />;
@@ -107,6 +120,7 @@ const Posts: FC = () => {
                   onPostChange={onPostChange}
                   setModalOpen={setModalOpen}
                   onSubmit={onPostSubmit}
+                  postUpdating={postUpdating}
                 />
               </Modal>
               <PostsList
@@ -114,6 +128,7 @@ const Posts: FC = () => {
                 onPostEdit={onPostEdit}
                 onPostDelete={onPostDelete}
                 username={username}
+                postDeleting={postDeleting}
               />
             </>
           )}

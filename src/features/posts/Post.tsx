@@ -9,8 +9,13 @@ import { PostResponse } from '../../interfaces/api-responses';
 import image from '../../assets/images/Post.jpg';
 import CommentsList from '../comments/CommentsList';
 import { selectAuthToken, selectIsUserLoggedIn } from '../../store/selectors/auth';
-import { selectCommentsError, selectCommentsList, selectCommentsLoading } from '../../store/selectors/comments';
-import { addComment, getCommentsByPostId } from '../comments/commentsSlice';
+import {
+  selectCommentAdding,
+  selectCommentsError,
+  selectCommentsList,
+  selectCommentsLoading,
+} from '../../store/selectors/comments';
+import { addComment, getComments } from '../comments/commentsSlice';
 
 
 interface IProps {
@@ -25,8 +30,11 @@ const Post: FC<IProps> = ({ post }) => {
   const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
   const commentsList = useSelector(selectCommentsList);
   const commentsLoading = useSelector(selectCommentsLoading);
+  const commentAdding = useSelector(selectCommentAdding);
   const commentsError = useSelector(selectCommentsError);
   const dispatch = useDispatch();
+
+  const commentsByPostId = commentsList.filter((comment) => comment[1].postId === post[0]);
 
   const [commentForm, setCommentValues] = useState({
     commentTitle: '',
@@ -34,10 +42,6 @@ const Post: FC<IProps> = ({ post }) => {
     likeCounter: 0,
     dislikeCounter: 0,
   });
-
-  useEffect(() => {
-    dispatch(getCommentsByPostId(postId));
-  }, [dispatch, postId]);
 
   const onCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -57,6 +61,10 @@ const Post: FC<IProps> = ({ post }) => {
       dislikeCounter: 0,
     });
   };
+
+  useEffect(() => {
+    dispatch(getComments());
+  }, [dispatch]);
 
   if (commentsError) {
     return <ErrorIndicator />;
@@ -83,10 +91,10 @@ const Post: FC<IProps> = ({ post }) => {
         </div>
       </div>
 
-      {commentsList.length === 0 ? (
+      {commentsByPostId.length === 0 ? (
         <h5 className="text-info mb-4">There are no comments yet</h5>
       ) : (
-        <CommentsList />
+        <CommentsList comments={commentsByPostId} />
       )}
 
       {isUserLoggedIn ? (
@@ -95,6 +103,7 @@ const Post: FC<IProps> = ({ post }) => {
           postId={postId}
           onCommentChange={onCommentChange}
           onSubmit={onCommentSubmit}
+          commentAdding={commentAdding}
         />
       ) : (
         <div className="card shadow-sm mt-4">

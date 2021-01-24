@@ -24,12 +24,6 @@ const Profile: FC = () => {
 
   const [form, setValues] = useState(user);
 
-  useEffect(() => {
-    dispatch(getUserById(token));
-    setValues(user);
-  // eslint-disable-next-line
-  }, [dispatch, token, user.id]);
-
   const onProfileChange = (e: ChangeEvent<HTMLInputElement >) => {
     const { id, value } = e.target;
     setValues({
@@ -40,8 +34,14 @@ const Profile: FC = () => {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    updateUser(token, form);
+    dispatch(updateUser(token, form));
   };
+
+  useEffect(() => {
+    dispatch(getUserById(token));
+    setValues(user);
+    // eslint-disable-next-line
+  }, [dispatch, token, user.id]);
 
   if (error) {
     return <ErrorIndicator />;

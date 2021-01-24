@@ -102,7 +102,7 @@ export const getUserById = (token: string | null): AppThunk => {
   const id = getStorageItem('userId');
   return async (dispatch: AppThunkDispatch) => {
     try {
-      dispatch(getUsersStart());
+      dispatch(getUserByIdStart());
       const response = await axios.get(`/users/${id}.json?auth=${token}`);
       dispatch(getUserByIdSuccess(response.data));
     } catch (err) {

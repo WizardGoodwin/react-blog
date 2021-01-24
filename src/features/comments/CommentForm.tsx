@@ -1,11 +1,14 @@
 import React, { ChangeEvent, FormEvent, FC } from 'react';
 
+import ButtonSpinner from '../../shared/Spinner/ButtonSpinner';
+
 
 interface IProps {
   form: ICommentForm;
   postId: string;
   onCommentChange(e: ChangeEvent): void;
   onSubmit(e: FormEvent, postId: string): void;
+  commentAdding: boolean;
 }
 
 interface ICommentForm {
@@ -13,7 +16,13 @@ interface ICommentForm {
   commentBody: string;
 }
 
-const CommentForm: FC<IProps> = ({ form, postId, onCommentChange, onSubmit }) => {
+const CommentForm: FC<IProps> = ({
+  form,
+  postId,
+  onCommentChange,
+  onSubmit,
+  commentAdding
+}) => {
   const { commentTitle, commentBody } = form;
   return (
     <form className="mb-5" onSubmit={(e) => onSubmit(e, postId)}>
@@ -40,9 +49,13 @@ const CommentForm: FC<IProps> = ({ form, postId, onCommentChange, onSubmit }) =>
           onChange={(e) => onCommentChange(e)}
         />
       </div>
-      <button className="btn btn-success" type="submit">
-        Send
-      </button>
+      {commentAdding ? (
+        <ButtonSpinner />
+      ) : (
+        <button className="btn btn-success" type="submit">
+          Send
+        </button>
+      )}
     </form>
   );
 };

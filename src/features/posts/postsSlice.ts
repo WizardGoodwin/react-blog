@@ -12,6 +12,8 @@ export interface IPostState {
   error: string | null;
   loading: boolean;
   updating: boolean;
+  updated: boolean;
+  deleting: boolean;
 }
 
 const initialState: IPostState = {
@@ -25,24 +27,37 @@ const initialState: IPostState = {
   error: null,
   loading: false,
   updating: false,
+  updated: false,
+  deleting: false,
 };
 
 const startLoading = (state: IPostState) => {
-  state.loading = true
+  state.loading = true;
 }
 
 const loadingFailed = (state: IPostState, action: PayloadAction<string>) => {
-  state.loading = false
-  state.error = action.payload
+  state.loading = false;
+  state.error = action.payload;
 }
 
 const startUpdating = (state: IPostState) => {
-  state.updating = true
+  state.updating = true;
+  state.updated = false;
 }
 
 const updatingFailed = (state: IPostState, action: PayloadAction<string>) => {
-  state.updating = false
-  state.error = action.payload
+  state.updating = false;
+  state.updated = true;
+  state.error = action.payload;
+}
+
+const startDeleting = (state: IPostState) => {
+  state.deleting = true;
+}
+
+const deletingFailed = (state: IPostState, action: PayloadAction<string>) => {
+  state.deleting = false;
+  state.error = action.payload;
 }
 
 const posts = createSlice({
@@ -50,9 +65,9 @@ const posts = createSlice({
   initialState: initialState,
   reducers: {
     getPostsStart: startLoading,
-    addPostStart: startLoading,
+    addPostStart: startUpdating,
     updatePostStart: startUpdating,
-    deletePostStart: startLoading,
+    deletePostStart: startDeleting,
     getPostsSuccess(state, { payload }: PayloadAction<PostResponse[]>) {
       state.list = payload;
       state.loading = false;
@@ -61,7 +76,8 @@ const posts = createSlice({
     addPostSuccess(state, { payload }: PayloadAction<{ id: string, post: IPost }>) {
       const newPost: PostResponse = [payload.id, payload.post];
       state.list.push(newPost);
-      state.loading = false;
+      state.updating = false;
+      state.updated = true;
       state.error = null;
     },
     updatePostSuccess(state, { payload }: PayloadAction<{ id: string, post: IPost }>) {
@@ -69,7 +85,8 @@ const posts = createSlice({
       if (index > -1) {
         state.list[index] = [payload.id, payload.post];
       }
-      state.loading = false;
+      state.updating = false;
+      state.updated = true;
       state.error = null;
     },
     deletePostSuccess(state, { payload }: PayloadAction<string>) {
@@ -77,13 +94,13 @@ const posts = createSlice({
       if (index > -1) {
         state.list.splice(index, 1);
       }
-      state.loading = false;
+      state.deleting = false;
       state.error = null;
     },
     getPostsFailure: loadingFailed,
-    addPostFailure: loadingFailed,
+    addPostFailure: updatingFailed,
     updatePostFailure: updatingFailed,
-    deletePostFailure: loadingFailed
+    deletePostFailure: deletingFailed
   }
 })
 

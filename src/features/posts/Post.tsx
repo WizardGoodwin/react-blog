@@ -43,10 +43,6 @@ const Post: FC<IProps> = ({ post }) => {
     dislikeCounter: 0,
   });
 
-  useEffect(() => {
-    dispatch(getComments());
-  }, [dispatch]);
-
   const onCommentChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setCommentValues({
@@ -65,6 +61,10 @@ const Post: FC<IProps> = ({ post }) => {
       dislikeCounter: 0,
     });
   };
+
+  useEffect(() => {
+    dispatch(getComments());
+  }, [dispatch]);
 
   if (commentsError) {
     return <ErrorIndicator />;
@@ -94,7 +94,7 @@ const Post: FC<IProps> = ({ post }) => {
       {commentsByPostId.length === 0 ? (
         <h5 className="text-info mb-4">There are no comments yet</h5>
       ) : (
-        <CommentsList />
+        <CommentsList comments={commentsByPostId} />
       )}
 
       {isUserLoggedIn ? (

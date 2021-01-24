@@ -9,7 +9,7 @@ interface IProps {
 
 const ButtonSpinner: FC<IProps> = ({ className }) => {
   return (
-      <img width={50} src={SpinnerImage} alt="Loading..." className={className} />
+    <img width={50} src={SpinnerImage} alt="Loading..." className={className} />
   );
 };
 
